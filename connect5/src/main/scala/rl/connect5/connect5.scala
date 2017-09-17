@@ -16,7 +16,7 @@ object connect5 extends App{
   val s=State()
   val s1=s.copy(end=true)
   print(s.winner)
-  (0,0,true,DenseMatrix.zeros[Int](10, 10))
+ 
 
 
 }
