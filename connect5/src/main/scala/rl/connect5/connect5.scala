@@ -25,20 +25,18 @@ case class State(winner:Int=0,  var hashVal:Int =0,  end:Boolean = false,  data:
 
   override def hashCode: Int = {
     if (hashVal == 0 ) {
-      for( i <- data.reshape(data.rows,data.cols)) {
-        hashVal = hashVal *3 + i
-      }
+      hashVal = data.toArray.foldLeft(0)(_*3 + _+1)
     }
     hashVal
   }
 //  def isEnd:Boolean = {
 //    checkColumn && checkRow && checkDiagnol
 //  }
-//  def checkColumn:Boolean = {
-//    for (rows <- data.rows  ) {
-//      rows.
-//    }
-//  }
+  def checkRow:Boolean = {
+    for (row <- data.rows  ) {
+      println(row)
+    }
+  }
 
 
 
