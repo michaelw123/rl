@@ -4,7 +4,9 @@ import breeze.linalg._
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  val data = DenseMatrix.zeros[Int](3, 3)
+  val DIMENSION = 3
+
+  val data = DenseMatrix.zeros[Int](DIMENSION, DIMENSION)
   data(0,0)=1
   data(0,1)=1
   data(0,2)=1
@@ -28,7 +30,7 @@ case class State( data:DenseMatrix[Int]) {
   def isEnd:Boolean = winner!=0
 
   def winner:Int = {
-     val rows = data(*, ::)
+    val rows = data(*, ::)
     for (row <- rows) {
       println(sum(row))
      if (sum(row) == 3)
