@@ -28,8 +28,8 @@ case class State( data:DenseMatrix[Int]) {
   def isEnd:Boolean = winner!=0
 
   def winner:Int = {
-    var w:Int = winner1(data)
-    if (w==0) w = winner1(data.t)
+    var w:Int = winner(data)
+    if (w==0) w = winner(data.t)
     if (w==0) {
       val x = data(0, 0) + data(1, 1) + data(2, 2)
       val y = data(2, 0) + data(1, 1) + data(0, 2)
@@ -41,7 +41,7 @@ case class State( data:DenseMatrix[Int]) {
     }
     w
   }
-  def winner1(d:DenseMatrix[Int]): Int ={
+  def winner(d:DenseMatrix[Int]): Int ={
     val rows = data(*, ::)
     for (row <- rows) {
       println(sum(row))
