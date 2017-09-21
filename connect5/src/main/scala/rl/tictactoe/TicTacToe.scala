@@ -44,7 +44,6 @@ case class State( data:DenseMatrix[Int]) {
   def winner(d:DenseMatrix[Int]): Int ={
     val rows = data(*, ::)
     for (row <- rows) {
-      println(sum(row))
       if (sum(row) == 3)
         return 1
       else if (sum(row) == -3)
