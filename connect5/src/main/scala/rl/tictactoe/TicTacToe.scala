@@ -1,23 +1,35 @@
 package rl.tictactoe
 import breeze.linalg._
+import scala.collection.mutable.HashMap
 /**
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
   val data = DenseMatrix.zeros[Int](3, 3)
-  data(0,0)=1
-  data(0,1)=1
-  data(0,2)=1
+  data(0,0)= -1
+  data(1,1)= 0
+  data(2,2)= -1
   val s= State(data)
-  println(s.hashVal)
-  println("winner is:" +s.winner)
-  println(s.isEnd)
+  val s1=s.nextState(1,0, 1)
+  val allStates = HashMap[Int, State]()
+  allStates += ((s.hashCode, s), (s1.hashCode, s1))
+println(allStates)
+
+  //s.show
+  //s.winner
+
+  //s1.show
+ // s1.winner
+
+//  println(s.hashVal)
+//  println("winner is:" +s.winner)
+//  println(s.isEnd)
 
 }
 import breeze.linalg.DenseMatrix
 
 case class State( data:DenseMatrix[Int]) {
-    val hashVal:Int = hashCode
+  val hashVal:Int = hashCode
   override def hashCode: Int = {
       if (hashVal == 0 ) {
         data.toArray.foldLeft(0)(_*3 + _+1)
@@ -25,7 +37,7 @@ case class State( data:DenseMatrix[Int]) {
         hashVal
       }
    }
-  def isEnd:Boolean = winner!=0
+  lazy val isEnd:Boolean = winner!=0
 
   def winner:Int = {
     var w:Int = winner(data)
@@ -51,4 +63,16 @@ case class State( data:DenseMatrix[Int]) {
     }
     0
   }
+  def nextState(i:Int, j:Int, player:Int): State = {
+    val newData = data.copy
+    newData(i,j) = player
+    State(newData)
+  }
+  def show = {
+    println(data)
+  }
+}
+
+trait Player {
+
 }
