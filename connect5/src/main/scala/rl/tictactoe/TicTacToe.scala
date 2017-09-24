@@ -1,29 +1,26 @@
 package rl.tictactoe
+import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
+
 import breeze.linalg._
-import scala.collection.mutable.HashMap
+
+import scala.collection.mutable
 /**
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  val data = DenseMatrix.zeros[Int](3, 3)
-  data(0,0)= -1
-  data(1,1)= 0
-  data(2,2)= -1
-  val s= State(data)
-  val s1=s.nextState(1,0, 1)
-  val allStates = HashMap[Int, State]()
-  allStates += ((s.hashCode, s), (s1.hashCode, s1))
-println(allStates)
+  val est=new Estimations()
+  val oos = new ObjectOutputStream(new FileOutputStream("/tmp/nflx"))
+  oos.writeObject(est)
+  oos.close
 
-  //s.show
-  //s.winner
+  val ois = new ObjectInputStream(new FileInputStream("/tmp/nflx"))
+  val est1 = ois.readObject.asInstanceOf[Estimations]
+  ois.close
 
-  //s1.show
- // s1.winner
+  println(est1.data)
 
-//  println(s.hashVal)
-//  println("winner is:" +s.winner)
-//  println(s.isEnd)
+ // game.play
+
 
 }
 import breeze.linalg.DenseMatrix
@@ -38,6 +35,11 @@ case class State( data:DenseMatrix[Int]) {
       }
    }
   lazy val isEnd:Boolean = winner!=0
+  lazy val estimate:Double = {
+    val w = winner
+    if (w != 0) w
+    else 0.5
+  }
 
   def winner:Int = {
     var w:Int = winner(data)
@@ -46,9 +48,9 @@ case class State( data:DenseMatrix[Int]) {
       val x = data(0, 0) + data(1, 1) + data(2, 2)
       val y = data(2, 0) + data(1, 1) + data(0, 2)
       println(x, y)
-      if (x == 3 || y == 3)
+      if (x == data.rows || y == data.rows)
         w = 1
-      else if (x == -3 || y == -3)
+      else if (x == -data.rows || y == -data.rows)
         w = -1
     }
     w
@@ -73,6 +75,31 @@ case class State( data:DenseMatrix[Int]) {
   }
 }
 
-trait Player {
+sealed trait Player {
+//  def feedState:Unit
+//  def feedReward:Unit
+//  def takeAction:Unit
+}
+object Player {
+  case object AIPlayer extends Player
+  case object HumanPlayer extends Player
+}
+object game {
+  final val ROWCOL = 3
 
+  //val data = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
+  def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
+    data.update(0, 0, -1)
+    data.update(1, 1, 0)
+    data.update(2, 2, -1)
+    val s = State(data)
+    val s1 = s.nextState(1, 0, 1)
+    val allStates = mutable.HashMap[Int, State]()
+    allStates += ((s.hashCode, s), (s1.hashCode, s1))
+    println(allStates)
+  }
+}
+@SerialVersionUID(123L)
+class Estimations extends Serializable {
+  val data: mutable.HashMap[Int, Double] = mutable.HashMap((1, 2.3), (2, 4.5))
 }
