@@ -8,18 +8,18 @@ import scala.collection.mutable
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  val est=new Estimations()
-  val oos = new ObjectOutputStream(new FileOutputStream("/tmp/nflx"))
-  oos.writeObject(est)
-  oos.close
+//  val est=new Estimations()
+//  val oos = new ObjectOutputStream(new FileOutputStream("/tmp/nflx"))
+//  oos.writeObject(est)
+//  oos.close
+//
+//  val ois = new ObjectInputStream(new FileInputStream("/tmp/nflx"))
+//  val est1 = ois.readObject.asInstanceOf[Estimations]
+//  ois.close
 
-  val ois = new ObjectInputStream(new FileInputStream("/tmp/nflx"))
-  val est1 = ois.readObject.asInstanceOf[Estimations]
-  ois.close
+//  println(est1.data)
 
-  println(est1.data)
-
- // game.play
+  game.play
 
 
 }
@@ -76,8 +76,15 @@ case class State( data:DenseMatrix[Int]) {
 }
 
 sealed trait Player {
-//  def feedState:Unit
-//  def feedReward:Unit
+  val estimations = mutable.HashMap[Int, Double]()
+  val states = mutable.HashMap[Int, State]()
+
+  def feedState(state:State): Unit = {
+    states.put(state.hashCode, state)
+  }
+  def feedReward(reward:Double):Unit = {
+    val keys=states.keySet
+  }
 //  def takeAction:Unit
 }
 object Player {
@@ -95,8 +102,8 @@ object game {
     val s = State(data)
     val s1 = s.nextState(1, 0, 1)
     val allStates = mutable.HashMap[Int, State]()
-    allStates += ((s.hashCode, s), (s1.hashCode, s1))
-    println(allStates)
+   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
+    //println(allStates)
   }
 }
 @SerialVersionUID(123L)
