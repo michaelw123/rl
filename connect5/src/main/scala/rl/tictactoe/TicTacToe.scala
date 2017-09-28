@@ -6,6 +6,7 @@ import rl.tictactoe.Player.AIPlayer
 
 import scala.collection.immutable
 import scala.collection.mutable
+import scala.util.Random
 
 /**
   * Created by wangmich on 09/19/2017.
@@ -84,6 +85,7 @@ case class State( data:DenseMatrix[Int]) {
 }
 
 sealed trait Player {
+  val playerSymbol = 1 //or -1
   val stepsize=0.1
   val exploreRate = 0.5
   val estimations = mutable.HashMap[Int, Double]()
@@ -100,12 +102,26 @@ sealed trait Player {
   }
   def takeAction:Unit = {
     if (toExplore) {
-      val availablePositions = states.values.last.data.findAll(_ == 0)
-      availablePositions.reduce()
+      val (i, j) = nextPosition
+      val nextState = states.values.last.nextState(i,j, playerSymbol)
+      states.put(nextState.hashCode, nextState)
+      (i, j, states)
+    } else {  //to Exploit
+
     }
   }
-  def toExplore:Boolean = {
+  private def toExplore:Boolean = {
     return Binomial(100, exploreRate).draw < 100* exploreRate
+  }
+  private def nextPosition = {
+    val latestStateData = states.values.last.data
+    val index = Random.nextInt(latestStateData.findAll( _ == 0).size)
+    var x = 0
+    for ((i, j ) <- (0 to latestStateData.rows-1, 1 to latestStateData.cols-1)) {
+      if (latestStateData(i,j) == 0) x=x+1
+      if (x == index) (i,j)
+    }
+    (latestStateData.rows-1,latestStateData.cols-1)
   }
 }
 object Player {
