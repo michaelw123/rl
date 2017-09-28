@@ -110,16 +110,19 @@ sealed trait Player {
 
     }
   }
-  private def toExplore:Boolean = {
+   def toExplore:Boolean = {
     return Binomial(100, exploreRate).draw < 100* exploreRate
   }
   private def nextPosition = {
     val latestStateData = states.values.last.data
     val index = Random.nextInt(latestStateData.findAll( _ == 0).size)
     var x = 0
-    for ((i, j ) <- (0 to latestStateData.rows-1, 1 to latestStateData.cols-1)) {
-      if (latestStateData(i,j) == 0) x=x+1
-      if (x == index) (i,j)
+    //for ((i, j ) <- (0 to latestStateData.rows-1, 0 to latestStateData.cols-1)) {
+    for (i <- 0 to latestStateData.rows-1) {
+      for (j <- 0 to latestStateData.cols-1) {
+        if (latestStateData.valueAt(i, j) == 0) x = x + 1
+        if (x == index) (i, j)
+      }
     }
     (latestStateData.rows-1,latestStateData.cols-1)
   }
