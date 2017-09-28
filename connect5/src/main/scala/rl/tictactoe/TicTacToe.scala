@@ -2,12 +2,16 @@ package rl.tictactoe
 import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import breeze.linalg._
+import rl.tictactoe.Player.AIPlayer
 
+import scala.collection.immutable
 import scala.collection.mutable
+
 /**
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
+
 //  val est=new Estimations()
 //  val oos = new ObjectOutputStream(new FileOutputStream("/tmp/nflx"))
 //  oos.writeObject(est)
@@ -19,11 +23,15 @@ object TicTacToe extends App {
 
 //  println(est1.data)
 
-  game.play
+//  game.play
+  val player= AIPlayer
+  player.toExplore
+
 
 
 }
 import breeze.linalg.DenseMatrix
+import breeze.stats.distributions.Binomial
 
 case class State( data:DenseMatrix[Int]) {
   val hashVal:Int = hashCode
@@ -76,16 +84,29 @@ case class State( data:DenseMatrix[Int]) {
 }
 
 sealed trait Player {
+  val stepsize=0.1
+  val exploreRate = 0.5
   val estimations = mutable.HashMap[Int, Double]()
-  val states = mutable.HashMap[Int, State]()
+  val states = mutable.LinkedHashMap[Int, State]()
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
   }
-  def feedReward(reward:Double):Unit = {
-    val keys=states.keySet
+  def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
+    if (theStates.isEmpty) return
+    val key=theStates.keySet.last
+    estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
+    feedReward(estimations(key), theStates.dropRight(key))
   }
-//  def takeAction:Unit
+  def takeAction:Unit = {
+    if (toExplore) {
+      val availablePositions = states.values.last.data.findAll(_ == 0)
+      availablePositions.reduce()
+    }
+  }
+  def toExplore:Boolean = {
+    return Binomial(100, exploreRate).draw < 100* exploreRate
+  }
 }
 object Player {
   case object AIPlayer extends Player
