@@ -2,7 +2,7 @@ package rl.tictactoe
 import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import breeze.linalg._
-import rl.tictactoe.Player.AIPlayer
+
 
 import scala.collection.immutable
 import scala.collection.mutable
@@ -25,8 +25,8 @@ object TicTacToe extends App {
 //  println(est1.data)
 
 //  game.play
-  val player= AIPlayer
-  player.toExplore
+//  val player= AIPlayer
+//  player.toExplore
 
 
 
@@ -84,8 +84,7 @@ case class State( data:DenseMatrix[Int]) {
   }
 }
 
-sealed trait Player {
-  val playerSymbol = 1 //or -1
+sealed class Player (val playerSymbol:Int){
   val stepsize=0.1
   val exploreRate = 0.5
   val estimations = mutable.HashMap[Int, Double]()
@@ -100,15 +99,15 @@ sealed trait Player {
     estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
     feedReward(estimations(key), theStates.dropRight(key))
   }
-  def takeAction:Unit = {
-    if (toExplore) {
+  def takeAction = {
+    //if (toExplore) {
       val (i, j) = nextPosition
       val nextState = states.values.last.nextState(i,j, playerSymbol)
       states.put(nextState.hashCode, nextState)
-      (i, j, states)
-    } else {  //to Exploit
+      (i, j, nextState)
+    //} else {  //to Exploit
 
-    }
+    //}
   }
    def toExplore:Boolean = {
     return Binomial(100, exploreRate).draw < 100* exploreRate
@@ -128,23 +127,53 @@ sealed trait Player {
   }
 }
 object Player {
-  case object AIPlayer extends Player
-  case object HumanPlayer extends Player
+   case object ai1 extends Player(1)
+   case object ai2 extends Player(-1)
+   case object human extends Player(-1)
 }
 object game {
   final val ROWCOL = 3
 
   //val data = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
-    data.update(0, 0, -1)
-    data.update(1, 1, 0)
-    data.update(2, 2, -1)
-    val s = State(data)
-    val s1 = s.nextState(1, 0, 1)
-    val allStates = mutable.HashMap[Int, State]()
-   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
-    //println(allStates)
+//    data.update(0, 0, -1)
+//    data.update(1, 1, 0)
+//    data.update(2, 2, -1)
+//    val s = State(data)
+//    val s1 = s.nextState(1, 0, 1)
+//    val allStates = mutable.HashMap[Int, State]()
+//   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
+//    //println(allStates)
+
+    var player:Player = Player.ai1
+    var otherPlayer:Player = Player.ai2
+    def findRewards(theWinner:Int) = {
+      if (player.playerSymbol == theWinner) {
+        (1.0, 0.0)
+      } else if (otherPlayer.playerSymbol == theWinner) {
+        (0.0, 1.0)
+      } else {
+        (0.1, 0.5)
+      }
+    }
+    def go:Unit = {
+      val (i, j, state) = player.takeAction
+      player.feedState(state)
+      val winner = state.winner
+      val (reward, otherReward) = findRewards( winner)
+      player.feedReward(reward, player.states)
+      otherPlayer.feedReward(otherReward, otherPlayer.states)
+
+      if (winner!=0)  {
+        val tmp = player
+        player = otherPlayer
+        otherPlayer = tmp
+        go
+      }
+    }
+    go
   }
+
 }
 @SerialVersionUID(123L)
 class Estimations extends Serializable {
