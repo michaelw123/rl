@@ -24,7 +24,7 @@ object TicTacToe extends App {
 
 //  println(est1.data)
 
-//  game.play
+  game.play
 //  val player= AIPlayer
 //  player.toExplore
 
@@ -113,17 +113,21 @@ sealed class Player (val playerSymbol:Int){
     return Binomial(100, exploreRate).draw < 100* exploreRate
   }
   private def nextPosition = {
-    val latestStateData = states.values.last.data
-    val index = Random.nextInt(latestStateData.findAll( _ == 0).size)
-    var x = 0
-    //for ((i, j ) <- (0 to latestStateData.rows-1, 0 to latestStateData.cols-1)) {
-    for (i <- 0 to latestStateData.rows-1) {
-      for (j <- 0 to latestStateData.cols-1) {
-        if (latestStateData.valueAt(i, j) == 0) x = x + 1
-        if (x == index) (i, j)
+    if (!states.isEmpty) {
+      val latestStateData = states.values.last.data
+      val index = Random.nextInt(latestStateData.findAll(_ == 0).size)
+      var x = 0
+      //for ((i, j ) <- (0 to latestStateData.rows-1, 0 to latestStateData.cols-1)) {
+      for (i <- 0 to latestStateData.rows - 1) {
+        for (j <- 0 to latestStateData.cols - 1) {
+          if (latestStateData.valueAt(i, j) == 0) x = x + 1
+          if (x == index) (i, j)
+        }
       }
+      (0,0)
+    } else {
+      ((game.ROWCOL/2) toInt, (game.ROWCOL/2) toInt )
     }
-    (latestStateData.rows-1,latestStateData.cols-1)
   }
 }
 object Player {
@@ -172,6 +176,8 @@ object game {
       }
     }
     go
+    println(player.estimations)
+    println(otherPlayer.estimations)
   }
 
 }
