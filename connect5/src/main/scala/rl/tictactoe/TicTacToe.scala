@@ -149,33 +149,29 @@ object game {
 //   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
 //    //println(allStates)
 
-    var player:Player = Player.ai1
-    var otherPlayer:Player = Player.ai2
-    def findRewards(theWinner:Int) = {
-      if (player.playerSymbol == theWinner) {
+    val player:Player = Player.ai1
+    val otherPlayer:Player = Player.ai2
+    def findRewards(p1:Player, p2:Player, theWinner:Int) = {
+      if (p1.playerSymbol == theWinner) {
         (1.0, 0.0)
-      } else if (otherPlayer.playerSymbol == theWinner) {
+      } else if (p2.playerSymbol == theWinner) {
         (0.0, 1.0)
       } else {
         (0.1, 0.5)
       }
     }
-    def go:Unit = {
-      val (i, j, state) = player.takeAction
-      player.feedState(state)
+    def go(p1:Player, p2:Player):Unit = {
+      val (i, j, state) = p1.takeAction
+      p1.feedState(state)
       val winner = state.winner
-      val (reward, otherReward) = findRewards( winner)
-      player.feedReward(reward, player.states)
-      otherPlayer.feedReward(otherReward, otherPlayer.states)
-
+      val (reward, otherReward) = findRewards(p1, p2, winner)
+      p1.feedReward(reward, p1.states)
+      p2.feedReward(otherReward, p2.states)
       if (winner!=0)  {
-        val tmp = player
-        player = otherPlayer
-        otherPlayer = tmp
-        go
+        go(p2, p1)
       }
     }
-    go
+    go(player, otherPlayer)
     println(player.estimations)
     println(otherPlayer.estimations)
   }
