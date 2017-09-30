@@ -2,7 +2,7 @@ package rl.tictactoe
 import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import breeze.linalg._
-
+import rl.tictactoe.game.ROWCOL
 
 import scala.collection.immutable
 import scala.collection.mutable
@@ -102,12 +102,22 @@ sealed class Player (val playerSymbol:Int){
   def takeAction = {
     //if (toExplore) {
       val (i, j) = nextPosition
-      val nextState = states.values.last.nextState(i,j, playerSymbol)
+      val nextState = nextState1(i,j)
+
       states.put(nextState.hashCode, nextState)
       (i, j, nextState)
     //} else {  //to Exploit
 
     //}
+  }
+  private def nextState1(i:Int,j:Int):State = {
+    if (states.isEmpty){
+      val newData = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
+      newData(i,j) = playerSymbol
+      State(newData)
+    } else {
+      states.values.last.nextState(i, j, playerSymbol)
+    }
   }
    def toExplore:Boolean = {
     return Binomial(100, exploreRate).draw < 100* exploreRate
