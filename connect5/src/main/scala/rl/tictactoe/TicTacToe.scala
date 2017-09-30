@@ -92,6 +92,7 @@ sealed class Player (val playerSymbol:Int){
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
+    estimations.put(state.hashCode, 0)
   }
   def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
     if (theStates.isEmpty) return
@@ -173,15 +174,18 @@ object game {
     def go(p1:Player, p2:Player):Unit = {
       val (i, j, state) = p1.takeAction
       p1.feedState(state)
+      p2.feedState(state)
       val winner = state.winner
-      val (reward, otherReward) = findRewards(p1, p2, winner)
-      p1.feedReward(reward, p1.states)
-      p2.feedReward(otherReward, p2.states)
       if (winner!=0)  {
+        val (reward, otherReward) = findRewards(p1, p2, winner)
+        p1.feedReward(reward, p1.states)
+        p2.feedReward(otherReward, p2.states)
+      } else {
         go(p2, p1)
       }
     }
     go(player, otherPlayer)
+
     println(player.estimations)
     println(otherPlayer.estimations)
   }
