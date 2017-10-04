@@ -56,7 +56,7 @@ case class State( data:DenseMatrix[Int]) {
     if (w==0) {
       val x = data(0, 0) + data(1, 1) + data(2, 2)
       val y = data(2, 0) + data(1, 1) + data(0, 2)
-      println(x, y)
+ //     println(x, y)
       if (x == data.rows || y == data.rows)
         w = 1
       else if (x == -data.rows || y == -data.rows)
@@ -126,7 +126,8 @@ sealed class Player (val playerSymbol:Int){
   private def nextPosition = {
     if (!states.isEmpty) {
       val latestStateData = states.values.last.data
-      val index = Random.nextInt(latestStateData.findAll(_ == 0).size)
+      val a = latestStateData.toArray
+      val index = Random.nextInt(latestStateData.toArray.filter(_ == 0).size)
       var x = 0
       //for ((i, j ) <- (0 to latestStateData.rows-1, 0 to latestStateData.cols-1)) {
       for (i <- 0 to latestStateData.rows - 1) {
@@ -159,7 +160,22 @@ object game {
 //    val allStates = mutable.HashMap[Int, State]()
 //   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
 //    //println(allStates)
-
+    val allStates:mutable.HashMap[Int, (State, Boolean)]= mutable.HashMap()
+    def buildAllStates(currentState:State, playerSymbol:Int):Unit = {
+      for (i <- 0 to ROWCOL-1) {
+        for (j <- 0 to ROWCOL-1 ) {
+          if (currentState.data(i,j)==0) {
+            val newState  = currentState.nextState(i, j, playerSymbol)
+            val newHash = newState.hashVal
+            if (!allStates.contains(newHash)) {
+              val isEnd = newState.isEnd
+              allStates.put(newHash, (newState, isEnd))
+              if (!isEnd) buildAllStates(newState, -playerSymbol)
+            }
+          }
+        }
+      }
+    }
     val player:Player = Player.ai1
     val otherPlayer:Player = Player.ai2
     def findRewards(p1:Player, p2:Player, theWinner:Int) = {
@@ -180,10 +196,12 @@ object game {
         val (reward, otherReward) = findRewards(p1, p2, winner)
         p1.feedReward(reward, p1.states)
         p2.feedReward(otherReward, p2.states)
+        println("found winner:"+winner)
       } else {
         go(p2, p1)
       }
     }
+    buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
     go(player, otherPlayer)
 
     println(player.estimations)
