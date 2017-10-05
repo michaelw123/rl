@@ -88,7 +88,7 @@ sealed class Player (val playerSymbol:Int){
   val stepsize=0.1
   val exploreRate = 0.5
   val estimations = mutable.HashMap[Int, Double]()
-  val states = mutable.LinkedHashMap[Int, State]()
+  var states = mutable.LinkedHashMap[Int, State]()
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
@@ -98,7 +98,7 @@ sealed class Player (val playerSymbol:Int){
     if (theStates.isEmpty) return
     val key=theStates.keySet.last
     estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
-    feedReward(estimations(key), theStates.dropRight(key))
+    feedReward(estimations(key), theStates.dropRight(1))
   }
   def takeAction = {
     //if (toExplore) {
@@ -130,13 +130,6 @@ sealed class Player (val playerSymbol:Int){
       val size = a.filter(_ == 0).size
       val index = Random.nextInt(size)
       var x = 0
-      //for ((i, j ) <- (0 to latestStateData.rows-1, 0 to latestStateData.cols-1)) {
-//      for (i <- 0 to latestStateData.rows - 1) {
-//        for (j <- 0 to latestStateData.cols - 1) {
-//          if (latestStateData.valueAt(i, j) == 0) x = x + 1
-//          if (x == index) (i, j)
-//        }
-//      }
       for (i <- 0 to ROWCOL*ROWCOL) {
         if (latestStateData.valueAt(i) == 0) {
           if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
@@ -215,7 +208,12 @@ object game {
     }
 
     buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
-    go(player, otherPlayer)
+    for (i <- 0 to 100) {
+      player.states= player.states.empty
+      otherPlayer.states= otherPlayer.states.empty
+      go(player, otherPlayer)
+      System.out.println("Epoch "+i)
+    }
 
     println(player.estimations)
     println(otherPlayer.estimations)
