@@ -123,18 +123,23 @@ sealed class Player (val playerSymbol:Int){
    def toExplore:Boolean = {
     return Binomial(100, exploreRate).draw < 100* exploreRate
   }
-  private def nextPosition = {
+  private def nextPosition:(Int, Int) = {
     if (!states.isEmpty) {
       val latestStateData = states.values.last.data
       val a = latestStateData.toArray
-      val index = Random.nextInt(latestStateData.toArray.filter(_ == 0).size)
+      val size = a.filter(_ == 0).size
+      val index = Random.nextInt(size)
       var x = 0
       //for ((i, j ) <- (0 to latestStateData.rows-1, 0 to latestStateData.cols-1)) {
-      for (i <- 0 to latestStateData.rows - 1) {
-        for (j <- 0 to latestStateData.cols - 1) {
-          if (latestStateData.valueAt(i, j) == 0) x = x + 1
-          if (x == index) (i, j)
-        }
+//      for (i <- 0 to latestStateData.rows - 1) {
+//        for (j <- 0 to latestStateData.cols - 1) {
+//          if (latestStateData.valueAt(i, j) == 0) x = x + 1
+//          if (x == index) (i, j)
+//        }
+//      }
+      for (i <- 0 to ROWCOL*ROWCOL) {
+        if (latestStateData.valueAt(i) == 0) x=x+1
+        if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
       }
       (0,0)
     } else {
