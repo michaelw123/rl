@@ -138,14 +138,20 @@ sealed class Player (val playerSymbol:Int){
 //        }
 //      }
       for (i <- 0 to ROWCOL*ROWCOL) {
-        if (latestStateData.valueAt(i) == 0) x=x+1
-        if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
+        if (latestStateData.valueAt(i) == 0) {
+          if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
+          x=x+1
+        }
       }
       (0,0)
     } else {
       ((game.ROWCOL/2) toInt, (game.ROWCOL/2) toInt )
     }
   }
+  def gameFinished = {
+    states.values.last.data.toArray.filter(_ == 0).isEmpty
+  }
+  def show = println(states.values.last.data)
 }
 object Player {
    case object ai1 extends Player(1)
@@ -202,10 +208,12 @@ object game {
         p1.feedReward(reward, p1.states)
         p2.feedReward(otherReward, p2.states)
         println("found winner:"+winner)
+        p1.show
       } else {
-        go(p2, p1)
+        if (!p1.gameFinished) go(p2, p1)
       }
     }
+
     buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
     go(player, otherPlayer)
 
