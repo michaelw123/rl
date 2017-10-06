@@ -1,100 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="49bb649b-27e9-4ec5-bff2-2218ba531b32" name="Default" comment="init chechin">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4776cc54095488d311d3$$anonfun$$sbtdef$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4776cc54095488d311d3$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4776cc54095488d311d3.cache" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4776cc54095488d311d3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4e7c1ca0fc2e49c258bf$$anonfun$$sbtdef$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4e7c1ca0fc2e49c258bf$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4e7c1ca0fc2e49c258bf.cache" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$4e7c1ca0fc2e49c258bf.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d$$anonfun$$sbtdef$1$$anonfun$apply$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d$$anonfun$$sbtdef$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d$$anonfun$$sbtdef$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d$$anonfun$$sbtdef$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d.cache" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$bb930f682b0c0d5a270d.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$df813c7bcdeaa3fb4f42$$anonfun$$sbtdef$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$df813c7bcdeaa3fb4f42$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$df813c7bcdeaa3fb4f42.cache" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/connect5/project/target/config-classes/$df813c7bcdeaa3fb4f42.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/$global/update/$global/streams/update_cache_2.10/inputs" afterPath="$PROJECT_DIR$/connect5/project/target/streams/$global/update/$global/streams/update_cache_2.10/inputs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/$global/update/$global/streams/update_cache_2.10/output" afterPath="$PROJECT_DIR$/connect5/project/target/streams/$global/update/$global/streams/update_cache_2.10/output" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/dependencyPositions/$global/streams/update_cache_2.12/input_dsp" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/dependencyPositions/$global/streams/update_cache_2.12/input_dsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/dependencyPositions/$global/streams/update_cache_2.12/output_dsp" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/dependencyPositions/$global/streams/update_cache_2.12/output_dsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/update/$global/streams/update_cache_2.12/inputs" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/update/$global/streams/update_cache_2.12/inputs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/update/$global/streams/update_cache_2.12/output" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/update/$global/streams/update_cache_2.12/output" />
+    <list default="true" id="49bb649b-27e9-4ec5-bff2-2218ba531b32" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml" afterPath="$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/.idea/modules/connect5.iml" afterPath="$PROJECT_DIR$/connect5/.idea/modules/connect5.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/default/connect5-build/scala_2.10/sbt_0.13/0.1-SNAPSHOT/resolved.xml.properties" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/default/connect5-build/scala_2.10/sbt_0.13/0.1-SNAPSHOT/resolved.xml.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/default/connect5-build/scala_2.10/sbt_0.13/0.1-SNAPSHOT/resolved.xml.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/default/connect5-build/scala_2.10/sbt_0.13/0.1-SNAPSHOT/resolved.xml.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-compile-internal.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-compile-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-compile.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-compile.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-docs.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-docs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-optional.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-optional.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-plugin.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-pom.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-provided.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-provided.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-runtime-internal.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-runtime-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-runtime.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-runtime.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-scala-tool.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-scala-tool.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-sources.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-sources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-test-internal.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-test-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-test.xml" afterPath="$PROJECT_DIR$/connect5/project/target/scala-2.10/sbt-0.13/resolution-cache/reports/default-connect5-build-test.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/$global/update/$global/streams/out" afterPath="$PROJECT_DIR$/connect5/project/target/streams/$global/update/$global/streams/out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/compile/dependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/compile/dependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/compile/exportedProducts/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/compile/exportedProducts/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/compile/externalDependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/compile/externalDependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/compile/managedClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/compile/managedClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/runtime/dependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/runtime/dependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/runtime/exportedProducts/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/runtime/exportedProducts/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/runtime/fullClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/runtime/fullClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/project/target/streams/runtime/internalDependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/project/target/streams/runtime/internalDependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala" afterPath="$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala" afterPath="$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5$sources_2.12/1.0/resolved.xml.properties" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5$sources_2.12/1.0/resolved.xml.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5$sources_2.12/1.0/resolved.xml.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5$sources_2.12/1.0/resolved.xml.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5_2.12/1.0/resolved.xml.properties" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5_2.12/1.0/resolved.xml.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5_2.12/1.0/resolved.xml.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/default/connect5_2.12/1.0/resolved.xml.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-compile-internal.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-compile-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-compile.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-compile.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-docs.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-docs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-optional.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-optional.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-plugin.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-pom.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-provided.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-provided.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-runtime-internal.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-runtime-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-runtime.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-runtime.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-scala-tool.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-scala-tool.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-sources.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-sources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-test-internal.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-test-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-test.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5$sources_2.12-test.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-compile-internal.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-compile-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-compile.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-compile.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-docs.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-docs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-optional.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-optional.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-plugin.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-pom.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-provided.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-provided.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-runtime-internal.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-runtime-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-runtime.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-runtime.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-scala-tool.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-scala-tool.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-sources.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-sources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-test-internal.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-test-internal.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-test.xml" afterPath="$PROJECT_DIR$/connect5/target/scala-2.12/resolution-cache/reports/default-connect5_2.12-test.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/$global/dumpStructure/$global/streams/out" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/$global/dumpStructure/$global/streams/out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/update/$global/streams/out" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/update/$global/streams/out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/$global/updateClassifiers/$global/streams/out" afterPath="$PROJECT_DIR$/connect5/target/streams/$global/updateClassifiers/$global/streams/out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/compile/externalDependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/target/streams/compile/externalDependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/compile/managedClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/target/streams/compile/managedClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/runtime/externalDependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/target/streams/runtime/externalDependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/runtime/managedClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/target/streams/runtime/managedClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/test/externalDependencyClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/target/streams/test/externalDependencyClasspath/$global/streams/export" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect5/target/streams/test/managedClasspath/$global/streams/export" afterPath="$PROJECT_DIR$/connect5/target/streams/test/managedClasspath/$global/streams/export" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/connect5/target/" />
@@ -138,24 +47,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="connect5.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
+      <file leaf-file-name="TicTacToe.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="13" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="13" />
-              <folding />
+            <state relative-caret-position="306">
+              <caret line="157" column="20" lean-forward="false" selection-start-line="157" selection-start-column="20" selection-end-line="157" selection-end-column="20" />
+              <folding>
+                <element signature="e#21#110#0" expanded="true" />
+                <element signature="e#706#738#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicTacToe.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
+      <file leaf-file-name="Console.scala" pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/Console.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="204" column="13" lean-forward="false" selection-start-line="204" selection-start-column="13" selection-end-line="204" selection-end-column="13" />
+            <state relative-caret-position="431">
+              <caret line="124" column="7" lean-forward="false" selection-start-line="124" selection-start-column="7" selection-end-line="124" selection-end-column="7" />
               <folding>
-                <element signature="e#21#110#0" expanded="true" />
-                <element signature="e#712#744#0" expanded="true" />
+                <element signature="n#!!doc" expanded="false" />
+                <element signature="e#541#641#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -176,8 +88,8 @@
       <file leaf-file-name="Tensor.scala" pinned="false" current-in-tab="false">
         <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/Tensor.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="834">
-              <caret line="78" column="6" lean-forward="false" selection-start-line="78" selection-start-column="6" selection-end-line="78" selection-end-column="6" />
+            <state relative-caret-position="-323">
+              <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
               <folding>
                 <element signature="e#585#601#0" expanded="false" />
               </folding>
@@ -228,7 +140,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
               <caret line="95" column="6" lean-forward="false" selection-start-line="95" selection-start-column="6" selection-end-line="95" selection-end-column="6" />
-              <folding />
+              <folding>
+                <element signature="e#585#608#0" expanded="false" />
+                <element signature="e#6296#6383#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -238,7 +153,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="230">
               <caret line="261" column="84" lean-forward="true" selection-start-line="261" selection-start-column="84" selection-end-line="261" selection-end-column="84" />
-              <folding />
+              <folding>
+                <element signature="e#585#622#0" expanded="false" />
+                <element signature="e#6543#6640#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -277,6 +195,8 @@
       <find>feedState</find>
       <find>feedReward</find>
       <find>states</find>
+      <find>exploreRate</find>
+      <find>allStates</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -1008,12 +928,26 @@
       <option name="project" value="LOCAL" />
       <updated>1507225573575</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="init chechin">
+      <created>1507234409779</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1507234409779</updated>
+    </task>
+    <task id="LOCAL-00020" summary="init chechin">
+      <created>1507315135720</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1507315135720</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1026,7 +960,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39598733" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26504752" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1081,7 +1015,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#712#744#0" expanded="true" />
+            <element signature="e#706#738#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1111,7 +1045,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5831">
           <caret line="343" column="95" lean-forward="false" selection-start-line="343" selection-start-column="84" selection-end-line="343" selection-end-column="95" />
-          <folding />
+          <folding>
+            <element signature="e#585#608#0" expanded="false" />
+            <element signature="e#6296#6383#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1129,7 +1066,7 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#712#744#0" expanded="true" />
+            <element signature="e#706#738#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1148,7 +1085,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5831">
           <caret line="343" column="95" lean-forward="true" selection-start-line="343" selection-start-column="84" selection-end-line="343" selection-end-column="95" />
-          <folding />
+          <folding>
+            <element signature="e#585#608#0" expanded="false" />
+            <element signature="e#6296#6383#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1362,16 +1302,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/Tensor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="834">
-          <caret line="78" column="6" lean-forward="false" selection-start-line="78" selection-start-column="6" selection-end-line="78" selection-end-column="6" />
-          <folding>
-            <element signature="e#585#601#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/Matrix.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2787">
@@ -1386,7 +1316,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
           <caret line="261" column="84" lean-forward="true" selection-start-line="261" selection-start-column="84" selection-end-line="261" selection-end-column="84" />
-          <folding />
+          <folding>
+            <element signature="e#585#622#0" expanded="false" />
+            <element signature="e#6543#6640#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1394,7 +1327,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="95" column="6" lean-forward="false" selection-start-line="95" selection-start-column="6" selection-end-line="95" selection-end-column="6" />
-          <folding />
+          <folding>
+            <element signature="e#585#608#0" expanded="false" />
+            <element signature="e#6296#6383#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1419,13 +1355,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/Tensor.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-323">
+          <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
+          <folding>
+            <element signature="e#585#601#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/Console.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="124" column="7" lean-forward="false" selection-start-line="124" selection-start-column="7" selection-end-line="124" selection-end-column="7" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#541#641#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="204" column="13" lean-forward="false" selection-start-line="204" selection-start-column="13" selection-end-line="204" selection-end-column="13" />
+        <state relative-caret-position="306">
+          <caret line="157" column="20" lean-forward="false" selection-start-line="157" selection-start-column="20" selection-end-line="157" selection-end-column="20" />
           <folding>
             <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#712#744#0" expanded="true" />
+            <element signature="e#706#738#0" expanded="true" />
           </folding>
         </state>
       </provider>

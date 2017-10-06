@@ -126,22 +126,43 @@ sealed class Player (val playerSymbol:Int){
     return Binomial(100, exploreRate).draw < 100* exploreRate
   }
   private def nextPosition:(Int, Int) = {
-    if (!states.isEmpty) {
-      val latestStateData = states.values.last.data
-      val a = latestStateData.toArray
-      val size = a.filter(_ == 0).size
-      val index = Random.nextInt(size)
-      var x = 0
-      for (i <- 0 to ROWCOL*ROWCOL) {
-        if (latestStateData.valueAt(i) == 0) {
-          if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
-          x=x+1
-        }
+    if (!states.isEmpty ) {
+      if (toExplore) {
+        explore
+      } else {
+        exploite
       }
-      (0,0)
     } else {
       ((game.ROWCOL/2) toInt, (game.ROWCOL/2) toInt )
     }
+  }
+  private def explore:(Int, Int) = {
+    val latestStateData = states.values.last.data
+    val a = latestStateData.toArray
+    val size = a.filter(_ == 0).size
+    val index = Random.nextInt(size)
+    var x = 0
+    for (i <- 0 to ROWCOL * ROWCOL) {
+      if (latestStateData.valueAt(i) == 0) {
+        if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
+        x = x + 1
+      }
+    }
+    (0, 0)
+  }
+  private exploite:(Int, Int) = {
+    val availablePositions = mutable.LinkedHashMap[Int, Double]()
+    val latestStateData = states.values.last.data.toArray
+    for (i <- latestStateData) {
+      if (latestStateData(i) == 0) {
+        val newState = states.values.last.data.copy
+        newState(i)=playerSymbol
+        val hash = newState.hashCode()
+        availablePositions.put(hash, estimations(hash))
+      }
+    }
+    val (state, isEnd) = game.allStates(availablePositions.max._1)
+    state.
   }
   def gameFinished = {
     states.values.last.data.toArray.filter(_ == 0).isEmpty
