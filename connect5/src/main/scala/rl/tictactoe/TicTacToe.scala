@@ -4,8 +4,7 @@ import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutp
 import breeze.linalg._
 import rl.tictactoe.game.ROWCOL
 
-import scala.collection.immutable
-import scala.collection.mutable
+import scala.collection.{immutable, mutable}
 import scala.util.Random
 
 /**
@@ -24,7 +23,10 @@ object TicTacToe extends App {
 
 //  println(est1.data)
 
+  game.train
   game.play
+
+
 //  val player= AIPlayer
 //  player.toExplore
 
@@ -111,7 +113,7 @@ sealed class Player (val playerSymbol:Int){
 
     //}
   }
-  private def nextState1(i:Int,j:Int):State = {
+   def nextState1(i:Int,j:Int):State = {
     if (states.isEmpty){
       val newData = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
       newData(i,j) = playerSymbol
@@ -149,13 +151,78 @@ sealed class Player (val playerSymbol:Int){
 object Player {
    case object ai1 extends Player(1)
    case object ai2 extends Player(-1)
-   case object human extends Player(-1)
+   case object human extends Player(-1) {
+     override def takeAction = {
+       show
+       println("enter the position:")
+       val input:Int = scala.io.StdIn.readLine().toInt
+       println(input)
+       val (i,j) = states.values.last.data.rowColumnFromLinearIndex(input)
+       val nextState = nextState1(i,j)
+
+       states.put(nextState.hashCode, nextState)
+       (i, j, nextState)
+     }
+
+     override def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]): Unit = {
+     }
+   }
 }
 object game {
   final val ROWCOL = 3
-
+  val allStates:mutable.HashMap[Int, (State, Boolean)]= mutable.HashMap()
+  def buildAllStates(currentState:State, playerSymbol:Int):Unit = {
+    for (i <- 0 to ROWCOL-1) {
+      for (j <- 0 to ROWCOL-1 ) {
+        if (currentState.data(i,j)==0) {
+          val newState  = currentState.nextState(i, j, playerSymbol)
+          val newHash = newState.hashVal
+          if (!allStates.contains(newHash)) {
+            val isEnd = newState.isEnd
+            allStates.put(newHash, (newState, isEnd))
+            if (!isEnd) buildAllStates(newState, -playerSymbol)
+          }
+        }
+      }
+    }
+  }
+  def findRewards(p1:Player, p2:Player, theWinner:Int) = {
+    if (p1.playerSymbol == theWinner) {
+      (1.0, 0.0)
+    } else if (p2.playerSymbol == theWinner) {
+      (0.0, 1.0)
+    } else {
+      (0.1, 0.5)
+    }
+  }
+  def savePolicy(policy:mutable.HashMap[Int, Double], file:String) = {
+    val oos = new ObjectOutputStream(new FileOutputStream(file))
+    oos.writeObject(policy)
+    oos.close
+  }
+  def loadPolicy(file:String): mutable.HashMap[Int, Double]= {
+    val ois = new ObjectInputStream(new FileInputStream(file))
+    val policy = ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
+    ois.close
+    policy
+  }
+  def go(p1:Player, p2:Player):Unit = {
+    val (i, j, state) = p1.takeAction
+    p1.feedState(state)
+    p2.feedState(state)
+    val winner = state.winner
+    if (winner!=0)  {
+      val (reward, otherReward) = findRewards(p1, p2, winner)
+      p1.feedReward(reward, p1.states)
+      p2.feedReward(otherReward, p2.states)
+      println("found winner:"+winner)
+      p1.show
+    } else {
+      if (!p1.gameFinished) go(p2, p1)
+    }
+  }
   //val data = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
-  def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
+  def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
 //    data.update(0, 0, -1)
 //    data.update(1, 1, 0)
 //    data.update(2, 2, -1)
@@ -164,51 +231,12 @@ object game {
 //    val allStates = mutable.HashMap[Int, State]()
 //   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
 //    //println(allStates)
-    val allStates:mutable.HashMap[Int, (State, Boolean)]= mutable.HashMap()
-    def buildAllStates(currentState:State, playerSymbol:Int):Unit = {
-      for (i <- 0 to ROWCOL-1) {
-        for (j <- 0 to ROWCOL-1 ) {
-          if (currentState.data(i,j)==0) {
-            val newState  = currentState.nextState(i, j, playerSymbol)
-            val newHash = newState.hashVal
-            if (!allStates.contains(newHash)) {
-              val isEnd = newState.isEnd
-              allStates.put(newHash, (newState, isEnd))
-              if (!isEnd) buildAllStates(newState, -playerSymbol)
-            }
-          }
-        }
-      }
-    }
+
     val player:Player = Player.ai1
     val otherPlayer:Player = Player.ai2
-    def findRewards(p1:Player, p2:Player, theWinner:Int) = {
-      if (p1.playerSymbol == theWinner) {
-        (1.0, 0.0)
-      } else if (p2.playerSymbol == theWinner) {
-        (0.0, 1.0)
-      } else {
-        (0.1, 0.5)
-      }
-    }
-    def go(p1:Player, p2:Player):Unit = {
-      val (i, j, state) = p1.takeAction
-      p1.feedState(state)
-      p2.feedState(state)
-      val winner = state.winner
-      if (winner!=0)  {
-        val (reward, otherReward) = findRewards(p1, p2, winner)
-        p1.feedReward(reward, p1.states)
-        p2.feedReward(otherReward, p2.states)
-        println("found winner:"+winner)
-        p1.show
-      } else {
-        if (!p1.gameFinished) go(p2, p1)
-      }
-    }
 
     buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
-    for (i <- 0 to 100) {
+    for (i <- 0 to 1000) {
       player.states= player.states.empty
       otherPlayer.states= otherPlayer.states.empty
       go(player, otherPlayer)
@@ -216,9 +244,16 @@ object game {
     }
 
     println(player.estimations)
+    savePolicy(player.estimations, "c://work/tmp/player1-policy")
     println(otherPlayer.estimations)
+    savePolicy(otherPlayer.estimations, "c://work/tmp/player2-policy")
   }
-
+  def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
+    val player:Player = Player.ai1
+    val otherPlayer:Player = Player.human
+    player.states= player.states.empty
+    go(player, otherPlayer)
+  }
 }
 @SerialVersionUID(123L)
 class Estimations extends Serializable {
