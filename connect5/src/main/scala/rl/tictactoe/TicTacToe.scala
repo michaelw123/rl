@@ -86,9 +86,9 @@ case class State( data:DenseMatrix[Int]) {
   }
 }
 
-sealed class Player (val playerSymbol:Int){
+sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
-  val exploreRate = 0.5
+
   val estimations = mutable.HashMap[Int, Double]()
   var states = mutable.LinkedHashMap[Int, State]()
 
@@ -123,7 +123,11 @@ sealed class Player (val playerSymbol:Int){
     }
   }
    def toExplore:Boolean = {
-    return Binomial(100, exploreRate).draw < 100* exploreRate
+     if (exploreRate==0) {
+       return false
+     } else {
+       return Binomial(100, exploreRate).draw <= 100 * exploreRate
+     }
   }
   private def nextPosition:(Int, Int) = {
     if (!states.isEmpty ) {
@@ -175,9 +179,10 @@ sealed class Player (val playerSymbol:Int){
   def show = println(states.values.last.data)
 }
 object Player {
-   case object ai1 extends Player(1)
-   case object ai2 extends Player(-1)
-   case object human extends Player(-1) {
+   case object ai1 extends Player(1, 1)
+   case object ai2 extends Player(-1, 1)
+   case object ai3 extends Player(1, 0)
+   case object human extends Player(-1, 0) {
      override def takeAction = {
        show
        println("enter the position:")
@@ -275,7 +280,7 @@ object game {
     savePolicy(otherPlayer.estimations, "c://work/tmp/player2-policy")
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
-    val player:Player = Player.ai1
+    val player:Player = Player.ai3
     val otherPlayer:Player = Player.human
     player.states= player.states.empty
     go(player, otherPlayer)
