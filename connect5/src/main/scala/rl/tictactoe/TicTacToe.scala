@@ -150,19 +150,24 @@ sealed class Player (val playerSymbol:Int){
     }
     (0, 0)
   }
-  private exploite:(Int, Int) = {
+  private def exploite:(Int, Int) = {
     val availablePositions = mutable.LinkedHashMap[Int, Double]()
-    val latestStateData = states.values.last.data.toArray
-    for (i <- latestStateData) {
+    val data = states.values.last.data
+    val latestStateData = data.toArray
+
+    for (i <- 0 to ROWCOL * ROWCOL -1) {
       if (latestStateData(i) == 0) {
         val newState = states.values.last.data.copy
-        newState(i)=playerSymbol
+        newState(data.rowColumnFromLinearIndex(i))=playerSymbol
         val hash = newState.hashCode()
-        availablePositions.put(hash, estimations(hash))
+        if (estimations.contains(hash)) {
+          availablePositions.put(i, estimations(hash))
+        } else {
+          availablePositions.put(i, 0)
+        }
       }
     }
-    val (state, isEnd) = game.allStates(availablePositions.max._1)
-    state.
+    states.values.last.data.rowColumnFromLinearIndex(availablePositions.max._1)
   }
   def gameFinished = {
     states.values.last.data.toArray.filter(_ == 0).isEmpty
