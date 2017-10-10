@@ -67,7 +67,7 @@ case class State( data:DenseMatrix[Int]) {
     w
   }
   def winner(d:DenseMatrix[Int]): Int ={
-    val rows = data(*, ::)
+    val rows = d(*, ::)
     for (row <- rows) {
       if (sum(row) == 3)
         return 1
@@ -173,7 +173,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     }
     states.values.last.data.rowColumnFromLinearIndex(availablePositions.max._1)
   }
-  def gameFinished = {
+  def isTie = {
     states.values.last.data.toArray.filter(_ == 0).isEmpty
   }
   def show = println(states.values.last.data)
@@ -249,7 +249,7 @@ object game {
       println("found winner:"+winner)
       p1.show
     } else {
-      if (!p1.gameFinished) go(p2, p1)
+      if (!p1.isTie) go(p2, p1)
     }
   }
   //val data = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
