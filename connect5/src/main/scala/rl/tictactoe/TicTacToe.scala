@@ -11,8 +11,8 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  //game.train
-  game.play
+  //game train
+  game play
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -26,7 +26,6 @@ case class State( data:DenseMatrix[Int]) {
         hashVal
       }
    }
-  lazy val isEnd:Boolean = winner!=0
   def winner:Int = {
     var w:Int = winner(data)
     if (w==0) w = winner(data.t)
@@ -123,7 +122,6 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       }
     } else {
       (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
-      //((game.ROWCOL/2) toInt, (game.ROWCOL/2) toInt )
     }
   }
   private def explore:(Int, Int) = {
@@ -203,29 +201,13 @@ object Player {
 }
 object game {
   final val ROWCOL = 3
-  val allStates:mutable.HashMap[Int, (State, Boolean)]= mutable.HashMap()
-  def buildAllStates(currentState:State, playerSymbol:Int):Unit = {
-    for (i <- 0 to ROWCOL-1) {
-      for (j <- 0 to ROWCOL-1 ) {
-        if (currentState.data(i,j)==0) {
-          val newState  = currentState.nextState(i, j, playerSymbol)
-          val newHash = newState.hashVal
-          if (!allStates.contains(newHash)) {
-            val isEnd = newState.isEnd
-            allStates.put(newHash, (newState, isEnd))
-            if (!isEnd) buildAllStates(newState, -playerSymbol)
-          }
-        }
-      }
-    }
-  }
   def findRewards(p1:Player, p2:Player, theWinner:Int) = {
     if (p1.playerSymbol == theWinner) {
       (1.0, 0.0)
     } else if (p2.playerSymbol == theWinner) {
       (0.0, 1.0)
     } else {
-      (0.1, 0.5)
+      (0.5, 0.5)
     }
   }
 
@@ -254,7 +236,6 @@ object game {
     val player:Player = Player.ai1
     val otherPlayer:Player = Player.ai2
 
-    buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
     for (i <- 0 to 50000) {
       player.states= player.states.empty
       otherPlayer.states= otherPlayer.states.empty
