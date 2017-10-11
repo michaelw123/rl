@@ -11,7 +11,7 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  game.train
+  //game.train
   game.play
 }
 import breeze.linalg.DenseMatrix
@@ -27,12 +27,6 @@ case class State( data:DenseMatrix[Int]) {
       }
    }
   lazy val isEnd:Boolean = winner!=0
-  lazy val estimate:Double = {
-    val w = winner
-    if (w != 0) w
-    else 0.5
-  }
-
   def winner:Int = {
     var w:Int = winner(data)
     if (w==0) w = winner(data.t)
@@ -74,14 +68,29 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
-    estimations.put(state.hashCode, 0)
+    //estimations.put(state.hashCode, 0)
+  }
+  def feedReward(reward:Double):Unit = {
+    if (states.isEmpty) return
+    val key = states.keySet.last
+    if (estimations.contains(key)) {
+      estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
+    } else {
+      estimations.put(key, reward)
+    }
+    feedReward(estimations(key), states.dropRight(1))
   }
   def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
     if (theStates.isEmpty) return
     val key=theStates.keySet.last
-    estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
+    if (estimations.contains(key)) {
+      estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
+    } else {
+      estimations.put(key, reward)
+    }
     feedReward(estimations(key), theStates.dropRight(1))
   }
+
   def takeAction = {
       val (i, j) = nextPosition
       val nextState = nextState1(i,j)
@@ -113,7 +122,8 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
         exploite
       }
     } else {
-      ((game.ROWCOL/2) toInt, (game.ROWCOL/2) toInt )
+      (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
+      //((game.ROWCOL/2) toInt, (game.ROWCOL/2) toInt )
     }
   }
   private def explore:(Int, Int) = {
@@ -187,6 +197,8 @@ object Player {
 
      override def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]): Unit = {
      }
+     override def feedReward(reward:Double): Unit = {
+     }
    }
 }
 object game {
@@ -230,8 +242,8 @@ object game {
     val winner = state.winner
     if (winner!=0)  {
       val (reward, otherReward) = findRewards(p1, p2, winner)
-      p1.feedReward(reward, p1.states)
-      p2.feedReward(otherReward, p2.states)
+      p1.feedReward(reward)
+      p2.feedReward(otherReward)
       println("found winner:"+winner)
       p1.show
     } else {
@@ -243,18 +255,16 @@ object game {
     val otherPlayer:Player = Player.ai2
 
     buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
-    for (i <- 0 to 5000) {
+    for (i <- 0 to 50000) {
       player.states= player.states.empty
       otherPlayer.states= otherPlayer.states.empty
       go(player, otherPlayer)
       System.out.println("Epoch "+i)
     }
-
     println(player.estimations)
-    player savePolicy "c://work/tmp/player2-policy"
+    player savePolicy "c://work/tmp/player1-policy"
     println(otherPlayer.estimations)
     otherPlayer savePolicy "c://work/tmp/player2-policy"
-
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player:Player = Player.ai3
