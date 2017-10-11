@@ -89,7 +89,7 @@ case class State( data:DenseMatrix[Int]) {
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
 
-  val estimations = mutable.HashMap[Int, Double]()
+  var estimations = mutable.HashMap[Int, Double]()
   var states = mutable.LinkedHashMap[Int, State]()
 
   def feedState(state:State): Unit = {
@@ -161,9 +161,11 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
 
     for (i <- 0 to ROWCOL * ROWCOL -1) {
       if (latestStateData(i) == 0) {
-        val newState = states.values.last.data.copy
-        newState(data.rowColumnFromLinearIndex(i))=playerSymbol
+        val newData = states.values.last.data.copy
+        newData(data.rowColumnFromLinearIndex(i))=playerSymbol
+        val newState=State(newData)
         val hash = newState.hashCode()
+        println("hash="+hash+", estimation="+estimations(hash))
         if (estimations.contains(hash)) {
           availablePositions.put(i, estimations(hash))
         } else {
@@ -171,12 +173,26 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
         }
       }
     }
-    states.values.last.data.rowColumnFromLinearIndex(availablePositions.max._1)
+    println("available positions:"+availablePositions)
+    val max = availablePositions.maxBy(_._2)
+    println(max)
+    data.rowColumnFromLinearIndex(max._1)
   }
   def isTie = {
     states.values.last.data.toArray.filter(_ == 0).isEmpty
   }
   def show = println(states.values.last.data)
+  def savePolicy(file:String) = {
+    val oos = new ObjectOutputStream(new FileOutputStream(file))
+    oos.writeObject(estimations)
+    oos.close
+  }
+  def loadPolicy(file:String)= {
+    val ois = new ObjectInputStream(new FileInputStream(file))
+   estimations = ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
+    ois.close
+
+  }
 }
 object Player {
    case object ai1 extends Player(1, 1)
@@ -226,11 +242,7 @@ object game {
       (0.1, 0.5)
     }
   }
-  def savePolicy(policy:mutable.HashMap[Int, Double], file:String) = {
-    val oos = new ObjectOutputStream(new FileOutputStream(file))
-    oos.writeObject(policy)
-    oos.close
-  }
+
   def loadPolicy(file:String): mutable.HashMap[Int, Double]= {
     val ois = new ObjectInputStream(new FileInputStream(file))
     val policy = ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
@@ -267,7 +279,7 @@ object game {
     val otherPlayer:Player = Player.ai2
 
     buildAllStates(State(DenseMatrix.zeros[Int](ROWCOL, ROWCOL)), 1)
-    for (i <- 0 to 1000) {
+    for (i <- 0 to 5000) {
       player.states= player.states.empty
       otherPlayer.states= otherPlayer.states.empty
       go(player, otherPlayer)
@@ -275,18 +287,20 @@ object game {
     }
 
     println(player.estimations)
-    savePolicy(player.estimations, "c://work/tmp/player1-policy")
+    player savePolicy "c://work/tmp/player2-policy"
     println(otherPlayer.estimations)
-    savePolicy(otherPlayer.estimations, "c://work/tmp/player2-policy")
+    otherPlayer savePolicy "c://work/tmp/player2-policy"
+
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player:Player = Player.ai3
+    player loadPolicy "c://work/tmp/player1-policy"
     val otherPlayer:Player = Player.human
     player.states= player.states.empty
     go(player, otherPlayer)
   }
 }
-@SerialVersionUID(123L)
-class Estimations extends Serializable {
-  val data: mutable.HashMap[Int, Double] = mutable.HashMap((1, 2.3), (2, 4.5))
-}
+//@SerialVersionUID(123L)
+//class Estimations extends Serializable {
+//  val data: mutable.HashMap[Int, Double] = mutable.HashMap((1, 2.3), (2, 4.5))
+//}
