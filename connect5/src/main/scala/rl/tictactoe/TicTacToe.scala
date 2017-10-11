@@ -11,8 +11,8 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  //game train
-  game play
+  game train
+  //game play
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -42,10 +42,10 @@ case class State( data:DenseMatrix[Int]) {
   def winner(d:DenseMatrix[Int]): Int ={
     val rows = d(*, ::)
     for (row <- rows) {
-      if (sum(row) == 3)
-        return 1
-      else if (sum(row) == -3)
-        return -1
+      val thesum = sum(row)
+      if (math.abs(thesum) == 3) {
+        math.signum(thesum)
+      }
     }
     0
   }
@@ -58,16 +58,13 @@ case class State( data:DenseMatrix[Int]) {
     println(data)
   }
 }
-
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
-
   var estimations = mutable.HashMap[Int, Double]()
   var states = mutable.LinkedHashMap[Int, State]()
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
-    //estimations.put(state.hashCode, 0)
   }
   def feedReward(reward:Double):Unit = {
     if (states.isEmpty) return
@@ -192,7 +189,6 @@ object Player {
        states.put(nextState.hashCode, nextState)
        (i, j, nextState)
      }
-
      override def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]): Unit = {
      }
      override def feedReward(reward:Double): Unit = {
@@ -210,7 +206,6 @@ object game {
       (0.5, 0.5)
     }
   }
-
   def loadPolicy(file:String): mutable.HashMap[Int, Double]= {
     val ois = new ObjectInputStream(new FileInputStream(file))
     val policy = ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
@@ -233,9 +228,8 @@ object game {
     }
   }
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
-    val player:Player = Player.ai1
-    val otherPlayer:Player = Player.ai2
-
+    val player = Player.ai1
+    val otherPlayer = Player.ai2
     for (i <- 0 to 50000) {
       player.states= player.states.empty
       otherPlayer.states= otherPlayer.states.empty
@@ -248,9 +242,9 @@ object game {
     otherPlayer savePolicy "c://work/tmp/player2-policy"
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
-    val player:Player = Player.ai3
+    val player = Player.ai3
     player loadPolicy "c://work/tmp/player1-policy"
-    val otherPlayer:Player = Player.human
+    val otherPlayer = Player.human
     player.states= player.states.empty
     go(player, otherPlayer)
   }
