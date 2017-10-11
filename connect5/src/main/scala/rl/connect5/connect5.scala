@@ -1,4 +1,4 @@
-package rl.tictactoe
+package rl.connect5
 import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import breeze.linalg.{DenseVector, _}
@@ -57,7 +57,7 @@ case class State( data:DenseMatrix[Int]) {
     newData(i,j) = player
     State(newData)
   }
-  def show = {
+  def show:Unit = {
     println(data)
   }
 }
@@ -65,8 +65,8 @@ case class State( data:DenseMatrix[Int]) {
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
 
-  var estimations = mutable.HashMap[Int, Double]()
-  var states = mutable.LinkedHashMap[Int, State]()
+  var estimations:mutable.HashMap[Int, Double] = mutable.HashMap[Int, Double]()
+  var states:mutable.LinkedHashMap[Int, State] = mutable.LinkedHashMap[Int, State]()
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
@@ -93,7 +93,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     feedReward(estimations(key), theStates.dropRight(1))
   }
 
-  def takeAction = {
+  def takeAction:Unit = {
     val (i, j) = nextPosition
     val nextState = nextState1(i,j)
 
@@ -111,13 +111,13 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   def toExplore:Boolean = {
     if (exploreRate==0) {
-      return false
+       false
     } else {
-      return Binomial(100, exploreRate).draw <= 100 * exploreRate
+       Binomial(100, exploreRate).draw <= 100 * exploreRate
     }
   }
   private def nextPosition:(Int, Int) = {
-    if (!states.isEmpty ) {
+    if (states.nonEmpty ) {
       if (toExplore) {
         explore
       } else {
@@ -130,7 +130,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   private def explore:(Int, Int) = {
     val latestStateData = states.values.last.data
     val a = latestStateData.toArray
-    val size = a.filter(_ == 0).size
+    val size = a.count(_ == 0)
     val index = Random.nextInt(size)
     var x = 0
     for (i <- 0 to ROWCOL * ROWCOL) {
@@ -146,7 +146,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     val data = states.values.last.data
     val latestStateData = data.toArray
 
-    for (i <- 0 to ROWCOL * ROWCOL -1) {
+    for (i <- 0 until ROWCOL * ROWCOL -1) {
       if (latestStateData(i) == 0) {
         val newData = states.values.last.data.copy
         newData(data.rowColumnFromLinearIndex(i))=playerSymbol
@@ -163,16 +163,16 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     println(max)
     data.rowColumnFromLinearIndex(max._1)
   }
-  def isTie = {
-    states.values.last.data.toArray.filter(_ == 0).isEmpty
+  def isTie:Boolean = {
+    !states.values.last.data.toArray.contains(0)
   }
-  def show = println(states.values.last.data)
-  def savePolicy(file:String) = {
+  def show:Unit = println(states.values.last.data)
+  def savePolicy(file:String):Unit = {
     val oos = new ObjectOutputStream(new FileOutputStream(file))
     oos.writeObject(estimations)
     oos.close
   }
-  def loadPolicy(file:String)= {
+  def loadPolicy(file:String):Unit= {
     val ois = new ObjectInputStream(new FileInputStream(file))
     estimations = ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
     ois.close
@@ -184,7 +184,7 @@ object Player {
   case object ai2 extends Player(-1, 1)
   case object ai3 extends Player(1, 0)
   case object human extends Player(-1, 0) {
-    override def takeAction = {
+    override def takeAction:Unit = {
       show
       println("enter the position:")
       val input:Int = scala.io.StdIn.readLine().toInt
@@ -204,7 +204,7 @@ object Player {
 }
 object game {
   final val ROWCOL = 10
-  def findRewards(p1:Player, p2:Player, theWinner:Int) = {
+  def findRewards(p1:Player, p2:Player, theWinner:Int):Unit = {
     if (p1.playerSymbol == theWinner) {
       (1.0, 0.0)
     } else if (p2.playerSymbol == theWinner) {
@@ -235,7 +235,7 @@ object game {
       if (!p1.isTie) go(p2, p1)
     }
   }
-  def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
+  def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)):Unit = {
     val player:Player = Player.ai1
     val otherPlayer:Player = Player.ai2
 
@@ -250,7 +250,7 @@ object game {
     println(otherPlayer.estimations)
     otherPlayer savePolicy "c://work/tmp/player2-policy"
   }
-  def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
+  def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)):Unit = {
     val player:Player = Player.ai3
     player loadPolicy "c://work/tmp/player1-policy"
     val otherPlayer:Player = Player.human
