@@ -11,27 +11,8 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-
-//  val est=new Estimations()
-//  val oos = new ObjectOutputStream(new FileOutputStream("/tmp/nflx"))
-//  oos.writeObject(est)
-//  oos.close
-//
-//  val ois = new ObjectInputStream(new FileInputStream("/tmp/nflx"))
-//  val est1 = ois.readObject.asInstanceOf[Estimations]
-//  ois.close
-
-//  println(est1.data)
-
   game.train
   game.play
-
-
-//  val player= AIPlayer
-//  player.toExplore
-
-
-
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -58,7 +39,6 @@ case class State( data:DenseMatrix[Int]) {
     if (w==0) {
       val x = data(0, 0) + data(1, 1) + data(2, 2)
       val y = data(2, 0) + data(1, 1) + data(0, 2)
- //     println(x, y)
       if (x == data.rows || y == data.rows)
         w = 1
       else if (x == -data.rows || y == -data.rows)
@@ -103,15 +83,11 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     feedReward(estimations(key), theStates.dropRight(1))
   }
   def takeAction = {
-    //if (toExplore) {
       val (i, j) = nextPosition
       val nextState = nextState1(i,j)
 
       states.put(nextState.hashCode, nextState)
       (i, j, nextState)
-    //} else {  //to Exploit
-
-    //}
   }
    def nextState1(i:Int,j:Int):State = {
     if (states.isEmpty){
@@ -165,7 +141,6 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
         newData(data.rowColumnFromLinearIndex(i))=playerSymbol
         val newState=State(newData)
         val hash = newState.hashCode()
-        println("hash="+hash+", estimation="+estimations(hash))
         if (estimations.contains(hash)) {
           availablePositions.put(i, estimations(hash))
         } else {
@@ -173,7 +148,6 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
         }
       }
     }
-    println("available positions:"+availablePositions)
     val max = availablePositions.maxBy(_._2)
     println(max)
     data.rowColumnFromLinearIndex(max._1)
@@ -264,17 +238,7 @@ object game {
       if (!p1.isTie) go(p2, p1)
     }
   }
-  //val data = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
-//    data.update(0, 0, -1)
-//    data.update(1, 1, 0)
-//    data.update(2, 2, -1)
-//    val s = State(data)
-//    val s1 = s.nextState(1, 0, 1)
-//    val allStates = mutable.HashMap[Int, State]()
-//   // allStates += ((s.hashCode, s), (s1.hashCode, s1))
-//    //println(allStates)
-
     val player:Player = Player.ai1
     val otherPlayer:Player = Player.ai2
 
@@ -300,7 +264,3 @@ object game {
     go(player, otherPlayer)
   }
 }
-//@SerialVersionUID(123L)
-//class Estimations extends Serializable {
-//  val data: mutable.HashMap[Int, Double] = mutable.HashMap((1, 2.3), (2, 4.5))
-//}
