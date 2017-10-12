@@ -11,8 +11,8 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  game train
-  //game play
+ // game train
+  game play
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -30,8 +30,9 @@ case class State( data:DenseMatrix[Int]) {
     var w:Int = winner(data)
     if (w==0) w = winner(data.t)
     if (w==0) {
-      val x = data(0, 0) + data(1, 1) + data(2, 2)
-      val y = data(2, 0) + data(1, 1) + data(0, 2)
+      val x = trace(data)
+      val y = trace(data.t)
+
       if (x == data.rows || y == data.rows)
         w = 1
       else if (x == -data.rows || y == -data.rows)
@@ -44,7 +45,7 @@ case class State( data:DenseMatrix[Int]) {
     for (row <- rows) {
       val thesum = sum(row)
       if (math.abs(thesum) == 3) {
-        math.signum(thesum)
+         return math.signum(thesum)
       }
     }
     0
@@ -67,24 +68,26 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     states.put(state.hashCode, state)
   }
   def feedReward(reward:Double):Unit = {
-    if (states.isEmpty) return
-    val key = states.keySet.last
-    if (estimations.contains(key)) {
-      estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
-    } else {
-      estimations.put(key, reward)
-    }
-    feedReward(estimations(key), states.dropRight(1))
+    if (!states.isEmpty) {
+     val key = states.keySet.last
+     if (estimations.contains(key)) {
+        estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
+     } else {
+        estimations.put(key, reward)
+     }
+     feedReward(estimations(key), states.dropRight(1))
+   }
   }
   def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
-    if (theStates.isEmpty) return
-    val key=theStates.keySet.last
-    if (estimations.contains(key)) {
-      estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
-    } else {
-      estimations.put(key, reward)
+    if (!theStates.isEmpty) {
+      val key = theStates.keySet.last
+      if (estimations.contains(key)) {
+        estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
+      } else {
+        estimations.put(key, reward)
+      }
+      feedReward(estimations(key), theStates.dropRight(1))
     }
-    feedReward(estimations(key), theStates.dropRight(1))
   }
 
   def takeAction = {
@@ -105,12 +108,16 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
    def toExplore:Boolean = {
      if (exploreRate==0) {
-       return false
+        false
      } else {
-       return Binomial(100, exploreRate).draw <= 100 * exploreRate
+        Binomial(100, exploreRate).draw <= 100 * exploreRate
      }
   }
   private def nextPosition:(Int, Int) = {
+//    states match {
+//      case isEmpty => (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
+//      case _ => if (toExplore) explore else exploite
+//    }
     if (!states.isEmpty ) {
       if (toExplore) {
         explore
@@ -127,7 +134,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     val size = a.filter(_ == 0).size
     val index = Random.nextInt(size)
     var x = 0
-    for (i <- 0 to ROWCOL * ROWCOL) {
+    for (i <- 0 to ROWCOL * ROWCOL -1) {
       if (latestStateData.valueAt(i) == 0) {
         if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
         x = x + 1
@@ -154,7 +161,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       }
     }
     val max = availablePositions.maxBy(_._2)
-    println(max)
+    println("max ="+max)
     data.rowColumnFromLinearIndex(max._1)
   }
   def isTie = {
@@ -203,7 +210,7 @@ object game {
     } else if (p2.playerSymbol == theWinner) {
       (0.0, 1.0)
     } else {
-      (0.5, 0.5)
+      (0.1, 0.5)
     }
   }
   def loadPolicy(file:String): mutable.HashMap[Int, Double]= {
