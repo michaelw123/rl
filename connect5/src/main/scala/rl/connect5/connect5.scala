@@ -1,7 +1,7 @@
 package rl.connect5
 import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
-import breeze.linalg.{DenseVector, _}
+import breeze.linalg.{DenseMatrix, DenseVector, _}
 import rl.tictactoe.game.ROWCOL
 
 import scala.collection.{immutable, mutable}
@@ -29,25 +29,56 @@ case class State( data:DenseMatrix[Int]) {
   def winner:Int = {
     var w:Int = winner(data)
     if (w==0) w = winner(data.t)
-    if (w==0) {
-      for (row <- 0 to ROWCOL-6) {
-        val v:DenseVector[Int] = DenseVector(data(row, ROWCOL-row), data(row+1, ROWCOL-row+1), data(row+2, ROWCOL-row+2), data(row+3, ROWCOL-row+3), data(row+4, ROWCOL-row+4))
+    if (w==0) w=diagWinner(data)
+    w
+  }
+  def diagWinner(m:DenseMatrix[Int]): Int = {
+    if (m.rows == 5) {
+      return diagWinner5(m)
+    }
+    val m1 = m(0 to m.rows-1,0 to m.rows-1)
+    val m2 = m(0 to m.rows, 1 to m.rows)
+    val m3 = m(1 to m.rows, 0 to m.rows-1)
+    val m4 = m(1 to m.rows, 1 to m.rows)
+    val x = Seq(m1, m2, m3, m4).foldLeft(0){
+      (a, b) => {
+        if (a == 0) {
+          val x = diagWinner(b)
+          if (math.abs(x) == 5) {
+            math.signum(x)
+          } else {
+            0
+          }
+        } else {
+          a
+        }
       }
     }
-    w
+    x
+  }
+  def diagWinner5(m:DenseMatrix[Int]): Int = {
+    val x = trace(m)
+    if (math.abs(x) == 5 )
+      return math.signum(x)
+    val y = trace(m.t)
+    if (math.abs(y) == 5 )
+      return math.signum(y)
+    0
   }
   def winner(m:DenseMatrix[Int]): Int ={
     val rows = m(*, ::)
     for (row <- rows) {
-      if (winner(row) != 0) winner
+      val x = winner(row)
+      if (winner(row) != 0) return math.signum(x)
     }
     0
   }
+
   def winner(v:DenseVector[Int]): Int = {
     for (start <- 0 to v.length-5) {
       val thesum = sum(v(start to start+4))
       if (math.abs(thesum) == 5) {
-        math.signum(thesum)
+        return math.signum(thesum)
       }
     }
     0
@@ -93,7 +124,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     feedReward(estimations(key), theStates.dropRight(1))
   }
 
-  def takeAction:Unit = {
+  def takeAction = {
     val (i, j) = nextPosition
     val nextState = nextState1(i,j)
 
@@ -184,7 +215,7 @@ object Player {
   case object ai2 extends Player(-1, 1)
   case object ai3 extends Player(1, 0)
   case object human extends Player(-1, 0) {
-    override def takeAction:Unit = {
+    override def takeAction = {
       show
       println("enter the position:")
       val input:Int = scala.io.StdIn.readLine().toInt
@@ -204,7 +235,7 @@ object Player {
 }
 object game {
   final val ROWCOL = 10
-  def findRewards(p1:Player, p2:Player, theWinner:Int):Unit = {
+  def findRewards(p1:Player, p2:Player, theWinner:Int) = {
     if (p1.playerSymbol == theWinner) {
       (1.0, 0.0)
     } else if (p2.playerSymbol == theWinner) {
