@@ -11,8 +11,8 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
- // game train
-  game play
+  game train
+ // game play
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -61,8 +61,8 @@ case class State( data:DenseMatrix[Int]) {
 }
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
-  var estimations = mutable.HashMap[Int, Double]()
-  var states = mutable.LinkedHashMap[Int, State]()
+  val estimations = mutable.HashMap.empty[Int, Double]
+  val states = mutable.LinkedHashMap.empty[Int, State]
 
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
@@ -115,28 +115,44 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   private def nextPosition:(Int, Int) = {
 //    states match {
-//      case isEmpty => (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
+//      case Nil => (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
 //      case _ => if (toExplore) explore else exploite
 //    }
-    if (!states.isEmpty ) {
+    //if (!states.isEmpty ) {
       if (toExplore) {
         explore
       } else {
         exploite
       }
-    } else {
-      (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
-    }
+//    } else {
+//      (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
+//    }
   }
   private def explore:(Int, Int) = {
-    val latestStateData = states.values.last.data
+    val latestStateData = if (states.isEmpty) states.empty else states.values.last.data
     val a = latestStateData.toArray
-    val size = a.filter(_ == 0).size
-    val index = Random.nextInt(size)
+    val index = Random.nextInt(a.count(_ == 0))
     var x = 0
+//    a.foldLeft(0)((c,d) => {
+//      if (d==0) {
+//        x=x+1
+//      }
+//      if (x == index) {
+//        return latestStateData.rowColumnFromLinearIndex(c)
+//      }
+//      c+1
+//    })
+//    var c=0
+//    a.foreach( x match {
+//      case 0 => c+1; if (c==index) return latestStateData.rowColumnFromLinearIndex(c)
+//      case _ => c+1
+//    })
+
     for (i <- 0 to ROWCOL * ROWCOL -1) {
       if (latestStateData.valueAt(i) == 0) {
-        if (x == index) return latestStateData.rowColumnFromLinearIndex(i)
+        if (x == index) {
+          return latestStateData.rowColumnFromLinearIndex(i)
+        }
         x = x + 1
       }
     }
@@ -175,7 +191,8 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   def loadPolicy(file:String)= {
     val ois = new ObjectInputStream(new FileInputStream(file))
-   estimations = ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
+    estimations ++= ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
+
     ois.close
 
   }
@@ -238,8 +255,9 @@ object game {
     val player = Player.ai1
     val otherPlayer = Player.ai2
     for (i <- 0 to 50000) {
-      player.states= player.states.empty
-      otherPlayer.states= otherPlayer.states.empty
+      player.states.dropWhile(_ => true)
+      otherPlayer.states.dropWhile(_ => true)
+
       go(player, otherPlayer)
       System.out.println("Epoch "+i)
     }
@@ -252,7 +270,8 @@ object game {
     val player = Player.ai3
     player loadPolicy "c://work/tmp/player1-policy"
     val otherPlayer = Player.human
-    player.states= player.states.empty
+    player.states.dropWhile(_ => true)
+   // player.states= player.states.empty
     go(player, otherPlayer)
   }
 }
