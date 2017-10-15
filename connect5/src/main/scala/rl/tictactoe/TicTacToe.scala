@@ -58,6 +58,9 @@ case class State( data:DenseMatrix[Int]) {
   def show = {
     println(data)
   }
+  def isTie:Boolean = {
+    data.toArray.count(_ == 0) == 0 && winner == 0
+  }
 }
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
@@ -129,9 +132,14 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
 //    }
   }
   private def explore:(Int, Int) = {
-    val latestStateData = if (states.isEmpty) states.empty else states.values.last.data
-    val a = latestStateData.toArray
-    val index = Random.nextInt(a.count(_ == 0))
+    val latestStateData:DenseMatrix[Int] = {
+      if (states.isEmpty) DenseMatrix.zeros[Int](ROWCOL, ROWCOL) else states.values.last.data
+    }
+    val a = latestStateData.toArray.count(_ == 0)
+    if (a==0) {
+      println("a is zero!!!")
+    }
+    val index = Random.nextInt(a)
     var x = 0
 //    a.foldLeft(0)((c,d) => {
 //      if (d==0) {
@@ -180,8 +188,8 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     println("max ="+max)
     data.rowColumnFromLinearIndex(max._1)
   }
-  def isTie = {
-    states.values.last.data.toArray.filter(_ == 0).isEmpty
+  def isTie:Boolean = {
+    states.values.last.isTie
   }
   def show = println(states.values.last.data)
   def savePolicy(file:String) = {
@@ -248,7 +256,10 @@ object game {
       println("found winner:"+winner)
       p1.show
     } else {
-      if (!p1.isTie) go(p2, p1)
+      val tie = p1.isTie
+      if (!p1.isTie) {
+        go(p2, p1)
+      }
     }
   }
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
