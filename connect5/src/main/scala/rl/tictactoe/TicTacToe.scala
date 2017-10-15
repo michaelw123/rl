@@ -96,7 +96,6 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   def takeAction = {
       val (i, j) = nextPosition
       val nextState = nextState1(i,j)
-
       states.put(nextState.hashCode, nextState)
       (i, j, nextState)
   }
@@ -109,27 +108,13 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       states.values.last.nextState(i, j, playerSymbol)
     }
   }
-   def toExplore:Boolean = {
-     if (exploreRate==0) {
-        false
-     } else {
-        Binomial(100, exploreRate).draw <= 100 * exploreRate
-     }
-  }
-  private def nextPosition:(Int, Int) = {
-//    states match {
-//      case Nil => (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
-//      case _ => if (toExplore) explore else exploite
-//    }
-    //if (!states.isEmpty ) {
-      if (toExplore) {
-        explore
-      } else {
-        exploite
-      }
-//    } else {
-//      (Random.nextInt(game.ROWCOL), Random.nextInt(game.ROWCOL))
-//    }
+   def toExplore:Boolean = exploreRate match {
+       case 0 => false
+       case _: Int => Binomial(100, exploreRate).draw <= 100 * exploreRate
+   }
+  private def nextPosition:(Int, Int) = toExplore match {
+      case true => explore
+      case _ => exploite
   }
   private def explore:(Int, Int) = {
     val latestStateData:DenseMatrix[Int] = {
@@ -200,7 +185,6 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   def loadPolicy(file:String)= {
     val ois = new ObjectInputStream(new FileInputStream(file))
     estimations ++= ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
-
     ois.close
 
   }
@@ -268,7 +252,6 @@ object game {
     for (i <- 0 to 50000) {
       player.states.dropWhile(_ => true)
       otherPlayer.states.dropWhile(_ => true)
-
       go(player, otherPlayer)
       System.out.println("Epoch "+i)
     }
@@ -282,7 +265,6 @@ object game {
     player loadPolicy "c://work/tmp/player1-policy"
     val otherPlayer = Player.human
     player.states.dropWhile(_ => true)
-   // player.states= player.states.empty
     go(player, otherPlayer)
   }
 }
