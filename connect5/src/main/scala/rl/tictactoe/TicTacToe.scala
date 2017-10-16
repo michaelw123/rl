@@ -4,6 +4,7 @@ import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutp
 import breeze.linalg._
 import rl.tictactoe.game.ROWCOL
 
+import scala.annotation.tailrec
 import scala.collection.{immutable, mutable}
 import scala.util.Random
 
@@ -11,32 +12,34 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  game train
- // game play
+  //game train
+  game play
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
 
 case class State( data:DenseMatrix[Int]) {
   val hashVal:Int = hashCode
-  override def hashCode: Int = {
-      if (hashVal == 0 ) {
-        data.toArray.foldLeft(0)(_*3 + _+1)
-      } else {
-        hashVal
-      }
-   }
+  override def hashCode: Int = hashVal match {
+    case 0 => data.toArray.foldLeft(0)(_ * 3 + _ + 1)
+    case _ => hashVal
+  }
   def winner:Int = {
-    var w:Int = winner(data)
-    if (w==0) w = winner(data.t)
-    if (w==0) {
+    var w: Int = winner(data)
+    if (w == 0) w = winner(rot90(data))
+    if (w == 0) {
       val x = trace(data)
-      val y = trace(data.t)
+      val y = trace(rot90(data))
+      w = (math.abs(x), math.abs(y)) match {
+        case (data.rows, _) => math.signum(x)
+        case (_, data.rows) => math.signum(y)
+        case _ => 0
+      }
+//       if (x == data.rows || y == data.rows)
+      //            w = 1
+      //          else if (x == -data.rows || y == -data.rows)
+      //            w = -1
 
-      if (x == data.rows || y == data.rows)
-        w = 1
-      else if (x == -data.rows || y == -data.rows)
-        w = -1
     }
     w
   }
@@ -59,14 +62,23 @@ case class State( data:DenseMatrix[Int]) {
     println(data)
   }
   def isTie:Boolean = {
-    data.toArray.count(_ == 0) == 0 && winner == 0
+    isEnd && (winner == 0)
   }
+  def isEnd:Boolean = data.toArray.count(_ == 0) == 0
 }
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val stepsize=0.1
   val estimations = mutable.HashMap.empty[Int, Double]
   val states = mutable.LinkedHashMap.empty[Int, State]
 
+  def currentData = {
+    if (states.isEmpty) DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL)
+    else states.values.last.data
+  }
+  def currentState = {
+    if (states.isEmpty) State(DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL))
+    else states.values.last
+  }
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
   }
@@ -99,13 +111,13 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       states.put(nextState.hashCode, nextState)
       (i, j, nextState)
   }
-   def nextState1(i:Int,j:Int):State = {
+  def nextState1(i:Int,j:Int):State = {
     if (states.isEmpty){
       val newData = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
       newData(i,j) = playerSymbol
       State(newData)
     } else {
-      states.values.last.nextState(i, j, playerSymbol)
+      currentState.nextState(i, j, playerSymbol)
     }
   }
    def toExplore:Boolean = exploreRate match {
@@ -117,13 +129,9 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       case _ => exploite
   }
   private def explore:(Int, Int) = {
-    val latestStateData:DenseMatrix[Int] = {
-      if (states.isEmpty) DenseMatrix.zeros[Int](ROWCOL, ROWCOL) else states.values.last.data
-    }
+    val latestStateData = currentData
+
     val a = latestStateData.toArray.count(_ == 0)
-    if (a==0) {
-      println("a is zero!!!")
-    }
     val index = Random.nextInt(a)
     var x = 0
 //    a.foldLeft(0)((c,d) => {
@@ -153,12 +161,12 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   private def exploite:(Int, Int) = {
     val availablePositions = mutable.LinkedHashMap[Int, Double]()
-    val data = states.values.last.data
+    val data = currentData
     val latestStateData = data.toArray
 
     for (i <- 0 to ROWCOL * ROWCOL -1) {
       if (latestStateData(i) == 0) {
-        val newData = states.values.last.data.copy
+        val newData = data.copy
         newData(data.rowColumnFromLinearIndex(i))=playerSymbol
         val newState=State(newData)
         val hash = newState.hashCode()
@@ -170,14 +178,17 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       }
     }
     val max = availablePositions.maxBy(_._2)
-    println("max ="+max)
     data.rowColumnFromLinearIndex(max._1)
   }
   def isTie:Boolean = {
     states.values.last.isTie
   }
+  def isEnd:Boolean = {
+    states.values.last.isEnd
+  }
   def show = println(states.values.last.data)
   def savePolicy(file:String) = {
+    println("estimations size:"+estimations.size)
     val oos = new ObjectOutputStream(new FileOutputStream(file))
     oos.writeObject(estimations)
     oos.close
@@ -199,7 +210,7 @@ object Player {
        println("enter the position:")
        val input:Int = scala.io.StdIn.readLine().toInt
        println(input)
-       val (i,j) = states.values.last.data.rowColumnFromLinearIndex(input)
+       val (i,j) = currentData.rowColumnFromLinearIndex(input)
        val nextState = nextState1(i,j)
 
        states.put(nextState.hashCode, nextState)
@@ -219,7 +230,7 @@ object game {
     } else if (p2.playerSymbol == theWinner) {
       (0.0, 1.0)
     } else {
-      (0.1, 0.5)
+      (0.5, 0.5)
     }
   }
   def loadPolicy(file:String): mutable.HashMap[Int, Double]= {
@@ -228,6 +239,7 @@ object game {
     ois.close
     policy
   }
+  @tailrec
   def go(p1:Player, p2:Player):Unit = {
     val (i, j, state) = p1.takeAction
     p1.feedState(state)
@@ -240,8 +252,7 @@ object game {
       println("found winner:"+winner)
       p1.show
     } else {
-      val tie = p1.isTie
-      if (!p1.isTie) {
+      if (!p1.isEnd) {
         go(p2, p1)
       }
     }
@@ -250,8 +261,8 @@ object game {
     val player = Player.ai1
     val otherPlayer = Player.ai2
     for (i <- 0 to 50000) {
-      player.states.dropWhile(_ => true)
-      otherPlayer.states.dropWhile(_ => true)
+      player.states.clear
+      otherPlayer.states.clear
       go(player, otherPlayer)
       System.out.println("Epoch "+i)
     }
@@ -262,9 +273,10 @@ object game {
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai3
+    player.states.clear
     player loadPolicy "c://work/tmp/player1-policy"
     val otherPlayer = Player.human
-    player.states.dropWhile(_ => true)
+    otherPlayer.states.clear
     go(player, otherPlayer)
   }
 }
