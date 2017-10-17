@@ -78,49 +78,20 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     states.put(state.hashCode, state)
   }
 
-  def feedReward(reward:Double):Unit = {
-    if (!states.isEmpty) {
-      val key = currentState.hashVal
-      if (!estimations.contains(key)) {
-        if (currentState.isEnd) {
-              if (currentState.winner == playerSymbol) {
-                estimations.put(key, 1)
-              } else {
-                estimations.put(key, 0)
-              }
-        } else {
-          estimations.put(key, 0.5)
-        }
-      }
-      val value = estimations(key) + stepsize * (reward - estimations(key))
-      estimations(key) = value
-
-      feedReward(value, states.dropRight(1))
-   }
-  }
-
    def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
     if (!theStates.isEmpty) {
-      val theState = theStates.values.last
-      val key = theState.hashVal
+      val (key, theState) = theStates.last
       if (!estimations.contains(key)) {
-        if (theState.isEnd) {
-          if (theState.winner == playerSymbol) {
-            estimations.put(key, 1)
-          } else {
-            estimations.put(key, 0)
-          }
-        } else {
-          estimations.put(key, 0.5)
-        }
+        estimations.put(key, (theState.isEnd, theState.winner) match {
+          case (true, playerSymbol) => 1
+          case (true, _) => 0
+          case (fasle, _) => 0.5
+        })
       }
-
-      val value = estimations(key) + stepsize * (reward - estimations(key))
-      estimations(key) = value
+      estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
       feedReward(estimations(key), theStates.dropRight(1))
     }
   }
-
   def takeAction = {
       val (i, j) = nextPosition
       val nState = nextState(i,j)
@@ -146,23 +117,24 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   private def explore:(Int, Int) = {
     val a = currentData.toArray.count(_ == 0)
+    val b =  currentData.toArray
     val index = Random.nextInt(a)
-    var x = 0
-//    a.foldLeft(0)((c,d) => {
-//      if (d==0) {
-//        x=x+1
-//      }
-//      if (x == index) {
-//        return latestStateData.rowColumnFromLinearIndex(c)
-//      }
+//    var x = 0
+//    var y = 0
+//    b.foldLeft(0)((c,d) => {
+//      if (d==0) x=x+1
+//      if (x == index) return currentData.rowColumnFromLinearIndex(x)
 //      c+1
 //    })
+//    (0,0)
 //    var c=0
-//    a.foreach( x match {
-//      case 0 => c+1; if (c==index) return latestStateData.rowColumnFromLinearIndex(c)
-//      case _ => c+1
-//    })
-
+//    val xx =  currentData.toArray
+//    xx.foreach
+//    xx.foreach( x match {
+//      case 0 => c=c+1; if (c==index) return currentData.rowColumnFromLinearIndex(c)
+//      case _ => c = c+1
+//    } => x )
+    var x = 0
     for (i <- 0 to ROWCOL * ROWCOL -1) {
       if (currentData.valueAt(i) == 0) {
         if (x == index) {
@@ -171,6 +143,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
         x = x + 1
       }
     }
+    currentData.rowColumnFromLinearIndex(x)
     (0, 0)
   }
   private def exploite:(Int, Int) = {
@@ -232,8 +205,6 @@ object Player {
      }
      override def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]): Unit = {
      }
-     override def feedReward(reward:Double): Unit = {
-     }
    }
 }
 object game {
@@ -259,8 +230,8 @@ object game {
     val winner = state.winner
     if (winner!=0)  {
       val (reward, otherReward) = findRewards(p1, p2, winner)
-      p1.feedReward(reward)
-      p2.feedReward(otherReward)
+      p1.feedReward(reward, p1.states)
+      p2.feedReward(otherReward, p2.states)
       println("found winner:"+winner)
       p1.show
     } else {
