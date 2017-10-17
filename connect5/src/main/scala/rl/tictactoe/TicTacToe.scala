@@ -12,7 +12,7 @@ import scala.util.Random
   * Created by wangmich on 09/19/2017.
   */
 object TicTacToe extends App {
-  //game train
+ //game train
   game play
 }
 import breeze.linalg.DenseMatrix
@@ -62,7 +62,7 @@ case class State( data:DenseMatrix[Int]) {
   def isEnd:Boolean = data.toArray.count(_ == 0) == 0
 }
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
-  val stepsize=0.2
+  val stepsize=0.1
   val estimations = mutable.HashMap.empty[Int, Double]
   val states = mutable.LinkedHashMap.empty[Int, State]
 
@@ -80,35 +80,54 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
 
   def feedReward(reward:Double):Unit = {
     if (!states.isEmpty) {
-     val key = currentState.hashVal
-     if (estimations.contains(key)) {
-        estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
-     } else {
-        estimations.put(key, reward)
-     }
-     feedReward(estimations(key), states.dropRight(1))
+      val key = currentState.hashVal
+      if (!estimations.contains(key)) {
+        if (currentState.isEnd) {
+              if (currentState.winner == playerSymbol) {
+                estimations.put(key, 1)
+              } else {
+                estimations.put(key, 0)
+              }
+        } else {
+          estimations.put(key, 0.5)
+        }
+      }
+      val value = estimations(key) + stepsize * (reward - estimations(key))
+      estimations(key) = value
+
+      feedReward(value, states.dropRight(1))
    }
   }
-  @tailrec
-  private def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
+
+   def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
     if (!theStates.isEmpty) {
-      val key = theStates.keySet.last
-      if (estimations.contains(key)) {
-        estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
-      } else {
-        estimations.put(key, reward)
+      val theState = theStates.values.last
+      val key = theState.hashVal
+      if (!estimations.contains(key)) {
+        if (theState.isEnd) {
+          if (theState.winner == playerSymbol) {
+            estimations.put(key, 1)
+          } else {
+            estimations.put(key, 0)
+          }
+        } else {
+          estimations.put(key, 0.5)
+        }
       }
+
+      val value = estimations(key) + stepsize * (reward - estimations(key))
+      estimations(key) = value
       feedReward(estimations(key), theStates.dropRight(1))
     }
   }
 
   def takeAction = {
       val (i, j) = nextPosition
-      val nextState = nextState1(i,j)
-      states.put(nextState.hashCode, nextState)
-      (i, j, nextState)
+      val nState = nextState(i,j)
+      states.put(nState.hashCode, nState)
+      (i, j, nState)
   }
-  def nextState1(i:Int,j:Int):State = {
+  def nextState(i:Int,j:Int):State = {
     if (states.isEmpty){
       val newData = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
       newData(i,j) = playerSymbol
@@ -164,7 +183,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
         val newData = data.copy
         newData(data.rowColumnFromLinearIndex(i))=playerSymbol
         val newState=State(newData)
-        val hash = newState.hashCode()
+        val hash = newState.hashVal
         if (estimations.contains(hash)) {
           availablePositions.put(i, estimations(hash))
         } else {
@@ -206,10 +225,10 @@ object Player {
        val input:Int = scala.io.StdIn.readLine().toInt
        println(input)
        val (i,j) = currentData.rowColumnFromLinearIndex(input)
-       val nextState = nextState1(i,j)
+       val nState = nextState(i,j)
 
-       states.put(nextState.hashCode, nextState)
-       (i, j, nextState)
+       states.put(nState.hashCode, nState)
+       (i, j, nState)
      }
      override def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]): Unit = {
      }
@@ -220,12 +239,10 @@ object Player {
 object game {
   final val ROWCOL = 3
   def findRewards(p1:Player, p2:Player, theWinner:Int) = {
-    if (p1.playerSymbol == theWinner) {
-      (1.0, 0.0)
-    } else if (p2.playerSymbol == theWinner) {
-      (0.0, 1.0)
-    } else {
-      (0.5, 0.5)
+    theWinner match {
+      case p1.playerSymbol => (1.0, 0.0)
+      case p2.playerSymbol => (0.0, 1.0)
+      case _ => (0.5, 0.5)
     }
   }
   def loadPolicy(file:String): mutable.HashMap[Int, Double]= {
