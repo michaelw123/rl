@@ -35,11 +35,6 @@ case class State( data:DenseMatrix[Int]) {
         case (_, data.rows) => math.signum(y)
         case _ => 0
       }
-//       if (x == data.rows || y == data.rows)
-      //            w = 1
-      //          else if (x == -data.rows || y == -data.rows)
-      //            w = -1
-
     }
     w
   }
@@ -67,13 +62,13 @@ case class State( data:DenseMatrix[Int]) {
   def isEnd:Boolean = data.toArray.count(_ == 0) == 0
 }
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
-  val stepsize=0.1
+  val stepsize=0.2
   val estimations = mutable.HashMap.empty[Int, Double]
   val states = mutable.LinkedHashMap.empty[Int, State]
 
   def currentData = {
     if (states.isEmpty) DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL)
-    else states.values.last.data
+    else currentState.data
   }
   def currentState = {
     if (states.isEmpty) State(DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL))
@@ -82,9 +77,10 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
   }
+
   def feedReward(reward:Double):Unit = {
     if (!states.isEmpty) {
-     val key = states.keySet.last
+     val key = currentState.hashVal
      if (estimations.contains(key)) {
         estimations(key) = estimations(key) + stepsize * (reward - estimations(key))
      } else {
@@ -93,7 +89,8 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
      feedReward(estimations(key), states.dropRight(1))
    }
   }
-  def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
+  @tailrec
+  private def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
     if (!theStates.isEmpty) {
       val key = theStates.keySet.last
       if (estimations.contains(key)) {
@@ -129,9 +126,7 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       case _ => exploite
   }
   private def explore:(Int, Int) = {
-    val latestStateData = currentData
-
-    val a = latestStateData.toArray.count(_ == 0)
+    val a = currentData.toArray.count(_ == 0)
     val index = Random.nextInt(a)
     var x = 0
 //    a.foldLeft(0)((c,d) => {
@@ -150,9 +145,9 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
 //    })
 
     for (i <- 0 to ROWCOL * ROWCOL -1) {
-      if (latestStateData.valueAt(i) == 0) {
+      if (currentData.valueAt(i) == 0) {
         if (x == index) {
-          return latestStateData.rowColumnFromLinearIndex(i)
+          return currentData.rowColumnFromLinearIndex(i)
         }
         x = x + 1
       }
@@ -181,12 +176,12 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     data.rowColumnFromLinearIndex(max._1)
   }
   def isTie:Boolean = {
-    states.values.last.isTie
+    currentState.isTie
   }
   def isEnd:Boolean = {
-    states.values.last.isEnd
+    currentState.isEnd
   }
-  def show = println(states.values.last.data)
+  def show = println(currentData)
   def savePolicy(file:String) = {
     println("estimations size:"+estimations.size)
     val oos = new ObjectOutputStream(new FileOutputStream(file))
@@ -260,7 +255,7 @@ object game {
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai1
     val otherPlayer = Player.ai2
-    for (i <- 0 to 50000) {
+    for (i <- 0 to 400000) {
       player.states.clear
       otherPlayer.states.clear
       go(player, otherPlayer)
