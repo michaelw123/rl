@@ -9,10 +9,10 @@ import scala.collection.{immutable, mutable}
 import scala.util.Random
 
 /**
-  * Created by wangmich on 09/19/2017.
+  * Created by Michael Wang on 09/19/2017.
   */
 object TicTacToe extends App {
- //game train
+  //game train
   game play
 }
 import breeze.linalg.DenseMatrix
@@ -42,9 +42,7 @@ case class State( data:DenseMatrix[Int]) {
     val rows = d(*, ::)
     for (row <- rows) {
       val thesum = sum(row)
-      if (math.abs(thesum) == 3) {
-         return math.signum(thesum)
-      }
+      if (math.abs(thesum) == ROWCOL) return math.signum(thesum)
     }
     0
   }
@@ -53,12 +51,8 @@ case class State( data:DenseMatrix[Int]) {
     newData(i,j) = player
     State(newData)
   }
-  def show = {
-    println(data)
-  }
-  def isTie:Boolean = {
-    isEnd && (winner == 0)
-  }
+  def show = println(data)
+  def isTie:Boolean = isEnd && (winner == 0)
   def isEnd:Boolean = data.toArray.count(_ == 0) == 0
 }
 sealed class Player (val playerSymbol:Int, val exploreRate:Int){
@@ -66,18 +60,18 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   val estimations = mutable.HashMap.empty[Int, Double]
   val states = mutable.LinkedHashMap.empty[Int, State]
 
-  def currentData = {
-    if (states.isEmpty) DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL)
-    else currentState.data
+  def currentData = states.isEmpty match {
+    case true => DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL)
+    case _ => currentState.data
   }
-  def currentState = {
-    if (states.isEmpty) State(DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL))
-    else states.values.last
+
+  def currentState = states.isEmpty match {
+    case true => State(DenseMatrix.zeros[Int](game.ROWCOL, game.ROWCOL))
+    case false => states.values.last
   }
   def feedState(state:State): Unit = {
     states.put(state.hashCode, state)
   }
-
    def feedReward(reward:Double, theStates:mutable.LinkedHashMap[Int, State]):Unit = {
     if (!theStates.isEmpty) {
       val (key, theState) = theStates.last
@@ -98,14 +92,13 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       states.put(nState.hashCode, nState)
       (i, j, nState)
   }
-  def nextState(i:Int,j:Int):State = {
-    if (states.isEmpty){
+  def nextState(i:Int,j:Int):State = states.isEmpty match {
+    case true => {
       val newData = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)
       newData(i,j) = playerSymbol
       State(newData)
-    } else {
-      currentState.nextState(i, j, playerSymbol)
     }
+    case _ => currentState.nextState(i, j, playerSymbol)
   }
    def toExplore:Boolean = exploreRate match {
        case 0 => false
@@ -117,52 +110,29 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   private def explore:(Int, Int) = {
     val a = currentData.toArray.count(_ == 0)
-    val b =  currentData.toArray
     val index = Random.nextInt(a)
-//    var x = 0
-//    var y = 0
-//    b.foldLeft(0)((c,d) => {
-//      if (d==0) x=x+1
-//      if (x == index) return currentData.rowColumnFromLinearIndex(x)
-//      c+1
-//    })
-//    (0,0)
-//    var c=0
-//    val xx =  currentData.toArray
-//    xx.foreach
-//    xx.foreach( x match {
-//      case 0 => c=c+1; if (c==index) return currentData.rowColumnFromLinearIndex(c)
-//      case _ => c = c+1
-//    } => x )
     var x = 0
-    for (i <- 0 to ROWCOL * ROWCOL -1) {
-      if (currentData.valueAt(i) == 0) {
+    for (i <- 0 to ROWCOL * ROWCOL -1 if currentData.valueAt(i) == 0) {
         if (x == index) {
           return currentData.rowColumnFromLinearIndex(i)
         }
         x = x + 1
-      }
     }
     currentData.rowColumnFromLinearIndex(x)
-    (0, 0)
   }
   private def exploite:(Int, Int) = {
     val availablePositions = mutable.LinkedHashMap[Int, Double]()
     val data = currentData
     val latestStateData = data.toArray
-
-    for (i <- 0 to ROWCOL * ROWCOL -1) {
-      if (latestStateData(i) == 0) {
+    for (i <- 0 to ROWCOL * ROWCOL -1 if latestStateData(i) == 0) {
         val newData = data.copy
         newData(data.rowColumnFromLinearIndex(i))=playerSymbol
         val newState=State(newData)
         val hash = newState.hashVal
-        if (estimations.contains(hash)) {
-          availablePositions.put(i, estimations(hash))
-        } else {
-          availablePositions.put(i, 0)
-        }
-      }
+        availablePositions.put(i, estimations.contains(hash) match {
+          case true => estimations(hash)
+          case _ => 0
+        })
     }
     val max = availablePositions.maxBy(_._2)
     data.rowColumnFromLinearIndex(max._1)
@@ -184,7 +154,6 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     val ois = new ObjectInputStream(new FileInputStream(file))
     estimations ++= ois.readObject.asInstanceOf[mutable.HashMap[Int, Double]]
     ois.close
-
   }
 }
 object Player {
@@ -199,7 +168,6 @@ object Player {
        println(input)
        val (i,j) = currentData.rowColumnFromLinearIndex(input)
        val nState = nextState(i,j)
-
        states.put(nState.hashCode, nState)
        (i, j, nState)
      }
@@ -228,16 +196,13 @@ object game {
     p1.feedState(state)
     p2.feedState(state)
     val winner = state.winner
-    if (winner!=0)  {
-      val (reward, otherReward) = findRewards(p1, p2, winner)
-      p1.feedReward(reward, p1.states)
-      p2.feedReward(otherReward, p2.states)
-      println("found winner:"+winner)
-      p1.show
-    } else {
-      if (!p1.isEnd) {
-        go(p2, p1)
-      }
+    winner match {
+      case 0 => if (!p1.isEnd) go(p2, p1)
+      case _ => val (reward, otherReward) = findRewards(p1, p2, winner)
+        p1.feedReward(reward, p1.states)
+        p2.feedReward(otherReward, p2.states)
+        println("found winner:"+winner)
+        p1.show
     }
   }
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
