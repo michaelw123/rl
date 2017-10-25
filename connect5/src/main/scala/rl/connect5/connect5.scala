@@ -13,7 +13,8 @@ import scala.util.Random
   */
 object connect5 extends App {
   //game train
-  game play
+  //game play
+  game test
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -27,15 +28,7 @@ case class State( data:DenseMatrix[Int]) {
   def winner:Int = {
     var w: Int = winner(data)
     if (w == 0) w = winner(rot90(data))
-    if (w == 0) {
-      val x = trace(data)
-      val y = trace(rot90(data))
-      w = (math.abs(x), math.abs(y)) match {
-        case (data.rows, _) => math.signum(x)
-        case (_, data.rows) => math.signum(y)
-        case _ => 0
-      }
-    }
+    if (w ==0) w = diagWinner(data)
     w
   }
   def winner(d:DenseMatrix[Int]): Int ={
@@ -49,9 +42,42 @@ case class State( data:DenseMatrix[Int]) {
   private def check5(v:DenseVector[Int]):Int = {
     v.foldLeft(0)((a, b) => {
       if (math.signum(a) != math.signum(b)) b
-      if (math.abs(a) ==game.FIVE -1 ) return math.signum(a)
+      if (math.abs(a) ==game.FIVE-1 ) return math.signum(a)
       a+b
     })
+    0
+  }
+  def diagWinner(m:DenseMatrix[Int]): Int = {
+    if (m.rows == 5) {
+      return diagWinner5(m)
+    }
+    val m1 = m(0 to m.rows-2,0 to m.rows-2)
+    val m2 = m(0 to m.rows-2, 1 to m.rows-1)
+    val m3 = m(1 to m.rows-1, 0 to m.rows-2)
+    val m4 = m(1 to m.rows-1, 1 to m.rows-1)
+    val x = Seq(m1, m2, m3, m4).foldLeft(0){
+      (a, b) => {
+        if (a == 0) {
+          val x = diagWinner(b)
+          if (math.abs(x) == 5) {
+            math.signum(x)
+          } else {
+            0
+          }
+        } else {
+          a
+        }
+      }
+    }
+    x
+  }
+  def diagWinner5(m:DenseMatrix[Int]): Int = {
+    val x = trace(m)
+    if (math.abs(x) == 5 )
+      return math.signum(x)
+    val y = trace(m.t)
+    if (math.abs(y) == 5 )
+      return math.signum(y)
     0
   }
   def nextState(i:Int, j:Int, player:Int): State = {
@@ -235,5 +261,12 @@ object game {
     val otherPlayer = Player.human
     otherPlayer.states.clear
     go(player, otherPlayer)
+  }
+  def test = {
+    //val m: DenseMatrix[Int] = DenseMatrix.zeros[Int](5,5)
+    val m = DenseMatrix((-1,1,0,1,1, 0), (1,-1,-1,-1, -1,0),(1, -1,-1,1,-1,0), (1, 0, 0, -1, -1,0), (1, 0, 0, -1, -1,0), (1, 0, 0, -1, -1,0))
+    val s = State(m)
+    println(s.winner)
+    s.show
   }
 }
