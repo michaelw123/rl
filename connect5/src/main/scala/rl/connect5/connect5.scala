@@ -49,7 +49,7 @@ case class State( data:DenseMatrix[Int]) {
   }
   def diagWinner(m:DenseMatrix[Int]): Int = {
     if (m.rows == 5) {
-      return diagWinner5(m)
+       diagWinner5(m)
     }
     val m1 = m(0 to m.rows-2,0 to m.rows-2)
     val m2 = m(0 to m.rows-2, 1 to m.rows-1)
@@ -73,12 +73,15 @@ case class State( data:DenseMatrix[Int]) {
   }
   def diagWinner5(m:DenseMatrix[Int]): Int = {
     val x = trace(m)
-    if (math.abs(x) == 5 )
-      return math.signum(x)
-    val y = trace(m.t)
-    if (math.abs(y) == 5 )
-      return math.signum(y)
-    0
+    val y = trace(rot90(m))
+    val result = (x,y) match {
+      case (5, _) => 1
+      case (-5, _) => -1
+      case (_, 5) => 1
+      case (_, -5) => -1
+      case _ => 0
+    }
+    result
   }
   def nextState(i:Int, j:Int, player:Int): State = {
     val newData = data.copy
