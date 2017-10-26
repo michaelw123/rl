@@ -13,8 +13,8 @@ import scala.util.Random
   */
 object connect5 extends App {
   //game train
-  //game play
-  game test
+  game play
+  //game test
 }
 import breeze.linalg.DenseMatrix
 import breeze.stats.distributions.Binomial
@@ -48,28 +48,30 @@ case class State( data:DenseMatrix[Int]) {
     0
   }
   def diagWinner(m:DenseMatrix[Int]): Int = {
+    var w=0
     if (m.rows == 5) {
-       diagWinner5(m)
-    }
-    val m1 = m(0 to m.rows-2,0 to m.rows-2)
-    val m2 = m(0 to m.rows-2, 1 to m.rows-1)
-    val m3 = m(1 to m.rows-1, 0 to m.rows-2)
-    val m4 = m(1 to m.rows-1, 1 to m.rows-1)
-    val x = Seq(m1, m2, m3, m4).foldLeft(0){
-      (a, b) => {
-        if (a == 0) {
-          val x = diagWinner(b)
-          if (math.abs(x) == 5) {
-            math.signum(x)
+        w = diagWinner5(m)
+    } else {
+      val m1 = m(0 to m.rows - 2, 0 to m.rows - 2)
+      val m2 = m(0 to m.rows - 2, 1 to m.rows - 1)
+      val m3 = m(1 to m.rows - 1, 0 to m.rows - 2)
+      val m4 = m(1 to m.rows - 1, 1 to m.rows - 1)
+      w = Seq(m1, m2, m3, m4).foldLeft(0) {
+        (a, b) => {
+          if (a == 0) {
+            val x = diagWinner(b)
+            if (x !=0) {
+               return x
+            } else {
+               0
+            }
           } else {
-            0
+            a
           }
-        } else {
-          a
         }
       }
     }
-    x
+    w
   }
   def diagWinner5(m:DenseMatrix[Int]): Int = {
     val x = trace(m)
@@ -240,34 +242,34 @@ object game {
         p1.feedReward(reward, p1.states)
         p2.feedReward(otherReward, p2.states)
         println("found winner:"+winner)
-        p1.show
+       // p1.show
     }
   }
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai1
     val otherPlayer = Player.ai2
-    for (i <- 0 to 400000) {
+    for (i <- 0 to 400) {
       player.states.clear
       otherPlayer.states.clear
       go(player, otherPlayer)
       System.out.println("Epoch "+i)
     }
     println(player.estimations)
-    player savePolicy "c://work/tmp/player1-policy"
+    player savePolicy "c://work/tmp/connect5-player1-policy"
     println(otherPlayer.estimations)
-    otherPlayer savePolicy "c://work/tmp/player2-policy"
+    otherPlayer savePolicy "c://work/tmp/connect5-player2-policy"
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai3
     player.states.clear
-    player loadPolicy "c://work/tmp/player1-policy"
+    player loadPolicy "c://work/tmp/connect5-player1-policy"
     val otherPlayer = Player.human
     otherPlayer.states.clear
     go(player, otherPlayer)
   }
   def test = {
     //val m: DenseMatrix[Int] = DenseMatrix.zeros[Int](5,5)
-    val m = DenseMatrix((-1,1,0,1,1, 0), (1,-1,-1,-1, -1,0),(1, -1,-1,1,-1,0), (1, 0, 0, -1, -1,0), (1, 0, 0, -1, -1,0), (1, 0, 0, -1, -1,0))
+    val m = DenseMatrix((0,1,0,1,1, 0), (0,-1,-1,-1, -1,0),(1, -1,-1,1,-1,0), (1, 0, 0, -1, -1,0), (1, 0, 0, -1, -1,0), (1, 0, 0, -1, -1,-1))
     val s = State(m)
     println(s.winner)
     s.show
