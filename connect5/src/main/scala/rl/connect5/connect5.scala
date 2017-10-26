@@ -41,9 +41,14 @@ case class State( data:DenseMatrix[Int]) {
   }
   private def check5(v:DenseVector[Int]):Int = {
     v.foldLeft(0)((a, b) => {
-      if (math.signum(a) != math.signum(b)) b
-      if (math.abs(a) ==game.FIVE-1 ) return math.signum(a)
-      a+b
+      if (math.signum(a) != math.signum(b)) {
+        b
+      } else {
+        if (math.abs(a) == game.FIVE - 1) {
+          return math.signum(a)
+        }
+        a + b
+      }
     })
     0
   }
@@ -215,7 +220,7 @@ object Player {
   }
 }
 object game {
-  final val ROWCOL = 7
+  final val ROWCOL = 6
   final val FIVE=5
   def findRewards(p1:Player, p2:Player, theWinner:Int) = {
     theWinner match {
@@ -242,13 +247,13 @@ object game {
         p1.feedReward(reward, p1.states)
         p2.feedReward(otherReward, p2.states)
         println("found winner:"+winner)
-        p1.show
+       //p1.show
     }
   }
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai1
     val otherPlayer = Player.ai2
-    for (i <- 0 to 4000) {
+    for (i <- 0 to 400000) {
       player.states.clear
       otherPlayer.states.clear
       go(player, otherPlayer)
