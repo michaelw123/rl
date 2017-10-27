@@ -2,18 +2,18 @@ package rl.connect5
 import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import breeze.linalg._
-import rl.connect5.game.ROWCOL
+import rl.connect5.game.{ROWCOL, MAXROWCOL, SUBROWCOL}
 
 import scala.annotation.tailrec
 import scala.collection.{immutable, mutable}
 import scala.util.Random
-
+import scala.collection.mutable.ListBuffer
 /**
   * Created by Michael Wang on 09/19/2017.
   */
 object connect5 extends App {
-  //game train
-  game play
+  game train
+  //game play
   //game test
 }
 import breeze.linalg.DenseMatrix
@@ -153,16 +153,39 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
     case _ => exploite
   }
   private def explore:(Int, Int) = {
-    val a = currentData.toArray.count(_ == 0)
+    val positions = availablePositions
+    val a = positions.size
     val index = Random.nextInt(a)
     var x = 0
-    for (i <- 0 to ROWCOL * ROWCOL -1 if currentData.valueAt(i) == 0) {
+    for (i <- positions) {
       if (x == index) {
         return currentData.rowColumnFromLinearIndex(i)
       }
       x = x + 1
     }
     currentData.rowColumnFromLinearIndex(x)
+  }
+  private def availablePositions = {
+    val positions=ListBuffer[Int]()
+    for (i <- 0 to ROWCOL * ROWCOL -1 if currentData.valueAt(i) == 0 && withinDistance(i)) {
+        positions += i
+    }
+    positions.toList
+  }
+  private def withinDistance(i:Int): Boolean = {
+    val (x, y) = currentData.rowColumnFromLinearIndex(i)
+    val (top, bottom) = x match {
+      case 0 | 1=> (0, x+1)
+      case MAXROWCOL | SUBROWCOL => (x-1, MAXROWCOL)
+      case _ => (x-1, x+1)
+    }
+    val (left, right) = y match {
+      case 0 | 1=> (0, y+2)
+      case MAXROWCOL | SUBROWCOL => (y-2, MAXROWCOL)
+      case _ => (y-2, y+2)
+    }
+    !currentData(top to bottom, left to right).forall(_ == 0)
+
   }
   private def exploite:(Int, Int) = {
     val availablePositions = mutable.LinkedHashMap[Int, Double]()
@@ -220,7 +243,9 @@ object Player {
   }
 }
 object game {
-  final val ROWCOL = 6
+  final val ROWCOL:Int = 6
+  final val MAXROWCOL:Int = ROWCOL-1
+  final val SUBROWCOL:Int = ROWCOL-2
   final val FIVE=5
   def findRewards(p1:Player, p2:Player, theWinner:Int) = {
     theWinner match {
@@ -259,7 +284,7 @@ object game {
       go(player, otherPlayer)
       System.out.println("Epoch "+i)
     }
-    println(player.estimations)
+    //println(player.estimations)
     player savePolicy "c://work/tmp/connect5-player1-policy"
     println(otherPlayer.estimations)
     otherPlayer savePolicy "c://work/tmp/connect5-player2-policy"
