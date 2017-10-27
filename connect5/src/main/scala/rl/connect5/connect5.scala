@@ -167,8 +167,12 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
   }
   private def availablePositions = {
     val positions=ListBuffer[Int]()
-    for (i <- 0 to ROWCOL * ROWCOL -1 if currentData.valueAt(i) == 0 && withinDistance(i)) {
+    if (currentData.forall(_ == 0)) {
+      positions += ROWCOL*ROWCOL/2
+    } else {
+      for (i <- 0 to ROWCOL * ROWCOL - 1 if currentData.valueAt(i) == 0 && withinDistance(i)) {
         positions += i
+      }
     }
     positions.toList
   }
@@ -180,9 +184,9 @@ sealed class Player (val playerSymbol:Int, val exploreRate:Int){
       case _ => (x-1, x+1)
     }
     val (left, right) = y match {
-      case 0 | 1=> (0, y+2)
-      case MAXROWCOL | SUBROWCOL => (y-2, MAXROWCOL)
-      case _ => (y-2, y+2)
+      case 0 | 1=> (0, y+1)
+      case MAXROWCOL | SUBROWCOL => (y-1, MAXROWCOL)
+      case _ => (y-1, y+1)
     }
     !currentData(top to bottom, left to right).forall(_ == 0)
 
@@ -271,18 +275,20 @@ object game {
       case _ => val (reward, otherReward) = findRewards(p1, p2, winner)
         p1.feedReward(reward, p1.states)
         p2.feedReward(otherReward, p2.states)
-        println("found winner:"+winner)
+        //println(s"found winner $winner")
        //p1.show
     }
   }
   def train(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai1
     val otherPlayer = Player.ai2
-    for (i <- 0 to 400000) {
-      player.states.clear
-      otherPlayer.states.clear
-      go(player, otherPlayer)
-      System.out.println("Epoch "+i)
+    for (j <- 0 to 1000) {
+      for (i <- 0 to 400) {
+        player.states.clear
+        otherPlayer.states.clear
+        go(player, otherPlayer)
+      }
+      System.out.println("Epoch " + j)
     }
     //println(player.estimations)
     player savePolicy "c://work/tmp/connect5-player1-policy"
