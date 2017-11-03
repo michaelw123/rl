@@ -39,7 +39,7 @@ object kArmBandit extends App{
     val f = Figure()
     val p = f.subplot(0)
     val x = linspace(0.0,9.0, 10)
-    val y = x :+ 2.0
+    val y = x +:+ 2.0
     p += plot(x, x :^ 2.0)
     p += plot(x, x :^ 3.0, '.')
     p += plot(x,y, '.')
@@ -53,7 +53,18 @@ object kArmBandit extends App{
     val bandits= (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0, 0))
     val bb = bandits.map(_ => new Bandit(10, 0, 0))
     val (bestActionCount, agerageRewards) = banditSimulation(nBandits, time, bandits)
-
+    val f = Figure()
+    val p = f.subplot(0)
+    val x = linspace(0.0,9.0, 10)
+    val y = x +:+ 2.0
+    val rows = bestActionCount(*, ::)
+    for (row <- rows) {
+      p += plot(x,row, '.')
+      //val x = 0
+    }
+    p += plot(x,y, '.')
+    p.xlabel = "x axis"
+    p.ylabel = "y axis"
   }
   def banditSimulation(n:Int, time:Int, bandits:Array[Bandit]) = {
     val bestActionCounts = DenseMatrix.zeros[Int] (bandits.length, time)
