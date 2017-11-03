@@ -2,50 +2,70 @@ package rl.kArmBandit
 
 import breeze.linalg._
 import breeze.plot._
-import breeze.linalg.operators
 import breeze.linalg.DenseVector
+import breeze.stats.distributions.Binomial
 
 /*
   * Created by wangmich on 10/30/2017.
   */
-class Bandit (index: Int = 0) {
- // def getAction:Double = math.random()
-  def takeAction(b:Int) = b match {
-    case 0 => 0 // sample Average
-    case 1 => 1 // gradiant
-    case _ => 2 // update estimate
+class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
+  val estimation = DenseVector[Double](10)
+  val qEstimation = DenseVector[Double](10)
+  val actionCount = Array[Int](kArm)
+  var time = 0
+  var averageReward = 0.0
+
+  def getAction = epsilon match {
+    case 0 => argmax(estimation)
+    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
   }
+  def takeAction(arm:Int) = {
+    val reward = math.random
+    time += 1
+    averageReward = (time -1)/time * averageReward + reward/time
+    actionCount(arm) = actionCount(arm)+1
+    qEstimation(arm) = stepSize * (reward - qEstimation(arm))
+    reward
+  }
+  def bestAction = argmax(qEstimation)
 }
 
 object kArmBandit extends App{
 
   //test
-  val f = Figure()
-  val p = f.subplot(0)
-  val x = linspace(0.0,1.0)
-  val y = x :+= 2.0
-  p += plot(x, x :^ 2.0)
-  p += plot(x, x :^ 3.0, '.')
-  p += plot(x,y, '.')
+  epsilonGreedy(10, 10)
 
-  p.xlabel = "x axis"
-  p.ylabel = "y axis"
-  f.saveas("lines.png")
-//  val p = f.subplot(0)
-//  val g = breeze.stats.distributions.Gaussian(0,1)
-//  p += hist(g.sample(10000), 100)
-//  p.title = "A normal distribution"
+  private def test = {
+    val f = Figure()
+    val p = f.subplot(0)
+    val x = linspace(0.0,9.0, 10)
+    val y = x :+ 2.0
+    p += plot(x, x :^ 2.0)
+    p += plot(x, x :^ 3.0, '.')
+    p += plot(x,y, '.')
 
-  //val f2 = Figure()
-  //f2.subplot(0) += image(DenseMatrix.rand(200,200))
-  //f.saveas("subplots.png")
-//  private def test = {
-//    val f = Figure()
-//    val p = f.subplot(0)
-//    val x = linspace(0.0,1.0)
-//    p += plot(x, x :^ 2, '.')
-//    p.xlabel = "x axis"
-//    p.ylabel = "y axis"
-//  }
+    p.xlabel = "x axis"
+    p.ylabel = "y axis"
+    f.saveas("lines.png")
+  }
+  def epsilonGreedy(nBandits:Int, time:Int) = {
+    val epsilon = Seq(0, 0.1, 0.01)
+    val bandits= (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0, 0))
+    val bb = bandits.map(_ => new Bandit(10, 0, 0))
+    val (bestActionCount, agerageRewards) = banditSimulation(nBandits, time, bandits)
 
+  }
+  def banditSimulation(n:Int, time:Int, bandits:Array[Bandit]) = {
+    val bestActionCounts = DenseMatrix.zeros[Int] (bandits.length, time)
+    val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
+    for (b <- 0 to bandits.length-1; t <-0 to time-1) {
+        val action = bandits(b).getAction
+        val reward = bandits(b).takeAction(action)
+        averageRewards(b, t) += reward
+        if (action == bandits(b).bestAction) {
+          bestActionCounts(b,t) += 1
+        }
+    }
+    (bestActionCounts, averageRewards)
+  }
 }
