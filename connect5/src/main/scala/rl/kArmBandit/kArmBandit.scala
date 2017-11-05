@@ -18,7 +18,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
   var averageReward = 0.0
 
   def getAction = epsilon match {
-    case 0 => argmax(estimation)
+    case 0 => argmax(qEstimation)
     case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
   }
   def takeAction(arm:Int) = {
@@ -26,7 +26,8 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
     actionCount(arm) = actionCount(arm)+1
-    qEstimation(arm) = stepSize * (reward - qEstimation(arm))
+    //qEstimation(arm) += stepSize * (reward - qEstimation(arm))
+    qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
     reward
   }
   def bestAction = argmax(qEstimation)
@@ -35,7 +36,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
 object kArmBandit extends App{
 
   test
-  epsilonGreedy(10, 10000)
+  epsilonGreedy(10, 100)
 
   private def test = {
 
@@ -48,13 +49,12 @@ object kArmBandit extends App{
   }
   def epsilonGreedy(nBandits:Int, time:Int) = {
     val epsilon = Seq(0, 0.1, 0.01)
-    val bandits= (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0, 0))
-    val bb = bandits.map(_ => new Bandit(10, 0, 0))
+    val bandits= (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0, 0.1))
     val (bestActionCount, averageRewards) = banditSimulation(nBandits, time, bandits)
     val f = Figure()
     val p = f.subplot(0)
-    val x = averageRewards(::, 0)
-    val y = averageRewards(::, 1)
+    //val x = averageRewards(::, 0)
+    //val y = averageRewards(::, 1)
     //p += scatter(x, y, { _ => 0.1 }, { a => Color.BLUE })
 
     for (i <- 0 to time -1) {
