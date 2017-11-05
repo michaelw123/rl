@@ -11,8 +11,9 @@ import breeze.numerics._
   * Created by wangmich on 10/30/2017.
   */
 class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
-  val estimation = DenseVector[Double](10).map(_ => math.random)
-  val qEstimation = DenseVector[Double](10)
+  //val estimation = DenseVector[Double](10).map(_ => math.random)
+  val estimation = DenseVector.zeros[Double](10).map(_ => math.random)
+  val qEstimation = DenseVector.zeros[Double](10)
   val actionCount = Array[Int](kArm)
   var time = 0
   var averageReward = 0.0
