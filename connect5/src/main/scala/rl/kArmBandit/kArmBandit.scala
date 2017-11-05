@@ -11,7 +11,7 @@ import breeze.numerics._
   * Created by wangmich on 10/30/2017.
   */
 class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
-  val estimation = DenseVector[Double](10)
+  val estimation = DenseVector[Double](10).map(_ => math.random)
   val qEstimation = DenseVector[Double](10)
   val actionCount = Array[Int](kArm)
   var time = 0
@@ -22,7 +22,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
     case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
   }
   def takeAction(arm:Int) = {
-    val reward = math.random
+    val reward = estimation.valueAt(arm) + math.random
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
     actionCount(arm) = actionCount(arm)+1
@@ -35,7 +35,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
 object kArmBandit extends App{
 
   test
-  epsilonGreedy(10, 100)
+  epsilonGreedy(10, 10000)
 
   private def test = {
 
