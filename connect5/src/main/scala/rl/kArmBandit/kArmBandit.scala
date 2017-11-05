@@ -35,7 +35,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
 object kArmBandit extends App{
 
   test
-  epsilonGreedy(10, 10)
+  epsilonGreedy(10, 100)
 
   private def test = {
 
@@ -55,12 +55,14 @@ object kArmBandit extends App{
     val p = f.subplot(0)
     val x = averageRewards(::, 0)
     val y = averageRewards(::, 1)
+    //p += scatter(x, y, { _ => 0.1 }, { a => Color.BLUE })
 
-
-    p += scatter(averageRewards(::, 0), averageRewards(::, 1), {_ => 0.1},{a => Color.BLUE})
+    for (i <- 0 to time -1) {
+      p += scatter(DenseVector.fill[Double](nBandits, i), averageRewards(::, i), { _ => 0.1 }, { a => Color.BLUE })
+    }
     p.xlabel = "X-value"
-    p.ylabel = "Y-value"
-    p.title = "Input data"
+     p.ylabel = "Y-value"
+     p.title = "Input data"
     //    p += plot(x,y, '.')
     //    p.xlabel = "x axis"
     //    p.ylabel = "y axis"
