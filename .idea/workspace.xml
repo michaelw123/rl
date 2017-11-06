@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="49bb649b-27e9-4ec5-bff2-2218ba531b32" name="Default" comment="init chechin">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -118,65 +120,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="connect5.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
+      <file leaf-file-name="DenseVector.scala" pinned="false" current-in-tab="true">
+        <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseVector.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="53" column="9" lean-forward="true" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
-              <folding>
-                <element signature="e#20#109#0" expanded="true" />
-                <element signature="e#373#405#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TicTacToe.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3153">
-              <caret line="11" column="42" lean-forward="true" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
-              <folding>
-                <element signature="e#21#110#0" expanded="true" />
-                <element signature="e#383#415#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TraversableOnce.scala" pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/collection/TraversableOnce.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3672">
-              <caret line="226" column="35" lean-forward="false" selection-start-line="226" selection-start-column="35" selection-end-line="226" selection-end-column="35" />
-              <folding>
-                <element signature="n#!!doc" expanded="false" />
-                <element signature="e#560#607#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="237">
+              <caret line="388" column="0" lean-forward="false" selection-start-line="388" selection-start-column="0" selection-end-line="388" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="package.scala" pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/package.scala">
+        <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze-viz_2.12/srcs/breeze-viz_2.12-0.13.2-sources.jar!/breeze/plot/package.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1649">
-              <caret line="103" column="32" lean-forward="false" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
+            <state relative-caret-position="1819">
+              <caret line="110" column="6" lean-forward="false" selection-start-line="110" selection-start-column="6" selection-end-line="110" selection-end-column="6" />
               <folding>
-                <element signature="n#!!doc" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DenseMatrix.scala" pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseMatrix.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1789">
-              <caret line="204" column="47" lean-forward="false" selection-start-line="204" selection-start-column="42" selection-end-line="204" selection-end-column="47" />
-              <folding>
-                <element signature="e#585#608#0" expanded="false" />
-                <element signature="e#6296#6383#0" expanded="false" />
+                <element signature="e#16#54#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -207,12 +167,18 @@
       <find>toExplore</find>
       <find>zeros</find>
       <find>count</find>
-      <find>value</find>
       <find>exploit</find>
       <find>nextPosition</find>
       <find>takeAction</find>
       <find>isTie</find>
+      <find>3</find>
+      <find>action</find>
+      <find>winner</find>
+      <find>value</find>
+      <find>nextP</find>
       <find>explore</find>
+      <find>test</find>
+      <find>show</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -228,15 +194,19 @@
       <list>
         <option value="$PROJECT_DIR$/connect5/build.sbt" />
         <option value="$PROJECT_DIR$/connect5/TicTacToe.py" />
-        <option value="$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala" />
         <option value="$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala" />
+        <option value="$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala" />
+        <option value="$PROJECT_DIR$/connect5/src/main/scala/rl/kArmBandit/kArmBandit.scala" />
+        <option value="$PROJECT_DIR$/connect5/.gitattributes" />
+        <option value="$PROJECT_DIR$/.gitattributes" />
+        <option value="$PROJECT_DIR$/kArmBandit/src/rl/kArmBandit/kArmBandit.scala" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1604" />
+    <option name="width" value="1616" />
     <option name="height" value="876" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -255,96 +225,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rl" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -359,14 +239,49 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Reinforcement Learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Reinforcement.Learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Reinforcement Learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Reinforcement.Learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-    <property name="last_opened_file_path" value="D:/tmp" />
-    <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\rl\connect5\resources" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -380,15 +295,15 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.TicTacToe">
-    <configuration default="false" name="connect5" type="Application" factoryName="Application" temporary="true">
+  <component name="RunManager" selected="Application.kArmBandit">
+    <configuration default="false" name="TicTacToe" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="rl.connect5.*" />
+          <option name="PATTERN" value="rl.tictactoe.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="rl.connect5.connect5" />
+      <option name="MAIN_CLASS_NAME" value="rl.tictactoe.TicTacToe" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -401,14 +316,34 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="TicTacToe" type="Application" factoryName="Application" temporary="true">
+    <configuration default="false" name="connect5" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="rl.tictactoe.*" />
+          <option name="PATTERN" value="rl.connect5.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="rl.tictactoe.TicTacToe" />
+      <option name="MAIN_CLASS_NAME" value="rl.connect5.connect5" />
+      <option name="VM_PARAMETERS" value="-Xmx6g" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="connect5" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="kArmBandit" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="rl.kArmBandit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="rl.kArmBandit.kArmBandit" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -682,14 +617,16 @@
       <envs />
       <method />
     </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Application.connect5" />
-      <item index="1" class="java.lang.String" itemvalue="Application.TicTacToe" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Application.TicTacToe" />
+      <item index="1" class="java.lang.String" itemvalue="Application.connect5" />
+      <item index="2" class="java.lang.String" itemvalue="Application.kArmBandit" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Application.TicTacToe" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Application.kArmBandit" />
         <item index="1" class="java.lang.String" itemvalue="Application.connect5" />
+        <item index="2" class="java.lang.String" itemvalue="Application.TicTacToe" />
       </list>
     </recent_temporary>
   </component>
@@ -741,27 +678,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505572429394</updated>
-    </task>
-    <task id="LOCAL-00001" summary="init chechin">
-      <created>1505573177813</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1505573177813</updated>
-    </task>
-    <task id="LOCAL-00002" summary="init chechin">
-      <created>1505576993263</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1505576993263</updated>
-    </task>
-    <task id="LOCAL-00003" summary="init chechin">
-      <created>1505852206564</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1505852206564</updated>
     </task>
     <task id="LOCAL-00004" summary="init chechin">
       <created>1506025708665</created>
@@ -896,42 +812,251 @@
       <option name="project" value="LOCAL" />
       <updated>1508094060464</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="init chechin">
+      <created>1508897152890</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1508897152890</updated>
+    </task>
+    <task id="LOCAL-00024" summary="init chechin">
+      <created>1508975965045</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1508975965045</updated>
+    </task>
+    <task id="LOCAL-00025" summary="init chechin">
+      <created>1508977361567</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1508977361567</updated>
+    </task>
+    <task id="LOCAL-00026" summary="init chechin">
+      <created>1508985177862</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1508985177862</updated>
+    </task>
+    <task id="LOCAL-00027" summary="init chechin">
+      <created>1508988140519</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1508988140519</updated>
+    </task>
+    <task id="LOCAL-00028" summary="init chechin">
+      <created>1509213755583</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1509213755583</updated>
+    </task>
+    <task id="LOCAL-00029" summary="init chechin">
+      <created>1509216815438</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1509216815438</updated>
+    </task>
+    <task id="LOCAL-00030" summary="init chechin">
+      <created>1509220893169</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1509220893169</updated>
+    </task>
+    <task id="LOCAL-00031" summary="init chechin">
+      <created>1509222022740</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1509222022740</updated>
+    </task>
+    <task id="LOCAL-00032" summary="init chechin">
+      <created>1509222888331</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1509222888331</updated>
+    </task>
+    <task id="LOCAL-00033" summary="init chechin">
+      <created>1509307341185</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1509307341185</updated>
+    </task>
+    <task id="LOCAL-00034" summary="init chechin">
+      <created>1509320605122</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1509320605122</updated>
+    </task>
+    <task id="LOCAL-00035" summary="init chechin">
+      <created>1509814051180</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1509814051180</updated>
+    </task>
+    <task id="LOCAL-00036" summary="init chechin">
+      <created>1509816162945</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1509816162945</updated>
+    </task>
+    <task id="LOCAL-00037" summary="init chechin">
+      <created>1509893757288</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1509893757289</updated>
+    </task>
+    <task id="LOCAL-00038" summary="init chechin">
+      <created>1509903205146</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1509903205146</updated>
+    </task>
+    <task id="LOCAL-00039" summary="init chechin">
+      <created>1509921958884</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1509921958884</updated>
+    </task>
+    <task id="LOCAL-00040" summary="init chechin">
+      <created>1509922996669</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1509922996669</updated>
+    </task>
+    <task id="LOCAL-00041" summary="init chechin">
+      <created>1509928480968</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1509928480968</updated>
+    </task>
+    <task id="LOCAL-00042" summary="init chechin">
+      <created>1509928723225</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1509928723225</updated>
+    </task>
+    <task id="LOCAL-00043" summary="init chechin">
+      <created>1509929054039</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1509929054039</updated>
+    </task>
+    <task id="LOCAL-00044" summary="init chechin">
+      <created>1509929158929</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1509929158929</updated>
+    </task>
+    <task id="LOCAL-00045" summary="init chechin">
+      <created>1509929206388</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1509929206388</updated>
+    </task>
+    <task id="LOCAL-00046" summary="init chechin">
+      <created>1509933002833</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1509933002833</updated>
+    </task>
+    <task id="LOCAL-00047" summary="init chechin">
+      <created>1509933607377</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1509933607377</updated>
+    </task>
+    <task id="LOCAL-00048" summary="init chechin">
+      <created>1509934262486</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1509934262486</updated>
+    </task>
+    <task id="LOCAL-00049" summary="init chechin">
+      <created>1509934414559</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1509934414559</updated>
+    </task>
+    <task id="LOCAL-00050" summary="init chechin">
+      <created>1509934946225</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1509934946226</updated>
+    </task>
+    <task id="LOCAL-00051" summary="init chechin">
+      <created>1509935017374</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1509935017374</updated>
+    </task>
+    <task id="LOCAL-00052" summary="init chechin">
+      <created>1509935143260</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1509935143260</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1604" height="876" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32775453" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="SBT" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11593264" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="SBT" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11118252" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32775453" sideWeight="0.5051414" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26359832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32914925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37238494" sideWeight="0.45758355" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.47974277" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27590674" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29691517" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.52022314" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37935844" sideWeight="0.7892031" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32635984" sideWeight="0.46015424" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32775453" sideWeight="0.49485862" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -945,159 +1070,52 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala</url>
+          <url>file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/tictactoe/TicTacToe.scala</url>
           <line>130</line>
           <properties />
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
-          <url>file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala</url>
+          <url>file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/tictactoe/TicTacToe.scala</url>
           <line>113</line>
           <properties />
           <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/kArmBandit/kArmBandit.scala</url>
+          <line>63</line>
+          <properties />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/kArmBandit/kArmBandit.scala</url>
+          <line>82</line>
+          <properties />
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="25" />
+      <option name="time" value="42" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="this.length" custom="breeze.linalg.DenseVector" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseMatrix.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="347" column="4" lean-forward="false" selection-start-line="347" selection-start-column="4" selection-end-line="347" selection-end-column="4" />
-          <folding>
-            <element signature="e#585#608#0" expanded="false" />
-            <element signature="e#6296#6383#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="174" column="73" lean-forward="false" selection-start-line="174" selection-start-column="73" selection-end-line="174" selection-end-column="73" />
-          <folding>
-            <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#383#415#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/collection/TraversableOnce.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="226" column="35" lean-forward="false" selection-start-line="226" selection-start-column="35" selection-end-line="226" selection-end-column="35" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="e#560#607#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="103" column="32" lean-forward="true" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/math/Ordering.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="173" column="0" lean-forward="true" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="13" lean-forward="false" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="13" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#383#415#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/collection/mutable/HashMap.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2040">
-          <caret line="127" column="6" lean-forward="false" selection-start-line="127" selection-start-column="6" selection-end-line="127" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/tictactoe/TicTacToe.scala" />
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/package.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="935">
           <caret line="61" column="6" lean-forward="false" selection-start-line="61" selection-start-column="6" selection-end-line="61" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseMatrix.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5831">
-          <caret line="343" column="95" lean-forward="false" selection-start-line="343" selection-start-column="84" selection-end-line="343" selection-end-column="95" />
-          <folding>
-            <element signature="e#585#608#0" expanded="false" />
-            <element signature="e#6296#6383#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="13" lean-forward="true" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="13" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#383#415#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="61" column="6" lean-forward="false" selection-start-line="61" selection-start-column="6" selection-end-line="61" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1105,171 +1123,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5831">
           <caret line="343" column="95" lean-forward="true" selection-start-line="343" selection-start-column="84" selection-end-line="343" selection-end-column="95" />
-          <folding>
-            <element signature="e#585#608#0" expanded="false" />
-            <element signature="e#6296#6383#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="36" lean-forward="false" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="48" lean-forward="false" selection-start-line="15" selection-start-column="48" selection-end-line="15" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="7" lean-forward="false" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/.idea/modules/connect5-build.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/build.sbt" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/build.sbt" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/build.sbt" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/build.sbt" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/build.sbt" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" />
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/Function2.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="229">
           <caret line="28" column="6" lean-forward="false" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="46" lean-forward="false" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -1295,28 +1171,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/collection/TraversableOnce.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3672">
-          <caret line="226" column="35" lean-forward="false" selection-start-line="226" selection-start-column="35" selection-end-line="226" selection-end-column="35" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="e#560#607#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/Matrix.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2787">
           <caret line="33" column="6" lean-forward="false" selection-start-line="33" selection-start-column="6" selection-end-line="33" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseVector.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="261" column="84" lean-forward="true" selection-start-line="261" selection-start-column="84" selection-end-line="261" selection-end-column="84" />
         </state>
       </provider>
     </entry>
@@ -1355,16 +1213,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1649">
-          <caret line="103" column="32" lean-forward="false" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/View.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1372,44 +1220,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseMatrix.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1789">
-          <caret line="204" column="47" lean-forward="false" selection-start-line="204" selection-start-column="42" selection-end-line="204" selection-end-column="47" />
-          <folding>
-            <element signature="e#585#608#0" expanded="false" />
-            <element signature="e#6296#6383#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/io/ObjectOutputStream.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
           <caret line="341" column="27" lean-forward="false" selection-start-line="341" selection-start-column="27" selection-end-line="341" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseMatrix.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="95" column="17" lean-forward="false" selection-start-line="95" selection-start-column="6" selection-end-line="95" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="103" column="32" lean-forward="false" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connect5/resources/connect5-player1-policy" />
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/collection/TraversableOnce.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="226" column="35" lean-forward="false" selection-start-line="226" selection-start-column="35" selection-end-line="226" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/tictactoe/TicTacToe.scala" />
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze-viz_2.12/srcs/breeze-viz_2.12-0.13.2-sources.jar!/breeze/plot/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1819">
+          <caret line="110" column="6" lean-forward="false" selection-start-line="110" selection-start-column="6" selection-end-line="110" selection-end-column="6" />
+          <folding>
+            <element signature="e#16#54#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.12.3-sources.jar!/scala/math/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1326">
+          <caret line="84" column="6" lean-forward="false" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connect5/.gitattributes" />
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="27" lean-forward="false" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/tictactoe/TicTacToe.scala">
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/project/build.properties" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" />
+    <entry file="file://$PROJECT_DIR$/kArmBandit/kArmBandit.iml" />
+    <entry file="file://$PROJECT_DIR$/kArmBandit/src/rl/kArmBandit/kArmBandit.scala" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/build.sbt" />
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/kArmBandit/kArmBandit.scala" />
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3153">
-          <caret line="11" column="42" lean-forward="true" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
-          <folding>
-            <element signature="e#21#110#0" expanded="true" />
-            <element signature="e#383#415#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/src/main/scala/rl/connect5/connect5.scala">
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/connect5/connect5.scala" />
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/DenseVector.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="53" column="9" lean-forward="true" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
-          <folding>
-            <element signature="e#20#109#0" expanded="true" />
-            <element signature="e#373#405#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="237">
+          <caret line="388" column="0" lean-forward="false" selection-start-line="388" selection-start-column="0" selection-end-line="388" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1466,11 +1354,12 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>connect5</last-edited>
+          <last-edited>kArmBandit</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
