@@ -6,7 +6,7 @@ Some of the planned topics are:
 * Dynamic Programming 
 * Markov Decision Processes
 * Monte Carlo Methods
-* Temporal-Difference Learning etc. 
+* Temporal-Difference Learning
 
 
 https://github.com/michaelw123/rl
