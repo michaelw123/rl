@@ -4,7 +4,9 @@ This is a research project that explores Reinforcement Learning by solving some 
 Some of the planned topics are:
 * k-Armed Bandit problem
 * Dynamic Programming 
-* Markov Decision Processes, Monte Carlo Methods, Temporal-Difference Learning etc. 
+* Markov Decision Processes
+* Monte Carlo Methods
+* Temporal-Difference Learning etc. 
 
 
 https://github.com/michaelw123/rl
