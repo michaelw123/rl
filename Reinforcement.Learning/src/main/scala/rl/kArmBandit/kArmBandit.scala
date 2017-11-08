@@ -9,18 +9,19 @@ import java.awt.{Color, Paint}
 /*
   * Created by wangmich on 10/30/2017.
   */
-class Bandit (kArm: Int = 10, epsilon:Double = 0.0, stepSize:Double = 0.0) {
-  //val estimation = DenseVector[Double](10).map(_ => math.random)
-  val estimation = DenseVector.zeros[Double](10).map(_ => math.random)
-  val qEstimation = DenseVector.zeros[Double](10)
-  val actionCount = Array[Int](kArm)
+class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.0) {
+  val estimation = DenseVector.zeros[Double](kArm).map(_ => math.random)
+  //val estimation = DenseVector.fill[Double](kArm)(math.random)
+  val qEstimation = DenseVector.zeros[Double](kArm)
+  val actionCount = Array.fill[Int](kArm)(0)
   var time = 0
   var averageReward = 0.0
 
-  def getAction = epsilon match {
-    case 0 => argmax(qEstimation)
-    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
-  }
+  def getAction =scala.util.Random.nextInt(10)
+//    epsilon match {
+//    case 0 => argmax(estimation)
+//    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
+//  }
   def takeAction(arm:Int) = {
     val reward = estimation.valueAt(arm) + math.random
     time += 1
@@ -53,7 +54,7 @@ object kArmBandit extends App{
     val (bestActionCount, average) = banditSimulation(nBandits, time+1, bandits)
    // val aaa=average1(0)
     val f = Figure()
-    val p = f.subplot(0)
+    //val p = f.subplot(0)
     //val x = averageRewards(::, 0)
     //val y = averageRewards(::, 1)
     //p += scatter(x, y, { _ => 0.1 }, { a => Color.BLUE })
@@ -62,13 +63,23 @@ object kArmBandit extends App{
 //      p += scatter(DenseVector.fill[Double](nBandits, i), average1(i), { _ => 0.01 }, { a => Color.BLUE })
 //    }
     var step = 0
-    for(col <- average(::, *)) {
-      p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.1 }, { a => Color.BLUE })
+//    for(col <- average(::, *)) {
+//      p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
+//      step += 1
+//    }
+//    p.xlabel = "Steps"
+//     p.ylabel = "Average Rewards"
+//     p.title = "Input data"
+
+    val p1 = f.subplot(0)
+    step = 0
+    for(col <- bestActionCount(::, *)) {
+      p1 += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
       step += 1
     }
-    p.xlabel = "X-value"
-     p.ylabel = "Y-value"
-     p.title = "Input data"
+    p1.xlabel = "Steps"
+    p1.ylabel = "Best Actions (%)"
+    p1.title = "Input data"
     //    p += plot(x,y, '.')
     //    p.xlabel = "x axis"
     //    p.ylabel = "y axis"
@@ -82,7 +93,7 @@ object kArmBandit extends App{
     case _ => Color.BLACK //other
   }
   def banditSimulation(n:Int, time:Int, bandits:Array[Bandit]) = {
-    val bestActionCounts = DenseMatrix.zeros[Int] (bandits.length, time)
+    val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, time)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
     for (bandit <- bandits) {
       for (i <- 0 to n-1) {
@@ -95,6 +106,7 @@ object kArmBandit extends App{
           }
         }
       }
+      val xxx=9
     }
 //    val a = averageRewards(::, *) //broadcastedRows
 //    val b = averageRewards(*, ::) // broadcastedColumns
@@ -104,7 +116,7 @@ object kArmBandit extends App{
 ////    val aa=DenseVector.zeros[Double]
 ////
 ////    val aaaa = aa.sum
-
-    (bestActionCounts, averageRewards.map(_/bandits.length) )
+      val yyy = 8
+    (bestActionCounts.map(_/bandits.length), averageRewards.map(_/bandits.length) )
   }
 }
