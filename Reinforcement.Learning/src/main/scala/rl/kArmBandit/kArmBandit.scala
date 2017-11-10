@@ -9,7 +9,7 @@ import java.awt.{Color, Paint}
 /*
   * Created by wangmich on 10/30/2017.
   */
-class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.0) {
+class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
   val estimation = DenseVector.zeros[Double](kArm).map(_ => math.random)
   //val estimation = DenseVector.fill[Double](kArm)(math.random)
   val qEstimation = DenseVector.zeros[Double](kArm)
@@ -20,15 +20,15 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.0) {
   def getAction = //scala.util.Random.nextInt(10)
     epsilon match {
     case 0 => argmax(qEstimation)
-    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
+    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
   }
   def takeAction(arm:Int) = {
     val reward = estimation.valueAt(arm) + math.random
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
     actionCount(arm) = actionCount(arm)+1
-    qEstimation(arm) += stepSize * (reward - qEstimation(arm))
-    //qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
+    //qEstimation(arm) += stepSize * (reward - qEstimation(arm))
+    qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
     reward
   }
   def bestAction = argmax(qEstimation)
@@ -37,16 +37,9 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.0) {
 object kArmBandit extends App{
 
   test
-  epsilonGreedy(200, 1000)
+  epsilonGreedy(200, 100)
 
   private def test = {
-
-
-
-
-    //scatter(x, y, s)
-
-
   }
   def epsilonGreedy(nBandits:Int, time:Int) = {
     val epsilon = Seq(0, 0.1, 0.01)
@@ -62,7 +55,7 @@ object kArmBandit extends App{
       //val lin = linspace(0, time+1, time+1)
       //p+=scatter(linspace(0, time+1, time+1), col, { _ => 0.3 }, { a => Color.BLUE })
 
-      p+= plot(linspace(0, time+1, time+1), col, colorcode="BLACK")
+      p+= plot(linspace(0, time+1, time+1), col, colorcode="BLUE")
       //p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
     }
     p.xlabel = "Steps"
@@ -106,15 +99,6 @@ object kArmBandit extends App{
       }
       val xxx=9
     }
-//    val a = averageRewards(::, *) //broadcastedRows
-//    val b = averageRewards(*, ::) // broadcastedColumns
-//    val theSum = sum(averageRewards(*, ::))
-//    val theSum2 =  sum(averageRewards(::, *)).t
-//    val theAverage = theSum.map(_/time)
-////    val aa=DenseVector.zeros[Double]
-////
-////    val aaaa = aa.sum
-      val yyy = 8
     (bestActionCounts.map(_/bandits.length), averageRewards.map(_/bandits.length) )
   }
 }
