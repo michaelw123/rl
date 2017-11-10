@@ -37,30 +37,39 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
 object kArmBandit extends App{
 
   test
-  epsilonGreedy(200, 100)
+  epsilonGreedy(100, 50)
 
   private def test = {
   }
   def epsilonGreedy(nBandits:Int, time:Int) = {
-    val epsilon = Seq(0, 0.1, 0.01)
-    val bandits= (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0, 0.1))
-    val (bestActionCount, average) = banditSimulation(nBandits, time+1, bandits)
-   // val aaa=average1(0)
+    val epsilons = Seq(0, 0.1, 0.01)
+    val colors = Seq("BLUE", "RED", "BLACK")
     val f = Figure()
     val p = f.subplot(0)
-    val xx = average(::, *)
-
-
-    for(col <- average(*, ::)) {
-      //val lin = linspace(0, time+1, time+1)
-      //p+=scatter(linspace(0, time+1, time+1), col, { _ => 0.3 }, { a => Color.BLUE })
-
-      p+= plot(linspace(0, time+1, time+1), col, colorcode="BLUE")
-      //p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
-    }
     p.xlabel = "Steps"
     p.ylabel = "Average Rewards"
     p.title = "Input data"
+    for (epslon <- epsilons) {
+      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, epslon, 0.1))
+      val (bestActionCount, average) = banditSimulation(nBandits, time + 1, bandits)
+      val color = epslon match {
+        case 0 => "BLACK"
+        case 0.1 => "RED"
+        case 0.01 => "BLUE"
+        case _ => "BLACK"
+      }
+    // val aaa=average1(0)
+      //for(col <- average(*, ::)) {
+      for (row <- average(::, *)) {
+      //val lin = linspace(0, time+1, time+1)
+      //p+=scatter(linspace(0, time+1, time+1), col, { _ => 0.3 }, { a => Color.BLUE })
+           p += plot(linspace(0, nBandits, nBandits), row, colorcode= color)
+      //p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
+      }
+
+    }
+    val xxx=8
+    p.refresh()
 //    val p1 = f.subplot(0)
 //    step = 0
 //    for(col <- best
@@ -97,7 +106,6 @@ object kArmBandit extends App{
           }
         }
       }
-      val xxx=9
     }
     (bestActionCounts.map(_/bandits.length), averageRewards.map(_/bandits.length) )
   }
