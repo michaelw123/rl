@@ -17,18 +17,18 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.0) {
   var time = 0
   var averageReward = 0.0
 
-  def getAction =scala.util.Random.nextInt(10)
-//    epsilon match {
-//    case 0 => argmax(estimation)
-//    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
-//  }
+  def getAction = //scala.util.Random.nextInt(10)
+    epsilon match {
+    case 0 => argmax(qEstimation)
+    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(10) else  argmax(estimation)
+  }
   def takeAction(arm:Int) = {
     val reward = estimation.valueAt(arm) + math.random
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
     actionCount(arm) = actionCount(arm)+1
-    //qEstimation(arm) += stepSize * (reward - qEstimation(arm))
-    qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
+    qEstimation(arm) += stepSize * (reward - qEstimation(arm))
+    //qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
     reward
   }
   def bestAction = argmax(qEstimation)
@@ -37,7 +37,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.0) {
 object kArmBandit extends App{
 
   test
-  epsilonGreedy(100, 100)
+  epsilonGreedy(200, 1000)
 
   private def test = {
 
@@ -54,32 +54,30 @@ object kArmBandit extends App{
     val (bestActionCount, average) = banditSimulation(nBandits, time+1, bandits)
    // val aaa=average1(0)
     val f = Figure()
-    //val p = f.subplot(0)
-    //val x = averageRewards(::, 0)
-    //val y = averageRewards(::, 1)
-    //p += scatter(x, y, { _ => 0.1 }, { a => Color.BLUE })
+    val p = f.subplot(0)
+    val xx = average(::, *)
 
-//    for (i <- 0 to time -1) {
-//      p += scatter(DenseVector.fill[Double](nBandits, i), average1(i), { _ => 0.01 }, { a => Color.BLUE })
-//    }
-    var step = 0
-//    for(col <- average(::, *)) {
-//      p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
+
+    for(col <- average(*, ::)) {
+      //val lin = linspace(0, time+1, time+1)
+      //p+=scatter(linspace(0, time+1, time+1), col, { _ => 0.3 }, { a => Color.BLUE })
+
+      p+= plot(linspace(0, time+1, time+1), col, colorcode="BLACK")
+      //p += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
+    }
+    p.xlabel = "Steps"
+    p.ylabel = "Average Rewards"
+    p.title = "Input data"
+//    val p1 = f.subplot(0)
+//    step = 0
+//    for(col <- best
+    // ActionCount(::, *)) {
+//      p1 += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
 //      step += 1
 //    }
-//    p.xlabel = "Steps"
-//     p.ylabel = "Average Rewards"
-//     p.title = "Input data"
-
-    val p1 = f.subplot(0)
-    step = 0
-    for(col <- bestActionCount(::, *)) {
-      p1 += scatter(DenseVector.fill[Double](nBandits, step), col, { _ => 0.3 }, { a => Color.BLUE })
-      step += 1
-    }
-    p1.xlabel = "Steps"
-    p1.ylabel = "Best Actions (%)"
-    p1.title = "Input data"
+//    p1.xlabel = "Steps"
+//    p1.ylabel = "Best Actions (%)"
+//    p1.title = "Input data"
     //    p += plot(x,y, '.')
     //    p.xlabel = "x axis"
     //    p.ylabel = "y axis"
