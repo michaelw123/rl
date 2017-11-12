@@ -3,8 +3,6 @@ package rl.kArmBandit
 import breeze.linalg._
 import breeze.plot._
 import breeze.stats.distributions.Binomial
-import java.awt.{Color, Paint}
-import breeze.numerics._
 
 /*
   * Created by wangmich on 10/30/2017.
@@ -33,7 +31,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
   def bestAction = argmax(qEstimation)
 }
 object kArmBandit extends App{
-  epsilonGreedy(100, 50)
+  epsilonGreedy(100, 150)
 
   def epsilonGreedy(nBandits:Int, time:Int) = {
     val epsilons = Seq(0, 0.1, 0.01)
@@ -50,12 +48,24 @@ object kArmBandit extends App{
       }
       val f = Figure()
       val p = f.subplot(0)
-      for (row <- average(::, *)) {
-          p += plot(linspace(0, nBandits, nBandits), row, colorcode= color)
+//      for (col <- average(::, *)) {
+//          p += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
+//      }
+
+      for (row <- average(*, ::)) {
+        p += plot(linspace(0, time+1, time+1), row, colorcode= color)
       }
       p.xlabel = "Steps"
       p.ylabel = "Average Rewards"
       p.title = "epsolon ="+epslon
+
+//      val p1 = f.subplot(1)
+//      for (col <- bestActionCount(::, *)) {
+//        p1 += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
+//      }
+//      p1.xlabel = "Steps"
+//      p1.ylabel = "Best Action Count"
+//      p1.title = "epsolon ="+epslon
     }
   }
 
