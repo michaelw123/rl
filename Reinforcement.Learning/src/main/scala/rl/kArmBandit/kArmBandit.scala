@@ -29,10 +29,10 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
     qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
     reward
   }
-  def bestAction = argmax(qEstimation)
+  def bestAction = argmax(estimation)
 }
 object kArmBandit extends App{
-  epsilonGreedy(2000, 1000)
+  epsilonGreedy(1000, 2000)
 
   def epsilonGreedy(nBandits:Int, time:Int) = {
     val epsilons = Seq(0,0.001, 0.01, 0.1, 0.4)
@@ -49,8 +49,8 @@ object kArmBandit extends App{
         case _ => "RED"
       }
       val f = Figure()
-//      val p = f.subplot(0)
-//
+      val p = f.subplot(0)
+
 //      p += plot(linspace(0, time+1, time+1), mean(average(::, *)).inner, colorcode= color)
 //
 //      p.xlabel = "Steps"
@@ -64,6 +64,7 @@ object kArmBandit extends App{
       p1.xlabel = "Steps"
       p1.ylabel = "Best Action %"
       p1.title = "epsolon ="+epslon
+      
 
 
 //      val p1 = f.subplot(1)
@@ -85,7 +86,6 @@ object kArmBandit extends App{
           val action = bandit.getAction
           val reward = bandit.takeAction(action)
           averageRewards(i, t) += reward
-          val bestAction = bandit.bestAction
           if (action == bandit.bestAction) {
             bestActionCounts(i, t) += 1
           }
