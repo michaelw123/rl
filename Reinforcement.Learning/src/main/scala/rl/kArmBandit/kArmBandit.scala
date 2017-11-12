@@ -1,6 +1,7 @@
 package rl.kArmBandit
 
 import breeze.linalg._
+import breeze.stats._
 import breeze.plot._
 import breeze.stats.distributions.Binomial
 
@@ -31,10 +32,10 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
   def bestAction = argmax(qEstimation)
 }
 object kArmBandit extends App{
-  epsilonGreedy(100, 150)
+  epsilonGreedy(2000, 1000)
 
   def epsilonGreedy(nBandits:Int, time:Int) = {
-    val epsilons = Seq(0, 0.1, 0.01)
+    val epsilons = Seq(0,0.001, 0.01, 0.1, 0.4)
     val colors = Seq("BLUE", "RED", "BLACK")
 
     for (epslon <- epsilons) {
@@ -48,13 +49,15 @@ object kArmBandit extends App{
       }
       val f = Figure()
       val p = f.subplot(0)
-      for (col <- average(::, *)) {
-          p += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
-      }
+//      mean(average(::, *))
+//      for (col <- average(::, *)) {
+//          p += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
+//      }
 //      val aa = sum(average(::, *)).inner.map(a => a/nBandits)
-//      //for (row <- average(*, ::)) {
-//        p += plot(linspace(0, time+1, time+1), aa, colorcode= color)
-//      //}
+      //for (row <- average(*, ::)) {
+        p += plot(linspace(0, time+1, time+1), mean(average(::, *)).inner, colorcode= color)
+      //p += plot(linspace(0, nBandits, nBandits), mean(average(*, ::)), colorcode= color)
+      //}
       p.xlabel = "Steps"
       p.ylabel = "Average Rewards"
       p.title = "epsolon ="+epslon
@@ -72,9 +75,10 @@ object kArmBandit extends App{
   def banditSimulation(n:Int, time:Int, bandits:Array[Bandit]) = {
     val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, time)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
-    for (bandit <- bandits) {
+    //for (bandit <- bandits) {
       for (i <- 0 to n-1) {
         for (t <- 1 to time - 1) {
+          val bandit = bandits(i)
           val action = bandit.getAction
           val reward = bandit.takeAction(action)
           averageRewards(i, t) += reward
@@ -82,7 +86,7 @@ object kArmBandit extends App{
             bestActionCounts(i, t) += 1
           }
         }
-      }
+      //}
     }
     (bestActionCounts.map(_/bandits.length), averageRewards.map(_/bandits.length) )
   }
