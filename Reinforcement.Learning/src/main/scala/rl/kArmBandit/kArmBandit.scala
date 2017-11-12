@@ -32,51 +32,45 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
   def bestAction = argmax(estimation)
 }
 object kArmBandit extends App{
-  epsilonGreedy(1000, 2000)
+  epsilonGreedyAverageRewards(1000, 4000)
+  epsilonGreedyBestActions(1000, 4000)
 
-  def epsilonGreedy(nBandits:Int, time:Int) = {
-    val epsilons = Seq(0,0.001, 0.01, 0.1, 0.4)
+  def epsilonGreedyBestActions(nBandits:Int, time:Int) = {
+    val epsilons = Seq(0.005, 0.01, 0.1)
+    for (epslon <- epsilons) {
+      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, epslon, 0.1))
+      val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
+      val f = Figure()
+      val p = f.subplot(0)
+      p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(epslon))
+      p.xlabel = "Steps"
+      p.ylabel = "Best Action count"
+      p.title = "epslon ="+epslon
+    }
+  }
+
+  def epsilonGreedyAverageRewards(nBandits:Int, time:Int) = {
+    val epsilons = Seq(0.005, 0.01, 0.1)
     val colors = Seq("BLUE", "RED", "BLACK")
 
     for (epslon <- epsilons) {
       val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, epslon, 0.1))
       val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
-      val color = epslon match {
-        case 0 => "BLACK"
-        case 0.1 => "RED"
-        case 0.01 => "BLUE"
-        case 0.001 => "YELLOW"
-        case _ => "RED"
-      }
       val f = Figure()
       val p = f.subplot(0)
-
-//      p += plot(linspace(0, time+1, time+1), mean(average(::, *)).inner, colorcode= color)
-//
-//      p.xlabel = "Steps"
-//      p.ylabel = "Average Rewards"
-//      p.title = "epsolon ="+epslon
-
-      val p1 = f.subplot(0)
-
-      p1 += plot(linspace(0, time+1, time+1), mean(bestActions(::, *)).inner, colorcode= color)
-
-      p1.xlabel = "Steps"
-      p1.ylabel = "Best Action %"
-      p1.title = "epsolon ="+epslon
-      
-
-
-//      val p1 = f.subplot(1)
-//      for (col <- bestActionCount(::, *)) {
-//        p1 += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
-//      }
-//      p1.xlabel = "Steps"
-//      p1.ylabel = "Best Action Count"
-//      p1.title = "epsolon ="+epslon
+      p += plot(linspace(0, time+1, time+1), mean(average(::, *)).inner, colorcode=color(epslon))
+      p.xlabel = "Steps"
+      p.ylabel = "Average Rewards"
+      p.title = "epslon ="+epslon
     }
   }
-
+  private def  color(epslon:Double):String = epslon match {
+    case 0 => "BLACK"
+    case 0.1 => "RED"
+    case 0.01 => "BLUE"
+    case 0.001 => "YELLOW"
+    case _ => "RED"
+  }
   def banditSimulation(n:Int, time:Int, bandits:Array[Bandit]) = {
     val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, time)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
@@ -92,6 +86,5 @@ object kArmBandit extends App{
         }
     }
     (bestActionCounts, averageRewards.map(_/bandits.length) )
-
   }
 }
