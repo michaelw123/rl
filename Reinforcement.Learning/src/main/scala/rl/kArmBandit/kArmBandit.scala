@@ -48,13 +48,13 @@ object kArmBandit extends App{
       }
       val f = Figure()
       val p = f.subplot(0)
-//      for (col <- average(::, *)) {
-//          p += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
-//      }
-
-      for (row <- average(*, ::)) {
-        p += plot(linspace(0, time+1, time+1), row, colorcode= color)
+      for (col <- average(::, *)) {
+          p += plot(linspace(0, nBandits, nBandits), col, colorcode= color)
       }
+//      val aa = sum(average(::, *)).inner.map(a => a/nBandits)
+//      //for (row <- average(*, ::)) {
+//        p += plot(linspace(0, time+1, time+1), aa, colorcode= color)
+//      //}
       p.xlabel = "Steps"
       p.ylabel = "Average Rewards"
       p.title = "epsolon ="+epslon
