@@ -1,4 +1,4 @@
-# rl
+# Reinforcement Learning
 This is a research project that explores Reinforcement Learning by solving some of the RL problems with various approaches using Scala, with focus on policy/value systems.
 
 Some of the planned topics are:
