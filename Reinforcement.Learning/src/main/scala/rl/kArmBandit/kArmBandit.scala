@@ -8,8 +8,8 @@ import breeze.stats.distributions.Binomial
 /*
   * Created by wangmich on 10/30/2017.
   */
-class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false) {
-  val estimation = DenseVector.zeros[Double](kArm).map(_ => math.random)
+class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0) {
+  val estimation = DenseVector.zeros[Double](kArm).map(_ => math.random + initial)
   val qEstimation = DenseVector.zeros[Double](kArm)
   val actionCount = Array.fill[Int](kArm)(0)
   var time = 0
@@ -35,10 +35,26 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
   def bestAction = argmax(estimation)
 }
 object kArmBandit extends App{
-  incrementalEpsilonGreedy(1000, 4000)
+  //incrementalEpsilonGreedy(1000, 4000)
  // epsilonGreedyAverageRewards(1000, 4000)
  // epsilonGreedyBestActions(1000, 4000)
+  initialValueEpsilonGreedy(1000, 4000)
 
+  def initialValueEpsilonGreedy(nBandits:Int, time:Int) = {
+    val epsilons = Seq(0, 0.005, 0.01, 0.1)
+    val initails = Seq(0, 10, 20)
+    for (initial <- initails) {
+      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.2, false, initial))
+      val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
+      val f = Figure()
+      val p = f.subplot(0)
+      p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(0.1))
+      p.xlabel = "Steps"
+      p.ylabel = "Best Action count with initial value of "+initial
+      p.title = "epslon ="+0.1
+    }
+
+  }
   def incrementalEpsilonGreedy(nBandits:Int, time:Int) = {
     val epsilons = Seq(0, 0.005, 0.01, 0.1)
     for (epslon <- epsilons) {
