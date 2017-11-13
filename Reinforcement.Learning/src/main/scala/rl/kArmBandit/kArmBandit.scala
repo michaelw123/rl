@@ -9,11 +9,12 @@ import breeze.stats.distributions.Binomial
   * Created by wangmich on 10/30/2017.
   */
 class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0) {
-  val estimation = DenseVector.zeros[Double](kArm).map(_ => math.random + initial)
-  val qEstimation = DenseVector.zeros[Double](kArm)
+  val trueQ = DenseVector.fill[Double](kArm)(math.random)
+  val qEstimation = DenseVector.fill[Double](kArm)(initial)
   val actionCount = Array.fill[Int](kArm)(0)
   var time = 0
   var averageReward = 0.0
+
 
   def getAction = //scala.util.Random.nextInt(10)
     epsilon match {
@@ -21,26 +22,26 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
     case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
   }
   def takeAction(arm:Int) = {
-    val reward = estimation.valueAt(arm) + math.random
+    val reward = trueQ.valueAt(arm) + math.random
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
     if (incremental) {
       qEstimation(arm) += stepSize * (reward - qEstimation(arm)) //constant stepsize
     } else {
       actionCount(arm) = actionCount(arm)+1
-      qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))
+      qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))  //sample - average
     }
     reward
   }
-  def bestAction = argmax(estimation)
+  def bestAction = argmax(trueQ)
 }
 object kArmBandit extends App{
-  //incrementalEpsilonGreedy(1000, 4000)
+  incrementalEpsilonGreedy(1000, 4000)
  // epsilonGreedyAverageRewards(1000, 4000)
  // epsilonGreedyBestActions(1000, 4000)
-  initialValueEpsilonGreedy(1000, 4000)
+  //optimisticEpsilonGreedy(1000, 6000)
 
-  def initialValueEpsilonGreedy(nBandits:Int, time:Int) = {
+  def optimisticEpsilonGreedy(nBandits:Int, time:Int) = {
     val epsilons = Seq(0, 0.005, 0.01, 0.1)
     val initails = Seq(0, 1, 5)
     for (initial <- initails) {
@@ -48,9 +49,9 @@ object kArmBandit extends App{
       val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
       val f = Figure()
       val p = f.subplot(0)
-      p += plot(linspace(0, time+1, time+1), mean(average(::, *)).inner, colorcode=color(0.1))
+      p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(0.1))
       p.xlabel = "Steps"
-      p.ylabel = "Best Average with initial value of "+initial
+      p.ylabel = "Best Action count with initial value of "+initial
       p.title = "epslon ="+0.1
     }
 
