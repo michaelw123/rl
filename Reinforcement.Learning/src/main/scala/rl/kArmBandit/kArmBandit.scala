@@ -8,7 +8,7 @@ import breeze.stats.distributions.Binomial
 /*
   * Created by wangmich on 10/30/2017.
   */
-class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
+class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false) {
   val estimation = DenseVector.zeros[Double](kArm).map(_ => math.random)
   val qEstimation = DenseVector.zeros[Double](kArm)
   val actionCount = Array.fill[Int](kArm)(0)
@@ -24,17 +24,35 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1) {
     val reward = estimation.valueAt(arm) + math.random
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
-    actionCount(arm) = actionCount(arm)+1
-    //qEstimation(arm) += stepSize * (reward - qEstimation(arm))
-    qEstimation(arm) += 1.0/actionCount(arm) * (reward - qEstimation(arm))
+    if (incremental) {
+      qEstimation(arm) += stepSize * (reward - qEstimation(arm)) //constant stepsize
+    } else {
+      actionCount(arm) = actionCount(arm)+1
+      qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))
+    }
     reward
   }
   def bestAction = argmax(estimation)
 }
 object kArmBandit extends App{
-  epsilonGreedyAverageRewards(1000, 4000)
-  epsilonGreedyBestActions(1000, 4000)
+  incrementalEpsilonGreedy(1000, 4000)
+ // epsilonGreedyAverageRewards(1000, 4000)
+ // epsilonGreedyBestActions(1000, 4000)
 
+  def incrementalEpsilonGreedy(nBandits:Int, time:Int) = {
+    val epsilons = Seq(0, 0.005, 0.01, 0.1)
+    for (epslon <- epsilons) {
+      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, epslon, 0.2, true))
+      val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
+      val f = Figure()
+      val p = f.subplot(0)
+      p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(epslon))
+      p.xlabel = "Steps"
+      p.ylabel = "Best Action count"
+      p.title = "epslon ="+epslon
+    }
+
+  }
   def epsilonGreedyBestActions(nBandits:Int, time:Int) = {
     val epsilons = Seq(0.005, 0.01, 0.1)
     for (epslon <- epsilons) {
