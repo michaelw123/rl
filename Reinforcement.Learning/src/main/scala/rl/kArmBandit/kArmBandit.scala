@@ -42,15 +42,15 @@ object kArmBandit extends App{
 
   def initialValueEpsilonGreedy(nBandits:Int, time:Int) = {
     val epsilons = Seq(0, 0.005, 0.01, 0.1)
-    val initails = Seq(0, 10, 20)
+    val initails = Seq(0, 1, 5)
     for (initial <- initails) {
-      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.2, false, initial))
+      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1, true, initial))
       val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
       val f = Figure()
       val p = f.subplot(0)
-      p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(0.1))
+      p += plot(linspace(0, time+1, time+1), mean(average(::, *)).inner, colorcode=color(0.1))
       p.xlabel = "Steps"
-      p.ylabel = "Best Action count with initial value of "+initial
+      p.ylabel = "Best Average with initial value of "+initial
       p.title = "epslon ="+0.1
     }
 
