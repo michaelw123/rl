@@ -1,6 +1,7 @@
 package rl.kArmBandit
 
 import breeze.linalg._
+import breeze.numerics.{log, sqrt}
 import breeze.stats._
 import breeze.plot._
 import breeze.stats.distributions.Binomial
@@ -8,7 +9,7 @@ import breeze.stats.distributions.Binomial
 /*
   * Created by wangmich on 10/30/2017.
   */
-class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0) {
+class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0, ucb:Int = 0) {
   val trueQ = DenseVector.fill[Double](kArm)(math.random)
   val qEstimation = DenseVector.fill[Double](kArm)(initial)
   val actionCount = Array.fill[Int](kArm)(0)
@@ -17,9 +18,10 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
 
 
   def getAction = //scala.util.Random.nextInt(10)
-    epsilon match {
-    case 0 => argmax(qEstimation)
-    case _ => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
+    (epsilon, ucb) match {
+    case (0, 0) => argmax(qEstimation)
+    case (_, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
+    //case (_, _) => argmax(for (est <- qEstimation) yield  est + ucb * sqrt(log(time+1)/actionCount(0)+1)))
   }
   def takeAction(arm:Int) = {
     val reward = trueQ.valueAt(arm) + math.random
@@ -28,8 +30,8 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
     if (incremental) {
       qEstimation(arm) += stepSize * (reward - qEstimation(arm)) //constant stepsize
     } else {
-      actionCount(arm) = actionCount(arm)+1
-      qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))  //sample - average
+        actionCount(arm) = actionCount(arm)+1
+        qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))  //sample - average
     }
     reward
   }
