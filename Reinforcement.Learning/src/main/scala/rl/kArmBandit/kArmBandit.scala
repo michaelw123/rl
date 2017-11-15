@@ -16,7 +16,7 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
   var time = 0
   var averageReward = 0.0
   def getAction = //scala.util.Random.nextInt(10)
-    (epsilon, ucb) match {
+    (epsilon, ucb, ) match {
       case (0, 0) => argmax(qEstimation)
       case (_, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
       case (_, _) => argmax(
