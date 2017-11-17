@@ -4,7 +4,9 @@ import breeze.linalg._
 import breeze.numerics.{exp, log, sqrt}
 import breeze.stats._
 import breeze.plot._
-import breeze.stats.distributions.{Binomial, Rand, RandBasis}
+import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator}
+import org.apache.commons.math3.random.MersenneTwister
+
 import scala.annotation.tailrec
 
 /*
@@ -139,21 +141,46 @@ object kArmBandit extends App{
   }
 }
 
-private final case class WeightedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T], weights:DenseVector[Double]) extends Rand[U] {
-  def draw() = {
-    val sample = Rand.uniform.draw
-    var sum:Double = 0.0
-    val weightsArray:Array[Double] = weights.toArray
-    var index = 0
-    val d = go(sum, weightsArray)
-    @tailrec
-    def go(s:Double, a:Array[Double]):Int = {
-      index += 1
-      if (s+a.head > sample) index
-      else go(s+a.head, a.tail)
+object ExtendedRand extends RandBasis(new ThreadLocalRandomGenerator(new MersenneTwister()) {
+  def weightedChoose[T](c: Iterable[T], w:Iterable[Double]):Rand[T] = new Rand[T] {
+    def draw() = {
+      val sample = Rand.uniform.draw
+      var index = 0
+      val d = go(0.0, w.toArray)
+      val elems = c.iterator
+      var i = 1
+      var e = elems.next()
+      while(i < d) {
+        e = elems.next()
+        i += 1
+      }
+      e
+      @tailrec
+      def go(s:Double, a:Array[Double]):Int = {
+        index += 1
+        if (s+a.head > sample) index
+        else go(s+a.head, a.tail)
+      }
+
     }
-    d
   }
-  //override def drawOpt() = rand.drawOpt().map(func)
-  //override def map[E](f : U=>E):Rand[E] = WeightedRand(rand, (x:T) => f(func(x)))
 }
+
+//private final case class WeightedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T], weights:DenseVector[Double]) extends Rand[U] {
+//  def draw() = {
+//    val sample = Rand.uniform.draw
+//    var sum:Double = 0.0
+//    val weightsArray:Array[Double] = weights.toArray
+//    var index = 0
+//    val d = go(sum, weightsArray)
+//    @tailrec
+//    def go(s:Double, a:Array[Double]):Int = {
+//      index += 1
+//      if (s+a.head > sample) index
+//      else go(s+a.head, a.tail)
+//    }
+//    d
+//  }
+//  //override def drawOpt() = rand.drawOpt().map(func)
+//  //override def map[E](f : U=>E):Rand[E] = WeightedRand(rand, (x:T) => f(func(x)))
+//}
