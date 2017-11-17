@@ -5,6 +5,7 @@ import breeze.numerics.{exp, log, sqrt}
 import breeze.stats._
 import breeze.plot._
 import breeze.stats.distributions.{Binomial, Rand, RandBasis}
+import scala.annotation.tailrec
 
 /*
   * Created by Michael Wang on 10/30/2017.
@@ -137,11 +138,21 @@ object kArmBandit extends App{
     (bestActionCounts, averageRewards.map(_/bandits.length) )
   }
 }
+
 private final case class WeightedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T], weights:DenseVector[Double]) extends Rand[U] {
   def draw() = {
-    val sample = Rand.uniform
-    weights
-
+    val sample = Rand.uniform.draw
+    var sum:Double = 0.0
+    val weightsArray:Array[Double] = weights.toArray
+    var index = 0
+    val d = go(sum, weightsArray)
+    @tailrec
+    def go(s:Double, a:Array[Double]):Int = {
+      index += 1
+      if (s+a.head > sample) index
+      else go(s+a.head, a.tail)
+    }
+    d
   }
   //override def drawOpt() = rand.drawOpt().map(func)
   //override def map[E](f : U=>E):Rand[E] = WeightedRand(rand, (x:T) => f(func(x)))
