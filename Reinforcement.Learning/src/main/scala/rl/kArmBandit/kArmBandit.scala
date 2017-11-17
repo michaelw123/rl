@@ -1,27 +1,33 @@
 package rl.kArmBandit
 
 import breeze.linalg._
-import breeze.numerics.{log, sqrt}
+import breeze.numerics.{exp, log, sqrt}
 import breeze.stats._
 import breeze.plot._
-import breeze.stats.distributions.Binomial
+import breeze.stats.distributions.{Binomial, Rand, RandBasis}
 
 /*
   * Created by Michael Wang on 10/30/2017.
   */
-class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0, ucb:Int = 0) {
+class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0, ucb:Int = 0, gradient:Int=0) {
   val trueQ = DenseVector.fill[Double](kArm)(math.random)
   val qEstimation = DenseVector.fill[Double](kArm)(initial)
   val actionCount = Array.fill[Int](kArm)(0)
   var time = 0
   var averageReward = 0.0
   def getAction = //scala.util.Random.nextInt(10)
-    (epsilon, ucb, ) match {
-      case (0, 0) => argmax(qEstimation)
-      case (_, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
-      case (_, _) => argmax(
+    (epsilon, ucb, gradient) match {
+      case (0, 0, 0) => argmax(qEstimation)
+      case (_, 0, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
+      case (_, _, 0) => argmax(
         for ((est, count) <- qEstimation.toArray zip actionCount) yield  est + ucb * sqrt(log(time+1)/(count+1))
-    )
+      )
+//      case (_, _, _) => {
+//        val expEstimation = qEstimation.map( a => exp(a))
+//        val sum = sum(expEstimation)
+//        val actionProb = expEstimation.map(a => a/sum)
+//        Rand.choose(qEstimation, actionProb)
+//      }
   }
   def takeAction(arm:Int) = {
     val reward = trueQ.valueAt(arm) + math.random
@@ -122,14 +128,21 @@ object kArmBandit extends App{
     val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, time)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
     for (i <- 0 until n; t <- 1 until time ) {
- //       for (t <- 1 until time ) {
           val bandit = bandits(i)
           val action = bandit.getAction
           val reward = bandit.takeAction(action)
           averageRewards(i, t) += reward
           if (action == bandit.bestAction) bestActionCounts(i, t) += 1
- //       }
     }
     (bestActionCounts, averageRewards.map(_/bandits.length) )
   }
+}
+private final case class WeightedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T], weights:DenseVector[Double]) extends Rand[U] {
+  def draw() = {
+    val sample = Rand.uniform
+    weights
+
+  }
+  //override def drawOpt() = rand.drawOpt().map(func)
+  //override def map[E](f : U=>E):Rand[E] = WeightedRand(rand, (x:T) => f(func(x)))
 }
