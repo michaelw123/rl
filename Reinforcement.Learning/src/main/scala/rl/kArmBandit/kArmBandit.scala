@@ -13,26 +13,28 @@ import scala.annotation.tailrec
   * Created by Michael Wang on 10/30/2017.
   */
 class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0, ucb:Int = 0, gradient:Int=0) {
+
   val trueQ = DenseVector.fill[Double](kArm)(math.random)
   val qEstimation = DenseVector.fill[Double](kArm)(initial)
   val actionCount = Array.fill[Int](kArm)(0)
   var time = 0
   var averageReward = 0.0
-  def getAction = //scala.util.Random.nextInt(10)
+  def getAction:Int = //scala.util.Random.nextInt(10)
     (epsilon, ucb, gradient) match {
       case (0, 0, 0) => argmax(qEstimation)
       case (_, 0, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
       case (_, _, 0) => argmax(
         for ((est, count) <- qEstimation.toArray zip actionCount) yield  est + ucb * sqrt(log(time+1)/(count+1))
       )
-//      case (_, _, _) => {
-//        val expEstimation = qEstimation.map( a => exp(a))
-//        val sum = sum(expEstimation)
-//        val actionProb = expEstimation.map(a => a/sum)
-//        Rand.choose(qEstimation, actionProb)
-//      }
+      case (_, _, _) => {
+        val expEstimation = qEstimation.map( a => exp(a))
+        val theSum:Double = sum(expEstimation)
+        val actionProb = expEstimation.map(a => a/theSum)
+        val index:Int = ExtendedRand.weightedChooseIndex(qEstimation.toArray, actionProb.toArray).draw
+        index
+      }
   }
-  def takeAction(arm:Int) = {
+  def takeAction(arm:Int):Double = {
     val reward = trueQ.valueAt(arm) + math.random
     time += 1
     averageReward = (time -1)/time * averageReward + reward/time
@@ -48,10 +50,12 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
 }
 object kArmBandit extends App{
   //ucbEpsilonGreedy(1000, 4000)
-  incrementalEpsilonGreedy(1000, 4000)
-  epsilonGreedyAverageRewards(1000, 4000)
+  //incrementalEpsilonGreedy(1000, 4000)
+  //epsilonGreedyAverageRewards(1000, 4000)
   //epsilonGreedyBestActions(1000, 4000)
-  optimisticEpsilonGreedy(1000, 6000)
+  //optimisticEpsilonGreedy(1000, 6000)
+  gradientEpsilonGreedy(100, 400)
+
   def ucbEpsilonGreedy(nBandits:Int, time:Int) = {
    val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1, true, 0, 2))
    val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
@@ -104,7 +108,6 @@ object kArmBandit extends App{
       p.title = "epslon ="+epslon
     }
   }
-
   def epsilonGreedyAverageRewards(nBandits:Int, time:Int) = {
     val epsilons = Seq(0.005, 0.01, 0.1)
     val colors = Seq("BLUE", "RED", "BLACK")
@@ -132,12 +135,16 @@ object kArmBandit extends App{
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
     for (i <- 0 until n; t <- 1 until time ) {
           val bandit = bandits(i)
-          val action = bandit.getAction
+          val action:Int = bandit.getAction
           val reward = bandit.takeAction(action)
           averageRewards(i, t) += reward
           if (action == bandit.bestAction) bestActionCounts(i, t) += 1
     }
     (bestActionCounts, averageRewards.map(_/bandits.length) )
+  }
+  def gradientEpsilonGreedy(nBandits:Int, time:Int) = {
+    val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1,gradient=2 ))
+    val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
   }
 }
 
@@ -164,4 +171,29 @@ object ExtendedRand extends RandBasis(new ThreadLocalRandomGenerator(new Mersenn
       else go(s+a.head, a.tail)
     }
   }
+  def weightedChooseIndex[T](c: Iterable[T], w:Iterable[Double]):Rand[Int] = new Rand[Int] {
+      var index = 0
+      val sample1 = Rand.uniform.draw
+      def draw() = {
+        val weightsArray = w.toArray
+        val d = go(0.0, weightsArray)
+        val elems = c.iterator
+        var i:Int = 1
+        var e = elems.next()
+        while (i < d) {
+          e = elems.next()
+          i += 1
+        }
+        i
+      }
+      @tailrec
+      def go(s: Double, a: Array[Double]): Int = {
+        if (s + a.head > sample1) index
+        else {
+          index += 1
+          go(s + a.head, a.tail)
+        }
+      }
+    }
 }
+
