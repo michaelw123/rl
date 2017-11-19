@@ -15,8 +15,10 @@ import scala.annotation.tailrec
 class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0, ucb:Int = 0, gradient:Int=0) {
 
   val trueQ = DenseVector.fill[Double](kArm)(math.random)
-  val qEstimation = DenseVector.fill[Double](kArm)(initial)
+  var qEstimation = DenseVector.fill[Double](kArm)(initial)
   val actionCount = Array.fill[Int](kArm)(0)
+  val oneHot = DenseVector.zeros[Double](kArm)
+  var actionProb = DenseVector.zeros[Double](kArm)
   var time = 0
   var averageReward = 0.0
   def getAction:Int = //scala.util.Random.nextInt(10)
@@ -29,11 +31,19 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
       case (_, _, _) => {
         val expEstimation = qEstimation.map( a => exp(a))
         val theSum:Double = sum(expEstimation)
-        val actionProb = expEstimation.map(a => a/theSum)
+        actionProb = expEstimation.map(a => a/theSum)
         val index:Int = ExtendedRand.weightedChooseIndex(qEstimation.toArray, actionProb.toArray).draw
         index
       }
   }
+//  elif self.gradient:
+//    oneHot = np.zeros(self.k)
+//  oneHot[action] = 1
+//  if self.gradientBaseline:
+//    baseline = self.averageReward
+//  else:
+//  baseline = 0
+//  self.qEst = self.qEst + self.stepSize * (reward - baseline) * (oneHot - self.actionProb)
   def takeAction(arm:Int):Double = {
     val reward = trueQ.valueAt(arm) + math.random
     time += 1
@@ -41,8 +51,12 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
     actionCount(arm) = actionCount(arm)+1
     if (incremental) {
       qEstimation(arm) += stepSize * (reward - qEstimation(arm)) //constant stepsize
-    } else {
+    } else if (gradient != 0) {
+       oneHot(arm) = 1
+      qEstimation = qEstimation + (oneHot - actionProb) * stepSize
+    }else {
         qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))  //sample - average
+
     }
     reward
   }
@@ -54,7 +68,7 @@ object kArmBandit extends App{
   //epsilonGreedyAverageRewards(1000, 4000)
   //epsilonGreedyBestActions(1000, 4000)
   //optimisticEpsilonGreedy(1000, 6000)
-  gradientEpsilonGreedy(100, 400)
+  gradientEpsilonGreedy(1000, 4000)
 
   def ucbEpsilonGreedy(nBandits:Int, time:Int) = {
    val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1, true, 0, 2))
@@ -145,6 +159,12 @@ object kArmBandit extends App{
   def gradientEpsilonGreedy(nBandits:Int, time:Int) = {
     val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1,gradient=2 ))
     val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
+    val f = Figure()
+    val p = f.subplot(0)
+    p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(0.1))
+    p.xlabel = "Steps"
+    p.ylabel = "Average Rewards"
+    p.title = "epslon ="+0.1
   }
 }
 
