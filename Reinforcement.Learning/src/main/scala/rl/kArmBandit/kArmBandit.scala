@@ -15,9 +15,8 @@ import scala.annotation.tailrec
 class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, incremental:Boolean=false, initial:Double = 0, ucb:Int = 0, gradient:Int=0) {
 
   val trueQ = DenseVector.fill[Double](kArm)(math.random)
-  var qEstimation = DenseVector.fill[Double](kArm)(initial)
+  val qEstimation = DenseVector.fill[Double](kArm)(initial)
   val actionCount = Array.fill[Int](kArm)(0)
-  val oneHot = DenseVector.zeros[Double](kArm)
   var actionProb = DenseVector.zeros[Double](kArm)
   var time = 0
   var averageReward = 0.0
@@ -52,11 +51,11 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
     if (incremental) {
       qEstimation(arm) += stepSize * (reward - qEstimation(arm)) //constant stepsize
     } else if (gradient != 0) {
-       oneHot(arm) = 1
-      qEstimation = qEstimation + (oneHot - actionProb) * stepSize
+      val oneHot = DenseVector.zeros[Double](kArm)
+      oneHot(arm) = 1
+      qEstimation += (oneHot - actionProb) * stepSize * reward
     }else {
-        qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))  //sample - average
-
+        qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))
     }
     reward
   }
@@ -68,7 +67,7 @@ object kArmBandit extends App{
   //epsilonGreedyAverageRewards(1000, 4000)
   //epsilonGreedyBestActions(1000, 4000)
   //optimisticEpsilonGreedy(1000, 6000)
-  gradientEpsilonGreedy(1000, 4000)
+  gradientEpsilonGreedy(1000, 6000)
 
   def ucbEpsilonGreedy(nBandits:Int, time:Int) = {
    val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1, true, 0, 2))
@@ -157,14 +156,16 @@ object kArmBandit extends App{
     (bestActionCounts, averageRewards.map(_/bandits.length) )
   }
   def gradientEpsilonGreedy(nBandits:Int, time:Int) = {
-    val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, 0.1,gradient=2 ))
-    val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
-    val f = Figure()
-    val p = f.subplot(0)
-    p += plot(linspace(0, time+1, time+1), sum(bestActions(::, *)).inner, colorcode=color(0.1))
-    p.xlabel = "Steps"
-    p.ylabel = "Average Rewards"
-    p.title = "epslon ="+0.1
+    for (stepSize <- Seq(0.01, 0.1, 0.4)) {
+      val bandits = (new Array[Bandit](nBandits)).map(_ => new Bandit(10, 0.1, stepSize, gradient = 2))
+      val (bestActions, average) = banditSimulation(nBandits, time + 1, bandits)
+      val f = Figure()
+      val p = f.subplot(0)
+      p += plot(linspace(0, time + 1, time + 1), sum(bestActions(::, *)).inner, colorcode = color(0.1))
+      p.xlabel = "Steps"
+      p.ylabel = "Average Rewards"
+      p.title = "stepSize =" + stepSize
+    }
   }
 }
 
