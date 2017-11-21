@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2016 Michael Wang
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package rl.kArmBandit
 
 import breeze.linalg._
@@ -24,10 +44,10 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
     (epsilon, ucb, gradient) match {
       case (0, 0, 0) => argmax(qEstimation)
       case (_, 0, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
-      case (_, _, 0) => argmax(
+      case (_, _, 0) => argmax( //ucb
         for ((est, count) <- qEstimation.toArray zip actionCount) yield  est + ucb * sqrt(log(time+1)/(count+1))
       )
-      case (_, _, _) => {
+      case (_, _, _) => {//gradient
         val expEstimation = qEstimation.map( a => exp(a))
         val theSum:Double = sum(expEstimation)
         actionProb = expEstimation.map(a => a/theSum)
@@ -35,6 +55,8 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
         index
       }
   }
+
+
 //  elif self.gradient:
 //    oneHot = np.zeros(self.k)
 //  oneHot[action] = 1
@@ -61,6 +83,8 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
   }
   def bestAction:Int = argmax(trueQ)
 }
+
+
 object kArmBandit extends App{
   //ucbEpsilonGreedy(1000, 4000)
   //incrementalEpsilonGreedy(1000, 4000)
