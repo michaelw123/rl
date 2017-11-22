@@ -42,13 +42,13 @@ class Bandit (kArm: Int = 10, epsilon:Double = 0, stepSize:Double = 0.1, increme
   var averageReward = 0.0
   def getAction:Int = //scala.util.Random.nextInt(10)
     (epsilon, ucb, gradient) match {
-      case (0, 0, 0) => argmax(qEstimation)
-      case (_, 0, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)
+      case (0, 0, 0) => argmax(qEstimation) //epsilon == 0
+      case (_, 0, 0) => if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(kArm) else  argmax(qEstimation)  // epsilon != 0
       case (_, _, 0) => argmax( //ucb
         for ((est, count) <- qEstimation.toArray zip actionCount) yield  est + ucb * sqrt(log(time+1)/(count+1))
       )
       case (_, _, _) => {//gradient
-        val expEstimation = qEstimation.map( a => exp(a))
+        val expEstimation = qEstimation.map(exp(_))
         val theSum:Double = sum(expEstimation)
         actionProb = expEstimation.map(a => a/theSum)
         val index:Int = ExtendedRand.weightedChooseIndex(qEstimation.toArray, actionProb.toArray).draw
