@@ -74,9 +74,12 @@ object multiArmBandit extends App {
     def play(arm:Int): Double
   }
 
-  val bandit =  new averageGreedyBandit(0.1)
+  val bandit =  new averageGreedyBandit(0.5)
   val arm:Int = bandit.getArm
-  bandit.play(arm)
+  println("arm number "+arm)
+  val award = bandit.play(arm)
+  println("award is "+award)
+
 
 //  val bandit2 = new Bandit[incrementalArm](incrementalArm(0.1), 10)
 //  val arm2 = bandit2.getArm
