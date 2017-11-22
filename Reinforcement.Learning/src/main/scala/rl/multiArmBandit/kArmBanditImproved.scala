@@ -36,6 +36,10 @@ import scala.annotation.tailrec
   */
 
 object multiArmBandit extends App {
+  trait Action {
+    def getArm: Int
+    def play(arm:Int): Double
+  }
   trait Arm
   case class averageGreedyArm(epsilon:Double) extends Arm
   case class incrementalArm(stepSize: Double) extends Arm
@@ -69,10 +73,6 @@ object multiArmBandit extends App {
     }
   }
 
-  trait Action {
-    def getArm: Int
-    def play(arm:Int): Double
-  }
 
   val bandit =  new averageGreedyBandit(0.5)
   val arm:Int = bandit.getArm
