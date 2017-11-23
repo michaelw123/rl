@@ -41,10 +41,12 @@ object multiArmBandit extends App {
     def bestAction(bandit:Bandit[T]):Int = argmax(bandit.trueQ)
   }
   object Algorithm {
+
     implicit object averageGreedyAlgorithm extends Algorithm[averageGreedyArm] {
       def getArm(bandit: Bandit[averageGreedyArm]): Int = {
         if (Binomial(1, bandit.arm.epsilon).draw == 1) scala.util.Random.nextInt(bandit.k) else argmax(bandit.qEstimation)
       }
+
       def play(bandit: Bandit[averageGreedyArm], arm: Int): Double = {
         val reward = bandit.trueQ.valueAt(arm) + math.random
         bandit.time += 1
@@ -53,10 +55,12 @@ object multiArmBandit extends App {
         reward
       }
     }
+
     implicit object incrementalAlgorithm extends Algorithm[incrementalArm] {
       def getArm(bandit: Bandit[incrementalArm]): Int = {
         if (Binomial(1, bandit.arm.epsilon).draw == 1) scala.util.Random.nextInt(bandit.k) else argmax(bandit.qEstimation)
       }
+
       def play(bandit: Bandit[incrementalArm], arm: Int): Double = {
         val reward = bandit.trueQ.valueAt(arm) + math.random
         bandit.time += 1
@@ -66,40 +70,44 @@ object multiArmBandit extends App {
         reward
       }
     }
-  }
-  implicit object ucbAlgorithm extends Algorithm[ucbArm] {
-    def getArm(bandit: Bandit[ucbArm]): Int = {
-      argmax(
-        for ((est, count) <- bandit.qEstimation.toArray zip bandit.actionCount) yield  est + bandit.arm.ucb * sqrt(log(bandit.time+1)/(count+1))
-      )
-    }
-    def play(bandit: Bandit[ucbArm], arm: Int): Double = {
-      val reward = bandit.trueQ.valueAt(arm) + math.random
-      bandit.time += 1
-      bandit.actionCount(arm) = bandit.actionCount(arm) + 1
-      bandit.qEstimation(arm) += 1.0 / bandit.actionCount(arm) * (reward - bandit.qEstimation(arm))
-      reward
-    }
-  }
-  implicit object gradientAlgorithm extends Algorithm[gradientArm] {
-    def getArm(bandit: Bandit[gradientArm]): Int = {
-      val expEstimation = bandit.qEstimation.map(exp(_))
-      val theSum:Double = sum(expEstimation)
-      bandit.actionProb = expEstimation.map(a => a/theSum)
-      val index:Int = ExtendedRand.weightedChooseIndex( bandit.qEstimation.toArray,  bandit.actionProb.toArray).draw
-      index
-    }
-    def play(bandit: Bandit[gradientArm], arm: Int): Double = {
-      val reward = bandit.trueQ.valueAt(arm) + math.random
-      bandit.time += 1
-      bandit.actionCount(arm) = bandit.actionCount(arm)+1
-      val oneHot = DenseVector.zeros[Double](bandit.k)
-      oneHot(arm) = 1
-      bandit.qEstimation += (oneHot - bandit.actionProb) * bandit.arm.stepSize * reward
-      reward
-    }
-  }
 
+    implicit object ucbAlgorithm extends Algorithm[ucbArm] {
+      def getArm(bandit: Bandit[ucbArm]): Int = {
+        argmax(
+          for ((est, count) <- bandit.qEstimation.toArray zip bandit.actionCount) yield est + bandit.arm.ucb * sqrt(log(bandit.time + 1) / (count + 1))
+        )
+      }
+
+      def play(bandit: Bandit[ucbArm], arm: Int): Double = {
+        val reward = bandit.trueQ.valueAt(arm) + math.random
+        bandit.time += 1
+        bandit.actionCount(arm) = bandit.actionCount(arm) + 1
+        bandit.qEstimation(arm) += 1.0 / bandit.actionCount(arm) * (reward - bandit.qEstimation(arm))
+        reward
+      }
+    }
+
+    implicit object gradientAlgorithm extends Algorithm[gradientArm] {
+      def getArm(bandit: Bandit[gradientArm]): Int = {
+        val expEstimation = bandit.qEstimation.map(exp(_))
+        val theSum: Double = sum(expEstimation)
+        bandit.actionProb = expEstimation.map(a => a / theSum)
+        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
+        index
+      }
+
+      def play(bandit: Bandit[gradientArm], arm: Int): Double = {
+        val reward = bandit.trueQ.valueAt(arm) + math.random
+        bandit.time += 1
+        bandit.actionCount(arm) = bandit.actionCount(arm) + 1
+        val oneHot = DenseVector.zeros[Double](bandit.k)
+        oneHot(arm) = 1
+        bandit.qEstimation += (oneHot - bandit.actionProb) * bandit.arm.stepSize * reward
+        reward
+      }
+    }
+
+  }
   trait Arm
   case class averageGreedyArm(epsilon:Double) extends Arm
   case class incrementalArm(epsilon:Double, stepSize: Double) extends Arm
