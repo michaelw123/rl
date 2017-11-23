@@ -84,16 +84,23 @@ object multiArmBandit extends App {
     }
     (bestActionCounts, averageRewards.map(_/bandits.length) )
   }
-  val bandit =  new Bandit(averageGreedyArm(epsilon = 0.5))
-  val bandits = Array.fill(1000)(new Bandit(averageGreedyArm(epsilon = 0.1)))
-
   val time = 1000
-  val (bestActions, average) = banditSimulation(1000, time, bandits)
   val f = Figure()
-  val p = f.subplot(0)
-  p += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = "BLACK")
-  p.xlabel = "Steps"
-  p.ylabel = "Average Rewards"
-  p.title = "stepSize =" //+ stepSize
+  for (epsilon <- Seq(0.1, 0.2, 0.3)) {
+    val bandits = Array.fill(1000)(new Bandit(averageGreedyArm(epsilon)))
+    val time = 1000
+    val (bestActions, average) = banditSimulation(1000, time, bandits)
+
+    val p0 = f.subplot(0)
+    //val p1 = f.subplot(1)
+    p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = "BLACK")
+    p0.xlabel = "Steps"
+    p0.ylabel = "Best Action"
+    p0.title = "epsilon =" +epsilon
+//    p1 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode="RED")
+//    p1.xlabel = "Steps"
+//    p1.ylabel = "Average"
+//    p1.title = "epsilon =" +epsilon
+  }
 
 }
