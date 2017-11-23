@@ -23,7 +23,6 @@ package rl.multiArmBandit
 
 import breeze.linalg._
 import breeze.numerics.{exp, log, sqrt}
-import breeze.stats._
 import breeze.plot._
 import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator}
 import org.apache.commons.math3.random.MersenneTwister
@@ -100,12 +99,12 @@ object multiArmBandit extends App {
       reward
     }
   }
+
   trait Arm
   case class averageGreedyArm(epsilon:Double) extends Arm
   case class incrementalArm(epsilon:Double, stepSize: Double) extends Arm
   case class ucbArm(ucb: Int) extends Arm
   case class gradientArm(stepSize: Double = 0) extends Arm
-  case class initializationArm(initial: Double) extends Arm
 
   class Bandit[T](anArm:T) {
     val k:Int = 10
@@ -162,10 +161,6 @@ object multiArmBandit extends App {
         p0.xlabel = "Steps"
         p0.ylabel = "Best Action"
         p0.title = "epsilon =" + epsilon
-        //    p0 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(epsilon))
-        //    p0.xlabel = "Steps"
-        //    p0.ylabel = "Average"
-        //    p0.title = "epsilon =" +epsilon
       }
   }
   def ucbSimulation = {
@@ -181,10 +176,6 @@ object multiArmBandit extends App {
       p0.xlabel = "Steps"
       p0.ylabel = "Best Action"
       p0.title = "UCB =" + ucb
-      //    p0 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(epsilon))
-      //    p0.xlabel = "Steps"
-      //    p0.ylabel = "Average"
-      //    p0.title = "epsilon =" +epsilon
     }
   }
   def gradientSimulation = {
@@ -209,9 +200,9 @@ object multiArmBandit extends App {
     case _ => "BLACK"
   }
 
-  //averageGreedySimulation
-  //incrementalSimulation
-  //ucbSimulation
+  averageGreedySimulation
+  incrementalSimulation
+  ucbSimulation
   gradientSimulation
 
 
