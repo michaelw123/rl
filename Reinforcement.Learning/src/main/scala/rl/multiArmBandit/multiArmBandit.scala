@@ -39,7 +39,7 @@ object multiArmBandit extends App {
   trait Algorithm[T] {
     def getArm(bandit:Bandit[T]): Int
     def play(bandit:Bandit[T], arm:Int): Double
-    def bestAction(bandit:Bandit[T]):Int
+    def bestAction(bandit:Bandit[T]):Int = argmax(bandit.trueQ)
   }
   object Algorithm {
     implicit object averageGreedyAlgorithm extends Algorithm[averageGreedyArm] {
@@ -53,7 +53,6 @@ object multiArmBandit extends App {
         bandit.qEstimation(arm) += 1.0 / bandit.actionCount(arm) * (reward - bandit.qEstimation(arm))
         reward
       }
-      def bestAction(bandit: Bandit[averageGreedyArm]): Int = argmax(bandit.trueQ)
     }
   }
   trait Arm
@@ -86,6 +85,7 @@ object multiArmBandit extends App {
   }
   val time = 1000
   val f = Figure()
+
   for (epsilon <- Seq(0.1, 0.2, 0.3)) {
     val bandits = Array.fill(1000)(new Bandit(averageGreedyArm(epsilon)))
     val time = 1000
@@ -93,14 +93,19 @@ object multiArmBandit extends App {
 
     val p0 = f.subplot(0)
     //val p1 = f.subplot(1)
-    p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = "BLACK")
+//    p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode =color(epsilon))
+//    p0.xlabel = "Steps"
+//    p0.ylabel = "Best Action"
+//    p0.title = "epsilon =" +epsilon
+    p0 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(epsilon))
     p0.xlabel = "Steps"
-    p0.ylabel = "Best Action"
+    p0.ylabel = "Average"
     p0.title = "epsilon =" +epsilon
-//    p1 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode="RED")
-//    p1.xlabel = "Steps"
-//    p1.ylabel = "Average"
-//    p1.title = "epsilon =" +epsilon
   }
-
+  private def  color(epslon:Double):String = epslon match {
+    case 0.1 => "RED"
+    case 0.2 => "BLUE"
+    case 0.3 => "YELLOW"
+    case _ => "BLACK"
+  }
 }
