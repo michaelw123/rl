@@ -27,7 +27,6 @@ import breeze.plot._
 import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator}
 import org.apache.commons.math3.random.MersenneTwister
 
-
 import scala.annotation.tailrec
 
 /*
@@ -41,7 +40,6 @@ object multiArmBandit extends App {
     def bestAction(bandit:Bandit[T]):Int = argmax(bandit.trueQ)
   }
   object Algorithm {
-
     implicit object averageGreedyAlgorithm extends Algorithm[averageGreedyArm] {
       def getArm(bandit: Bandit[averageGreedyArm]): Int = {
         if (Binomial(1, bandit.arm.epsilon).draw == 1) scala.util.Random.nextInt(bandit.k) else argmax(bandit.qEstimation)
@@ -97,12 +95,17 @@ object multiArmBandit extends App {
       }
 
       def play(bandit: Bandit[gradientArm], arm: Int): Double = {
-        val reward = bandit.trueQ.valueAt(arm) + math.random
+        val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
         bandit.time += 1
         bandit.actionCount(arm) = bandit.actionCount(arm) + 1
+        bandit.averageReward = (bandit.time - 1.0) / bandit.time * bandit.averageReward + reward / bandit.time
         val oneHot = DenseVector.zeros[Double](bandit.k)
         oneHot(arm) = 1
-        bandit.qEstimation += (oneHot - bandit.actionProb) * bandit.arm.stepSize * reward
+        bandit.baseline = bandit.arm.gradientaseline match {
+          case true =>  bandit.averageReward
+          case false => 0
+        }
+        bandit.qEstimation += (oneHot - bandit.actionProb) * bandit.arm.stepSize * (reward - bandit.baseline)
         reward
       }
     }
@@ -112,7 +115,7 @@ object multiArmBandit extends App {
   case class averageGreedyArm(epsilon:Double) extends Arm
   case class incrementalArm(epsilon:Double, stepSize: Double) extends Arm
   case class ucbArm(ucb: Int) extends Arm
-  case class gradientArm(stepSize: Double = 0) extends Arm
+  case class gradientArm(stepSize: Double = 0, trueReward:Double =0, gradientaseline:Boolean=false, baseline:Double = 0) extends Arm
 
   class Bandit[T](anArm:T) {
     val k:Int = 10
@@ -121,6 +124,8 @@ object multiArmBandit extends App {
     val qEstimation = DenseVector.fill[Double](k)(0)
     val actionCount = Array.fill[Int](k)(0)
     var actionProb = DenseVector.zeros[Double](k)
+    var averageReward:Double = 0
+    var baseline:Double = 0
     def arm:T = anArm
   }
   def banditSimulation[T](n:Int, time:Int, bandits:Array[Bandit[T]])(implicit algo:Algorithm[T]) = {
@@ -191,7 +196,7 @@ object multiArmBandit extends App {
     val f = Figure()
     val epsilon=0.1
     for (gradient <- Seq(.1, .2, .3)) {
-      val bandits = Array.fill(1000)(new Bandit(gradientArm(gradient)))
+      val bandits = Array.fill(1000)(new Bandit(gradientArm(gradient, 4, true)))
       val time = 1000
       val (bestActions, average) = banditSimulation(1000, time, bandits)
       val p0 = f.subplot(0)
@@ -208,9 +213,9 @@ object multiArmBandit extends App {
     case _ => "BLACK"
   }
 
-  averageGreedySimulation
-  incrementalSimulation
-  ucbSimulation
+//  averageGreedySimulation
+//  incrementalSimulation
+//  ucbSimulation
   gradientSimulation
 
 
