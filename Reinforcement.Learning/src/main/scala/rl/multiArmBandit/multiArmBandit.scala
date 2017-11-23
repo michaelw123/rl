@@ -36,10 +36,25 @@ import scala.annotation.tailrec
   */
 
 object multiArmBandit extends App {
-  trait Action {
-    def getArm: Int
-    def play(arm:Int): Double
-    def bestAction:Int
+  trait Algorithm[T] {
+    def getArm(bandit:Bandit[T]): Int
+    def play(bandit:Bandit[T], arm:Int): Double
+    def bestAction(bandit:Bandit[T]):Int
+  }
+  object Algorithm {
+    implicit object averageGreedyAlgorithm extends Algorithm[averageGreedyArm] {
+      def getArm(bandit: Bandit[averageGreedyArm]): Int = {
+        if (Binomial(1, bandit.arm.epsilon).draw == 1) scala.util.Random.nextInt(bandit.k) else argmax(bandit.qEstimation)
+      }
+      def play(bandit: Bandit[averageGreedyArm], arm: Int): Double = {
+        val reward = bandit.trueQ.valueAt(arm) + math.random
+        bandit.time += 1
+        bandit.actionCount(arm) = bandit.actionCount(arm) + 1
+        bandit.qEstimation(arm) += 1.0 / bandit.actionCount(arm) * (reward - bandit.qEstimation(arm))
+        reward
+      }
+      def bestAction(bandit: Bandit[averageGreedyArm]): Int = argmax(bandit.trueQ)
+    }
   }
   trait Arm
   case class averageGreedyArm(epsilon:Double) extends Arm
@@ -48,64 +63,37 @@ object multiArmBandit extends App {
   case class gradientArm(stepSize: Double = 0) extends Arm
   case class initializationArm(initial: Double) extends Arm
 
-  trait Bandit[T] extends Action{//(implicit action: Action[T]) {
+  class Bandit[T](anArm:T) {
     val k:Int = 10
     var time=0
     val trueQ = DenseVector.fill[Double](k)(math.random)
     val qEstimation = DenseVector.fill[Double](k)(0)
     val actionCount = Array.fill[Int](k)(0)
     var actionProb = DenseVector.zeros[Double](k)
-
+    def arm:T = anArm
   }
-   class averageGreedyBandit(epsilon:Double) extends Bandit[averageGreedyArm]{
-    //val arms = List.fill[averageGreedyArm](k)(averageGreedyArm(epsilon))
-    def getArm:Int = {
-      System.out.println("getArm averageGreedyBandit")
-      if (Binomial(1, epsilon).draw == 1) scala.util.Random.nextInt(k) else  argmax(qEstimation)
-    }
-    def play(arm:Int):Double ={
-      System.out.println("play averageGreedyBandit")
-      val reward = trueQ.valueAt(arm) + math.random
-      time += 1
-      actionCount(arm) = actionCount(arm)+1
-      qEstimation(arm) += 1.0 / actionCount(arm) * (reward - qEstimation(arm))
-      reward
-    }
-  }
-  def banditSimulation(n:Int, time:Int, bandits:Array[Bandit[_]]) = {
+  def banditSimulation[T](n:Int, time:Int, bandits:Array[Bandit[T]])(implicit algo:Algorithm[T]) = {
     val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, time)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
     for (i <- 0 until n; t <- 1 until time ) {
       val bandit = bandits(i)
-      val arm:Int = bandit.getArm
-      val reward = bandit.play(arm)
+      val arm:Int = algo.getArm(bandit)
+      val reward = algo.play(bandit, arm)
       averageRewards(i, t) += reward
-      if (arm == bandit.bestAction) bestActionCounts(i, t) += 1
+      if (arm == algo.bestAction(bandit)) bestActionCounts(i, t) += 1
     }
     (bestActionCounts, averageRewards.map(_/bandits.length) )
   }
+  val bandit =  new Bandit(averageGreedyArm(epsilon = 0.5))
+  val bandits = Array.fill(1000)(new Bandit(averageGreedyArm(epsilon = 0.1)))
 
-  val bandit =  new averageGreedyBandit(0.5)
-  val arm:Int = bandit.getArm
-  println("arm number "+arm)
-  val award = bandit.play(arm)
-  println("award is "+award)
-
-  val bandits = Array.fill[averageGreedyBandit](100)(new averageGreedyBandit(0.1))
-
-  val (bestActions, average) = banditSimulation(100, 100, bandits)
+  val time = 1000
+  val (bestActions, average) = banditSimulation(1000, time, bandits)
   val f = Figure()
   val p = f.subplot(0)
-  p += plot(linspace(0, time + 1, time + 1), sum(bestActions(::, *)).inner, colorcode = color(0.1))
+  p += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = "BLACK")
   p.xlabel = "Steps"
   p.ylabel = "Average Rewards"
-  p.title = "stepSize =" + stepSize
-
-
-//  val bandit2 = new Bandit[incrementalArm](incrementalArm(0.1), 10)
-//  val arm2 = bandit2.getArm
-//  bandit2.play(arm2)
-//  val bandits = List.fill[Bandit[averageGreedyArm]](100)(new Bandit[averageGreedyArm](averageGreedyArm(0.1), 10))
-//  //bandits.foreach(_.getArm)
+  p.title = "stepSize =" //+ stepSize
 
 }
