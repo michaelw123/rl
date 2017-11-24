@@ -20,9 +20,13 @@ https://github.com/michaelw123/rl
 
 
   Assuming 10 arm bandit - this configuration can be changed easily
+  
   arm: contains features of the bandit
+  
   Algorithm: four althorithms are implemented by typeclass Algorithm: epsilon greedy, incremental, gradient, and ucb
+  
   scalanlp's breeze is used for numerical computation, and breeze-viz for data visualization
+  
   ExtendedRand is an extension of breeze Rand, which adds "weighted choose by index" from an Iterable, or typically, DenseVector.
 
 
