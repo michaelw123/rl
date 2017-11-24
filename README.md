@@ -3,7 +3,7 @@ This is a research project that explores Reinforcement Learning by solving some 
 
 Given the prolific python implementations to various DL and RL frameworks and algorithms, our research objective is to increase the presence of scala language, and provide an alternative framework and library to this research field.
 
-We plan to start from implementing concepts in Sutton's book "Reinforcement Learning, An Introduction", and expend our research into more specific areas.
+We plan to start from implementing concepts in Sutton & Barto's book Reinforcement Learning: An Introduction (2nd Edition), and expend our research into more specific areas.
 
 
 Some of the planned topics are:
