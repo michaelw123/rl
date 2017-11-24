@@ -26,6 +26,7 @@ import breeze.numerics.{exp, log, sqrt}
 import breeze.plot._
 import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator}
 import org.apache.commons.math3.random.MersenneTwister
+import breeze.stats.mean
 
 import scala.annotation.tailrec
 
@@ -143,26 +144,32 @@ object multiArmBandit extends App {
 
   def averageGreedySimulation = {
     val time = 1000
-    val f = Figure()
+    val f0 = Figure()
+    val f1 = Figure()
     for (epsilon <- Seq(0.1, 0.2, 0.3)) {
       val bandits = Array.fill(1000)(new Bandit(averageGreedyArm(epsilon)))
       val time = 1000
       val (bestActions, average) = banditSimulation(1000, time, bandits)
 
-      val p0 = f.subplot(0)
-      p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(epsilon))
+      val p0 = f0.subplot(0)
+      p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(epsilon), name="epsilon ="+epsilon)
       p0.xlabel = "Steps"
       p0.ylabel = "Best Action"
-      p0.title = "epsilon =" + epsilon
-      //    p0 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(epsilon))
-      //    p0.xlabel = "Steps"
-      //    p0.ylabel = "Average"
-      //    p0.title = "epsilon =" +epsilon
+      p0.title = "Epsilon Greedy"
+      p0.legend=true
+
+      val p1= f1.subplot(0)
+      p1 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(epsilon),name="epsilon ="+epsilon)
+      p1.xlabel = "Steps"
+      p1.ylabel = "Average"
+      p1.title = "Epsilon Greedy"
+      p1.legend=true
     }
   }
     def incrementalSimulation = {
       val time = 1000
       val f = Figure()
+      val f1 = Figure()
       val epsilon=0.1
       for (stepSize <- Seq(0.1, 0.2, 0.3)) {
         val bandits = Array.fill(1000)(new Bandit(incrementalArm(epsilon, stepSize)))
@@ -170,40 +177,65 @@ object multiArmBandit extends App {
         val (bestActions, average) = banditSimulation(1000, time, bandits)
 
         val p0 = f.subplot(0)
-        p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(epsilon))
+        p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(stepSize), name="stepSize ="+stepSize)
         p0.xlabel = "Steps"
         p0.ylabel = "Best Action"
-        p0.title = "epsilon =" + epsilon
+        p0.title = "Incremental"
+        p0.legend=true
+
+        val p1= f1.subplot(0)
+        p1 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(stepSize),name="stepSize ="+stepSize)
+        p1.xlabel = "Steps"
+        p1.ylabel = "Average"
+        p1.title = "Incremental"
+        p1.legend=true
       }
   }
   def ucbSimulation = {
     val time = 1000
     val f = Figure()
     val epsilon=0.1
+    val f1 = Figure()
     for (ucb <- Seq(1, 2, 3)) {
       val bandits = Array.fill(1000)(new Bandit(ucbArm(ucb)))
       val time = 1000
       val (bestActions, average) = banditSimulation(1000, time, bandits)
       val p0 = f.subplot(0)
-      p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(ucb))
+      p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(ucb), name="ucb ="+ucb)
       p0.xlabel = "Steps"
-      p0.ylabel = "Best Action"
-      p0.title = "UCB =" + ucb
+      p0.ylabel = "Best Actiosn"
+      p0.title = "Upper-Conifdence-Bound"
+      p0.legend=true
+
+      val p1= f1.subplot(0)
+      p1 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(ucb),name="ucb ="+ucb)
+      p1.xlabel = "Steps"
+      p1.ylabel = "Average"
+      p1.title = "Upper-Conifdence-Bound"
+      p1.legend=true
     }
   }
   def gradientSimulation = {
-    val time = 1000
+    val time = 4000
     val f = Figure()
     val epsilon=0.1
+    val f1 = Figure()
     for (gradient <- Seq(.1, .2, .3)) {
-      val bandits = Array.fill(1000)(new Bandit(gradientArm(gradient, 4, true)))
-      val time = 1000
+      val bandits = Array.fill(1000)(new Bandit(gradientArm(gradient, 0, true)))
       val (bestActions, average) = banditSimulation(1000, time, bandits)
       val p0 = f.subplot(0)
-      p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(gradient))
+      p0 += plot(linspace(0, time, time), sum(bestActions(::, *)).inner, colorcode = color(gradient), name="Gradient ="+gradient)
       p0.xlabel = "Steps"
-      p0.ylabel = "Best Action"
-      p0.title = "Gragient =" + gradient
+      p0.ylabel = "Best Actions"
+      p0.title = "Gradient"
+      p0.legend=true
+
+      val p1= f1.subplot(0)
+      p1 += plot(linspace(0, time, time), mean(average(::, *)).inner, colorcode=color(gradient),name="Gradient ="+gradient)
+      p1.xlabel = "Steps"
+      p1.ylabel = "Average"
+      p1.title = "Gradient"
+      p1.legend=true
     }
   }
   private def  color(epslon:Double):String = epslon match {
@@ -215,7 +247,7 @@ object multiArmBandit extends App {
 
 //  averageGreedySimulation
 //  incrementalSimulation
-//  ucbSimulation
+ // ucbSimulation
   gradientSimulation
 
 
