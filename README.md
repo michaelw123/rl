@@ -16,4 +16,6 @@ Some of the planned topics are:
 
 https://github.com/michaelw123/rl
 
+![Alt text](Reinforcement.Learning/epsilon_greedy_average.png?raw=true "Title")
+
 
