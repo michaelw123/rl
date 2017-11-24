@@ -18,6 +18,12 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/*
+  assuming 10 arm bandit - this configuration can be changed easily
+  arm: contains features of the bandit -
+  Algorithm: foure althorithm are implemented by typeclass Algorithm: epsilon greedy, incremental, gradient, and ucb
+  scalanlp's breeze is used for numerical computation, and breeze-viz for data visualization
+ */
 
 package rl.multiArmBandit
 
@@ -129,12 +135,12 @@ object multiArmBandit extends App {
     var baseline:Double = 0
     def arm:T = anArm
   }
-  def banditSimulation[T](n:Int, time:Int, bandits:Array[Bandit[T]])(implicit algo:Algorithm[T]) = {
-    val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, time)
-    val averageRewards = DenseMatrix.zeros[Double] (bandits.length, time)
-    for (i <- 0 until n; t <- 1 until time ) {
+  def banditSimulation[T](n:Int, timeSteps:Int, bandits:Array[Bandit[T]])(implicit algo:Algorithm[T]) = {
+    val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, timeSteps)
+    val averageRewards = DenseMatrix.zeros[Double] (bandits.length, timeSteps)
+    for (i <- 0 until n; t <- 1 until timeSteps ) {
       val bandit = bandits(i)
-      val arm:Int = algo.getArm(bandit)
+      val arm = algo.getArm(bandit)
       val reward = algo.play(bandit, arm)
       averageRewards(i, t) += reward
       if (arm == algo.bestAction(bandit)) bestActionCounts(i, t) += 1
