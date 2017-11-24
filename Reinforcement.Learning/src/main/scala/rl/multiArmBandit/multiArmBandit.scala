@@ -149,7 +149,7 @@ object multiArmBandit extends App {
     (bestActionCounts, averageRewards.map(_/bandits.length) )
   }
 
-  def averageGreedySimulation = {
+  def epsilonGreedySimulation = {
     val timeSteps = 1000
     val f0 = Figure()
     val f1 = Figure()
@@ -249,10 +249,10 @@ object multiArmBandit extends App {
     case _ => "BLACK"
   }
 
-//  averageGreedySimulation
+  epsilonGreedySimulation
 //  incrementalSimulation
- // ucbSimulation
-  gradientSimulation
+//  ucbSimulation
+ // gradientSimulation
 
 
   object ExtendedRand extends RandBasis(new ThreadLocalRandomGenerator(new MersenneTwister())) {
