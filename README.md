@@ -14,6 +14,7 @@ Some of the planned topics are:
 * Markov Decision Processes
 * Monte Carlo Methods
 * Temporal-Difference Learning
+* Q-Learning
 
 
 https://github.com/michaelw123/rl
