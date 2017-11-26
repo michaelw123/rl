@@ -1,4 +1,4 @@
-Multi-Armed Bandit Problem Implementation Details
+<h5>Multi-Armed Bandit Problem Implementation Details</h5>
 
 
   Assuming 10 arm bandit - this configuration can be changed easily
