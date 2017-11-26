@@ -7,6 +7,7 @@ We plan to start from implementing concepts in Sutton & Barto's book Reinforceme
 
 
 Some of the planned topics are:
+[* Multi-Armed Bandit problem](Reinforcement.Learning/MultiArmBandit.md)
 * Multi-Armed Bandit problem
 * Dynamic Programming 
 * Markov Decision Processes
