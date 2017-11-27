@@ -48,6 +48,7 @@ val DISCOUNT = 0.9
       val west = policy(West, (x, y))
     }
     for (i <- 0 until 1000) {
+      //bellman
       valueIteration
     }
     println(grid.map(a => (rounded(3, a.value))))
