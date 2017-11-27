@@ -16,6 +16,8 @@ Bellman Equation:
 
 
 
+Value Iteration:
+
 ![Value Iteration](Reinforcement.Learning/valueIteration.PNG?raw=true "Value Iteration")
 
 21.977  24.419  21.977  19.419  17.477
