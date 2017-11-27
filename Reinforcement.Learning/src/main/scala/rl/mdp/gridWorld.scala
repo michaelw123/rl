@@ -2,7 +2,7 @@ package rl.mdp
 
 import java.awt.Desktop.Action
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{DenseMatrix, DenseVector, max}
 
 /**
   * Created by MichaelXiaoqun on 2017-11-26.
@@ -15,7 +15,8 @@ object gridWorld extends App {
   case class South(value:Int=2) extends Action
   case class West(value:Int=3) extends Action
 
-
+val DISCOUNT = 0.9
+  val ACTIONPROB=0.25
     val WORLDSIZE = 5
     val WORLDSIZE1 = WORLDSIZE-1
     val A = (0, 1)
@@ -47,19 +48,23 @@ object gridWorld extends App {
       val west = policy(West, (x, y))
     }
     for (i <- 0 until 1000) {
-      bellman
+      valueIteration
     }
     println(grid.map(a => (rounded(3, a.value))))
+
+
+
+
 
     def bellman = {
     val newGrid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE) {
       (i, j) => new Node(i, j)
     }
     for (i <- 0 until WORLDSIZE; j <- 0 until WORLDSIZE) {
-      newGrid(i,j).value += 0.25 * (newGrid(i,j).north._2 + 0.9 * grid(newGrid(i,j).north._1._1, newGrid(i,j).north._1._2).value)
-      newGrid(i,j).value += 0.25 * (newGrid(i,j).east._2 + 0.9 * grid(newGrid(i,j).east._1._1, newGrid(i,j).east._1._2).value)
-      newGrid(i,j).value += 0.25 * (newGrid(i,j).south._2 + 0.9 * grid(newGrid(i,j).south._1._1, newGrid(i,j).south._1._2).value)
-      newGrid(i,j).value += 0.25 * (newGrid(i,j).west._2 + 0.9 * grid(newGrid(i,j).west._1._1, newGrid(i,j).west._1._2).value)
+      newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).north._2 + DISCOUNT * grid(newGrid(i,j).north._1._1, newGrid(i,j).north._1._2).value)
+      newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).east._2 + DISCOUNT * grid(newGrid(i,j).east._1._1, newGrid(i,j).east._1._2).value)
+      newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).south._2 + DISCOUNT * grid(newGrid(i,j).south._1._1, newGrid(i,j).south._1._2).value)
+      newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).west._2 + DISCOUNT * grid(newGrid(i,j).west._1._1, newGrid(i,j).west._1._2).value)
     }
     grid = newGrid
   }
@@ -68,6 +73,20 @@ object gridWorld extends App {
     (n * w).toLong.toDouble / w
   }
   def valueIteration = {
+    val newGrid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE) {
+      (i, j) => new Node(i, j)
+    }
+    for (i <- 0 until WORLDSIZE; j <- 0 until WORLDSIZE) {
+      val v1 = (newGrid(i,j).north._2 + DISCOUNT * grid(newGrid(i,j).north._1._1, newGrid(i,j).north._1._2).value)
+      val v2 =(newGrid(i,j).east._2 + DISCOUNT * grid(newGrid(i,j).east._1._1, newGrid(i,j).east._1._2).value)
+      val v3 =(newGrid(i,j).south._2 + DISCOUNT * grid(newGrid(i,j).south._1._1, newGrid(i,j).south._1._2).value)
+      val v4 = (newGrid(i,j).west._2 + DISCOUNT * grid(newGrid(i,j).west._1._1, newGrid(i,j).west._1._2).value)
+      newGrid(i,j).value = max(Seq(v1, v2, v3, v4))
+    }
+    grid = newGrid
+
+
+   // values.append(actionReward[i][j][action] + discount * world[newPosition[0], newPosition[1]])
 
   }
 
