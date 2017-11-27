@@ -23,6 +23,10 @@ References:
  
  [Python implementation of Reinforcement Learning: An Introduction by Shangtong Zhang](https://github.com/ShangtongZhang/reinforcement-learning-an-introduction)
 
+[Introduction to Multi-Armed Bandits by Aleksandrs Slivkins](http://slivkins.com/work/MAB-book.pdf)
+
+[Markov Decision Processes in Artificial Intelligence, Olivier Sigaud (https://zodml.org/sites/default/files/Markov_Decision_Processes_and_Artificial_Intelligence.pdf)
+
 
 Project Homepage:
 
