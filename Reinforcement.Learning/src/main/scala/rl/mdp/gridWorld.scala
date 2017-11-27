@@ -23,11 +23,17 @@ object gridWorld {
     val PRIMEA = (4, 1)
     val B = (0, 3)
     val PROMEB = (2, 3)
-   val grid = DenseMatrix.fill[State](WORLDSIZE, WORLDSIZE)(State(North,0,0,0.1))
+   val grid = DenseMatrix.fill[Node](WORLDSIZE, WORLDSIZE)
+  }
+  class Node(x:Int, y:Int) {
+    var value:Double=0
+    val north:(Action, Node, Double) = (North, this, 0)
+    val east:(Action, Node, Double) = (East, this, 0)
+    val south:(Action, Node,Double) = (South, this, 0)
+    val west:(Action,Node, Double) = (West, this, 0)
   }
   val actions = DenseVector(North, East, South, West)
-  case class State (action:Action, x:Int, y:Int, reward:Double)
-  val s=State(North, 0, 0, 0.2)
+
 
 
 
