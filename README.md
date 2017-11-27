@@ -20,6 +20,7 @@ Some of the planned topics are:
 References:
 
  [ Reinforcement Learning: An Introduction (2nd Edition), Sutton & Barto](http://incompleteideas.net/sutton/book/the-book-2nd.html)
+ 
  [Python implementation of Reinforcement Learning: An Introduction by Shangtong Zhang](https://github.com/ShangtongZhang/reinforcement-learning-an-introduction)
 
 
