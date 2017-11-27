@@ -19,7 +19,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 /*
-  assuming 10 arm bandit - this configuration can be changed easily
+  Implementation Details
+  Assuming 10 arm bandit - this configuration can be changed easily
   arm: contains features of the bandit
   Algorithm: four althorithms are implemented by typeclass Algorithm: epsilon greedy, incremental, gradient, and ucb
   scalanlp's breeze is used for numerical computation, and breeze-viz for data visualization
@@ -208,14 +209,14 @@ object multiArmBandit extends App {
       p0 += plot(linspace(0, timeSteps, timeSteps), sum(bestActions(::, *)).inner, colorcode = color(ucb), name="ucb ="+ucb)
       p0.xlabel = "Steps"
       p0.ylabel = "Best Actiosn"
-      p0.title = "Upper-Conifdence-Bound"
+      p0.title = "Upper-Confidence-Bound"
       p0.legend=true
 
       val p1= f1.subplot(0)
       p1 += plot(linspace(0, timeSteps, timeSteps), mean(average(::, *)).inner, colorcode=color(ucb),name="ucb ="+ucb)
       p1.xlabel = "Steps"
       p1.ylabel = "Average"
-      p1.title = "Upper-Conifdence-Bound"
+      p1.title = "Upper-Confidence-Bound"
       p1.legend=true
     }
   }
@@ -249,9 +250,9 @@ object multiArmBandit extends App {
     case _ => "BLACK"
   }
 
-  epsilonGreedySimulation
+ // epsilonGreedySimulation
 //  incrementalSimulation
-//  ucbSimulation
+  ucbSimulation
  // gradientSimulation
 
 
