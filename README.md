@@ -10,7 +10,7 @@ Some of the planned topics are:
 
   [* Multi-Armed Bandit problem](MultiArmBandit.md)
 
-* Dynamic Programming 
+  [* Dynamic Programming ](MDP.md)
 * Markov Decision Processes
 * Monte Carlo Methods
 * Temporal-Difference Learning
