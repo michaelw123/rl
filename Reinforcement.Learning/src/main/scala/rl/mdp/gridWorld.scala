@@ -39,8 +39,8 @@ object gridWorld extends App {
       case (West, (_, _)) => ((b._1, b._2 - 1), 0)
       case (_, (_, _)) => ((b._1, b._2), 0)
     }
-    case class Node(val x: Int, val y: Int) {
 
+    case class Node(val x: Int, val y: Int) {
       var value: Double = 0
 
       var north = policy(North, (x, y))
