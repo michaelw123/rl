@@ -24,6 +24,7 @@ References:
  [Python implementation of Reinforcement Learning: An Introduction by Shangtong Zhang](https://github.com/ShangtongZhang/reinforcement-learning-an-introduction)
 
 
+Project Homepage:
 
 https://github.com/michaelw123/rl
 
