@@ -1,6 +1,8 @@
 <h5>Multi-Armed Bandit Problem Implementation Details</h5>
 
-
+Multi-Armed bandit problem is a well-studied problem, with many algorithms available for solving this problem. The objective of this implementation is a friendly environment that is open to algorithm expansion.
+  
+  
   Assuming 10 arm bandit - this configuration can be changed easily
 
   arm: contains features of the bandit
