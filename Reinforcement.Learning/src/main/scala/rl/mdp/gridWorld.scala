@@ -9,76 +9,66 @@ import breeze.linalg.{DenseMatrix, DenseVector}
   */
 object gridWorld extends App {
   trait Action
-
+  sealed
   case class North(value:Int=0) extends Action
   case class East(value:Int=1) extends Action
   case class South(value:Int=2) extends Action
   case class West(value:Int=3) extends Action
 
-  trait GridWorld {
-    val WORLDSIZE = 4
-//    val grid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE)
-//      {
-//      (i, j) => new Node(i, j)
-//    }
 
-    def policy [T <: Action](a:T, b:(Int, Int)):((Int, Int), Double)
-
-/*
-    def policy(a: Action, b: (Int, Int)): ((Int, Int), Double) = (a, (b._1, b._2)) match {
-      case (_, A) => (PRIMEA, 10)
-      case (_, B) => (PRIMEB, 5)
-      case (North, (0, _)) => ((0, b._2), 0)
-      case (North, (_, _)) => ((b._1 - 1, b._2), 0)
-      case (East, (_, WORLDSIZE)) => ((b._1, WORLDSIZE), 0)
-      case (East, (_, _)) => ((b._1, b._2 + 1), 0)
-      case (South, (WORLDSIZE, _)) => ((WORLDSIZE, b._2), 0)
-      case (South, (_, _)) => ((b._1 + 1, b._2), 0)
-      case (West, (_, 0)) => ((b._1, 0), 0)
-      case (West, (_, _)) => ((b._1, b._2 - 1), 0)
-    }
-  */
-  }
-  object GridWorld {
-    val WORLDSIZE = 4
+    val WORLDSIZE = 5
+    val WORLDSIZE1 = WORLDSIZE-1
     val A = (0, 1)
     val PRIMEA = (4, 1)
     val B = (0, 3)
     val PRIMEB = (2, 3)
-
-    implicit def northPolicy[North](a: North, b: (Int, Int)): ((Int, Int), Double) = (a, (b._1, b._2)) match {
+    var grid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE) {
+      (i, j) => new Node(i, j)
+    }
+    def policy[T](a: T, b: (Int, Int)): ((Int, Int), Double) = (a, (b._1, b._2)) match {
       case (_, A) => (PRIMEA, 10)
       case (_, B) => (PRIMEB, 5)
-      case (North, (0, _)) => ((0, b._2), 0)
+      case (North, (0, _)) => ((0, b._2), -1)
       case (North, (_, _)) => ((b._1 - 1, b._2), 0)
-    }
-    implicit def eastPolicy[East](a: East, b: (Int, Int)): ((Int, Int), Double) = (a, (b._1, b._2)) match {
-      case (_, A) => (PRIMEA, 10)
-      case (_, B) => (PRIMEB, 5)
-      case (East, (_, WORLDSIZE)) => ((b._1, WORLDSIZE), 0)
+      case (East, (_, WORLDSIZE1)) => ((b._1, WORLDSIZE1), -1)
       case (East, (_, _)) => ((b._1, b._2 + 1), 0)
-    }
-    implicit def southPolicy[South](a: South, b: (Int, Int)): ((Int, Int), Double) = (a, (b._1, b._2)) match {
-      case (_, A) => (PRIMEA, 10)
-      case (_, B) => (PRIMEB, 5)
-      case (South, (WORLDSIZE, _)) => ((WORLDSIZE, b._2), 0)
+      case (South, (WORLDSIZE1, _)) => ((WORLDSIZE1, b._2), -1)
       case (South, (_, _)) => ((b._1 + 1, b._2), 0)
-    }
-    implicit def westPolicy[West](a: West, b: (Int, Int)): ((Int, Int), Double) = (a, (b._1, b._2)) match {
-      case (_, A) => (PRIMEA, 10)
-      case (_, B) => (PRIMEB, 5)
-      case (West, (_, 0)) => ((b._1, 0), 0)
+      case (West, (_, 0)) => ((b._1, 0), -1)
       case (West, (_, _)) => ((b._1, b._2 - 1), 0)
     }
-  }
-  class Node[T <: Action] (x: Int, y: Int)(implicit  f: (T, (Int, Int)) => ((Int, Int), Double)) {
-      var value: Double = 0
-      var north = f(North, (x, y))
-      var east = f(East, (x, y))
-      val south = f(South, (x, y))
-      val west = f(West, (x, y))
-  }
+    case class Node(val x: Int, val y: Int) {
 
-val node = new Node(2,3)
+      var value: Double = 0
+
+      var north = policy(North, (x, y))
+      var east = policy(East, (x, y))
+      val south = policy(South, (x, y))
+      val west = policy(West, (x, y))
+    }
+    for (i <- 0 until 1000) {
+      bellman
+    }
+    println(grid.map(a => (rounded(3, a.value))))
+
+    def bellman = {
+    val newGrid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE) {
+      (i, j) => new Node(i, j)
+    }
+    for (i <- 0 until WORLDSIZE; j <- 0 until WORLDSIZE) {
+      newGrid(i,j).value += 0.25 * (newGrid(i,j).north._2 + 0.9 * grid(newGrid(i,j).north._1._1, newGrid(i,j).north._1._2).value)
+      newGrid(i,j).value += 0.25 * (newGrid(i,j).east._2 + 0.9 * grid(newGrid(i,j).east._1._1, newGrid(i,j).east._1._2).value)
+      newGrid(i,j).value += 0.25 * (newGrid(i,j).south._2 + 0.9 * grid(newGrid(i,j).south._1._1, newGrid(i,j).south._1._2).value)
+      newGrid(i,j).value += 0.25 * (newGrid(i,j).west._2 + 0.9 * grid(newGrid(i,j).west._1._1, newGrid(i,j).west._1._2).value)
+    }
+    grid = newGrid
+  }
+  def rounded(x: Int, n:Double) = {
+    val w = math.pow(10, x)
+    (n * w).toLong.toDouble / w
+  }
+  def valueIteration = {
+
+  }
 
 }
