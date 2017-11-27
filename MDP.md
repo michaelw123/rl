@@ -2,7 +2,7 @@
 
 Bellman Equation:
 
-![Alt text](Reinforcement.Learning/bellman.PNG?raw=true "Bellman Equation")
+![Bellman Equation](Reinforcement.Learning/bellman.PNG?raw=true "Bellman Equation")
 
 3.308   8.789   4.427   5.322   1.492
 
@@ -16,7 +16,7 @@ Bellman Equation:
 
 
 
-![Alt text](Reinforcement.Learning/valueIteration.PNG?raw=true "Value Iteration")
+![Value Iteration](Reinforcement.Learning/valueIteration.PNG?raw=true "Value Iteration")
 
 21.977  24.419  21.977  19.419  17.477
 
