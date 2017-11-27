@@ -8,13 +8,20 @@ We plan to follow Sutton & Barto's book Reinforcement Learning: An Introduction 
 
 Some of the planned topics are:
 
-[ * Multi-Armed Bandit problem](MultiArmBandit.md)
+  [* Multi-Armed Bandit problem](MultiArmBandit.md)
 
 * Dynamic Programming 
 * Markov Decision Processes
 * Monte Carlo Methods
 * Temporal-Difference Learning
 * Q-Learning
+
+
+References:
+
+ [ Reinforcement Learning: An Introduction (2nd Edition), Sutton & Barto](http://incompleteideas.net/sutton/book/the-book-2nd.html)
+ [Python implementation of Reinforcement Learning: An Introduction by Shangtong Zhang](https://github.com/ShangtongZhang/reinforcement-learning-an-introduction)
+
 
 
 https://github.com/michaelw123/rl
