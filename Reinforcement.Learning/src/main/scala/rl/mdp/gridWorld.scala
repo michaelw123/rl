@@ -29,15 +29,15 @@ object gridWorld extends App {
     def policy[T](a: T, b: (Int, Int)): ((Int, Int), Double) = (a, b) match {
       case (_, A) => (PRIMEA, 10)
       case (_, B) => (PRIMEB, 5)
-      case (North, (0, _)) => ((0, b._2), -1)
-      case (North, (_, _)) => ((b._1 - 1, b._2), 0)
-      case (East, (_, WORLDSIZE1)) => ((b._1, WORLDSIZE1), -1)
-      case (East, (_, _)) => ((b._1, b._2 + 1), 0)
-      case (South, (WORLDSIZE1, _)) => ((WORLDSIZE1, b._2), -1)
-      case (South, (_, _)) => ((b._1 + 1, b._2), 0)
-      case (West, (_, 0)) => ((b._1, 0), -1)
-      case (West, (_, _)) => ((b._1, b._2 - 1), 0)
-      case (_, (_, _)) => ((b._1, b._2), 0)
+      case (North, (0, _)) => (b, -1)
+      case (North, b) => ((b._1 - 1, b._2), 0)
+      case (East, (_, WORLDSIZE1)) => (b, -1)
+      case (East, b) => ((b._1, b._2 + 1), 0)
+      case (South, (WORLDSIZE1, _)) => (b, -1)
+      case (South, b) => ((b._1 + 1, b._2), 0)
+      case (West, (_, 0)) => (b, -1)
+      case (West, b) => ((b._1, b._2 - 1), 0)
+      case (_, _) => (b, 0)
     }
 
     case class Node(val x: Int, val y: Int) {
@@ -49,8 +49,8 @@ object gridWorld extends App {
       val west = policy(West, (x, y))
     }
     for (i <- 0 until 5000) {
-      bellman
-      //valueIteration
+      //bellman
+      valueIteration
     }
     println(grid.map(a => rounded(3, a.value)))
 
