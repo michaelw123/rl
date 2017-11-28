@@ -43,26 +43,26 @@ object gridWorld extends App {
     case class Node(val x: Int, val y: Int) {
       var value: Double = 0
 
-      var north = policy(North, (x, y))
-      var east = policy(East, (x, y))
+      val north = policy(North, (x, y)) //next position (x,y), and reward
+      val east = policy(East, (x, y))
       val south = policy(South, (x, y))
       val west = policy(West, (x, y))
     }
     for (i <- 0 until 5000) {
-      //bellman
+     // bellman
       valueIteration
     }
     println(grid.map(a => rounded(3, a.value)))
 
   def bellman = {
       val newGrid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE) {
-        (i, j) => new Node(i, j)
+        (i, j) =>  Node(i, j)
       }
-      for (i <- 0 until WORLDSIZE; j <- 0 until WORLDSIZE) {
-       newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).north._2 + DISCOUNT * grid(newGrid(i,j).north._1._1, newGrid(i,j).north._1._2).value)
-        newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).east._2 + DISCOUNT * grid(newGrid(i,j).east._1._1, newGrid(i,j).east._1._2).value)
-        newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).south._2 + DISCOUNT * grid(newGrid(i,j).south._1._1, newGrid(i,j).south._1._2).value)
-       newGrid(i,j).value += ACTIONPROB * (newGrid(i,j).west._2 + DISCOUNT * grid(newGrid(i,j).west._1._1, newGrid(i,j).west._1._2).value)
+      newGrid.toArray.foreach { node =>
+        node.value += ACTIONPROB * (node.north._2 + DISCOUNT * grid(node.north._1).value)
+        node.value += ACTIONPROB * (node.east._2 + DISCOUNT * grid(node.east._1).value)
+        node.value += ACTIONPROB * (node.south._2 + DISCOUNT * grid(node.south._1).value)
+        node.value += ACTIONPROB * (node.west._2 + DISCOUNT * grid(node.west._1).value)
       }
       grid = newGrid
   }
@@ -70,12 +70,12 @@ object gridWorld extends App {
     val newGrid = DenseMatrix.tabulate[Node](WORLDSIZE, WORLDSIZE) {
       (i, j) => new Node(i, j)
     }
-    for (i <- 0 until WORLDSIZE; j <- 0 until WORLDSIZE) {
-      val v1 = (newGrid(i,j).north._2 + DISCOUNT * grid(newGrid(i,j).north._1._1, newGrid(i,j).north._1._2).value)
-      val v2 =(newGrid(i,j).east._2 + DISCOUNT * grid(newGrid(i,j).east._1._1, newGrid(i,j).east._1._2).value)
-      val v3 =(newGrid(i,j).south._2 + DISCOUNT * grid(newGrid(i,j).south._1._1, newGrid(i,j).south._1._2).value)
-      val v4 = (newGrid(i,j).west._2 + DISCOUNT * grid(newGrid(i,j).west._1._1, newGrid(i,j).west._1._2).value)
-      newGrid(i,j).value = max(Seq(v1, v2, v3, v4))
+    newGrid.toArray.foreach { node =>
+      val v1 = node.north._2 + DISCOUNT * grid(node.north._1).value
+      val v2 =node.east._2 + DISCOUNT * grid(node.east._1).value
+      val v3 =node.south._2 + DISCOUNT * grid(node.south._1).value
+      val v4 = node.west._2 + DISCOUNT * grid(node.west._1).value
+      node.value = max(Seq(v1, v2, v3, v4))
     }
     grid = newGrid
   }
