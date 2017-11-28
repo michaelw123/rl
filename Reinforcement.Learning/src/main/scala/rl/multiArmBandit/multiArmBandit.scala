@@ -49,6 +49,7 @@ object multiArmBandit extends App {
     def bestAction(bandit:Bandit[T]):Int = argmax(bandit.trueQ)
   }
   object Algorithm {
+
     implicit object averageGreedyAlgorithm extends Algorithm[averageGreedyArm] {
       def getArm(bandit: Bandit[averageGreedyArm]): Int = {
         if (Binomial(1, bandit.arm.epsilon).draw == 1) scala.util.Random.nextInt(bandit.k) else argmax(bandit.qEstimation)
@@ -111,7 +112,7 @@ object multiArmBandit extends App {
         val oneHot = DenseVector.zeros[Double](bandit.k)
         oneHot(arm) = 1
         bandit.baseline = bandit.arm.gradientaseline match {
-          case true =>  bandit.averageReward
+          case true => bandit.averageReward
           case false => 0
         }
         bandit.qEstimation += (oneHot - bandit.actionProb) * bandit.arm.stepSize * (reward - bandit.baseline)
@@ -119,12 +120,57 @@ object multiArmBandit extends App {
       }
     }
 
+    //TODO: Thompson Sampling
+    implicit object thomsonSamplingAlgorithm extends Algorithm[thomsonSamplingArm] {
+      def getArm(bandit: Bandit[thomsonSamplingArm]): Int = {
+        val expEstimation = bandit.qEstimation.map(exp(_))
+        val theSum: Double = sum(expEstimation)
+        bandit.actionProb = expEstimation.map(a => a / theSum)
+        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
+        index
+      }
+
+      def play(bandit: Bandit[thomsonSamplingArm], arm: Int): Double = {
+        val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
+        bandit.time += 1
+        bandit.actionCount(arm) = bandit.actionCount(arm) + 1
+        bandit.averageReward = (bandit.time - 1.0) / bandit.time * bandit.averageReward + reward / bandit.time
+        val oneHot = DenseVector.zeros[Double](bandit.k)
+        oneHot(arm) = 1
+
+        reward
+      }
+    }
+
+    //TODO: Thompson Sampling
+    implicit object bayseanAlgorithm extends Algorithm[bayseanArm] {
+      def getArm(bandit: Bandit[bayseanArm]): Int = {
+        val expEstimation = bandit.qEstimation.map(exp(_))
+        val theSum: Double = sum(expEstimation)
+        bandit.actionProb = expEstimation.map(a => a / theSum)
+        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
+        index
+      }
+
+      def play(bandit: Bandit[bayseanArm], arm: Int): Double = {
+        val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
+        bandit.time += 1
+        bandit.actionCount(arm) = bandit.actionCount(arm) + 1
+        bandit.averageReward = (bandit.time - 1.0) / bandit.time * bandit.averageReward + reward / bandit.time
+        val oneHot = DenseVector.zeros[Double](bandit.k)
+        oneHot(arm) = 1
+
+        reward
+      }
+    }
   }
   trait Arm
   case class averageGreedyArm(epsilon:Double) extends Arm
   case class incrementalArm(epsilon:Double, stepSize: Double) extends Arm
   case class ucbArm(ucb: Int) extends Arm
   case class gradientArm(stepSize: Double = 0, trueReward:Double =0, gradientaseline:Boolean=false, baseline:Double = 0) extends Arm
+  case class thomsonSamplingArm(trueReward:Double =0) extends Arm
+  case class bayseanArm(trueReward:Double =0) extends Arm
 
   class Bandit[T](anArm:T) {
     val k:Int = 10
