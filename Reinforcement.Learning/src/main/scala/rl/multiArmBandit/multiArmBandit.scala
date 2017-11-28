@@ -142,7 +142,7 @@ object multiArmBandit extends App {
       }
     }
 
-    //TODO: Thompson Sampling
+    //TODO: Baysean
     implicit object bayseanAlgorithm extends Algorithm[bayseanArm] {
       def getArm(bandit: Bandit[bayseanArm]): Int = {
         val expEstimation = bandit.qEstimation.map(exp(_))
