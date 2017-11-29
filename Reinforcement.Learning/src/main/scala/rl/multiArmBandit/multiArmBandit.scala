@@ -292,7 +292,7 @@ object multiArmBandit extends App {
     val timeSteps = 1000
     val f = Figure()
     val bandits = Array.fill(1000)(new Bandit(bayseanArm(trueReward=1)))
-    val (bestActions, average, regrets) = banditSimulation(1000, timeSteps, bandits)
+    val (_, _, regrets) = banditSimulation(1000, timeSteps, bandits)
     val p0 = f.subplot(0)
     p0 += plot(linspace(0, timeSteps, timeSteps), regrets, colorcode="RED",name="Baysean")
     p0.xlabel = "Steps"
