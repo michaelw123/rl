@@ -1,6 +1,6 @@
 <h5>Multi-Armed Bandit Problem Implementation Details</h5>
 
-Multi-Armed bandit problem is a well-studied problem, with many algorithms available for solving this problem. The objective of this implementation is to create a flexible environment that is open to algorithm expansion in scala.
+Multi-Armed bandit problem is a well-studied topic, with many algorithms available for solving this problem. The objective of this implementation is to create a flexible environment that is open to algorithm expansion in scala.
   
   
   Assuming 10 arm bandit - this configuration can be changed easily
