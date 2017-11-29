@@ -7,7 +7,7 @@ Multi-Armed bandit problem is a well-studied topic, with many algorithms availab
 
   arm: contains features of the bandit
 
-  Algorithm: four althorithms are implemented by typeclass Algorithm: epsilon greedy, incremental, gradient, and ucb
+  Algorithm: six althorithms are implemented by typeclass Algorithm: epsilon greedy, incremental, gradient, ucb, Thompson Sampling, and Baysean.
 
   scalanlp's breeze is used for numerical computation, and breeze-viz for data visualization
 
