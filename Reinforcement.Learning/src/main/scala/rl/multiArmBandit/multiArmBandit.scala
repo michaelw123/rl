@@ -32,9 +32,10 @@ package rl.multiArmBandit
 import breeze.linalg._
 import breeze.numerics.{exp, log, sqrt}
 import breeze.plot._
-import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator}
+import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator, Beta}
 import org.apache.commons.math3.random.MersenneTwister
 import breeze.stats.mean
+
 
 import scala.annotation.tailrec
 
@@ -49,7 +50,6 @@ object multiArmBandit extends App {
     def bestAction(bandit:Bandit[T]):Int = argmax(bandit.trueQ)
   }
   object Algorithm {
-
     implicit object averageGreedyAlgorithm extends Algorithm[averageGreedyArm] {
       def getArm(bandit: Bandit[averageGreedyArm]): Int = {
         if (Binomial(1, bandit.arm.epsilon).draw == 1) scala.util.Random.nextInt(bandit.k) else argmax(bandit.qEstimation)
@@ -120,13 +120,14 @@ object multiArmBandit extends App {
       }
     }
 
-    //TODO: Thompson Sampling
+    //TODO: Thompson Sampling https://github.com/robertdavidwest/thompson_sampling/blob/master/thompson_sampling.py
     implicit object thomsonSamplingAlgorithm extends Algorithm[thomsonSamplingArm] {
       def getArm(bandit: Bandit[thomsonSamplingArm]): Int = {
-        val expEstimation = bandit.qEstimation.map(exp(_))
-        val theSum: Double = sum(expEstimation)
-        bandit.actionProb = expEstimation.map(a => a / theSum)
-        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
+        val index =  (bandit.k * Beta.distribution(bandit.actionCount(0), bandit.actionCount(1)).draw).toInt
+//        val expEstimation = bandit.qEstimation.map(exp(_))
+//        val theSum: Double = sum(expEstimation)
+//        bandit.actionProb = expEstimation.map(a => a / theSum)
+//        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
         index
       }
 
@@ -142,24 +143,20 @@ object multiArmBandit extends App {
       }
     }
 
-    //TODO: Baysean
+    //TODO: Baysean: https://github.com/ezraerb/BayseanBandit/blob/master/bandit.py
     implicit object bayseanAlgorithm extends Algorithm[bayseanArm] {
       def getArm(bandit: Bandit[bayseanArm]): Int = {
-        val expEstimation = bandit.qEstimation.map(exp(_))
-        val theSum: Double = sum(expEstimation)
-        bandit.actionProb = expEstimation.map(a => a / theSum)
-        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
-        index
+       (bandit.k * Beta.distribution(bandit.actionCount(0)+1, bandit.actionCount(1)+1).draw).toInt
       }
 
       def play(bandit: Bandit[bayseanArm], arm: Int): Double = {
-        val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
+        //val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
+        val reward = math.random
         bandit.time += 1
         bandit.actionCount(arm) = bandit.actionCount(arm) + 1
         bandit.averageReward = (bandit.time - 1.0) / bandit.time * bandit.averageReward + reward / bandit.time
-        val oneHot = DenseVector.zeros[Double](bandit.k)
-        oneHot(arm) = 1
-
+        if (reward > bandit.trueQ.valueAt(arm))  bandit.trueQ(arm) = reward
+        bandit.regrets = max(bandit.trueQ) - reward
         reward
       }
     }
@@ -175,6 +172,7 @@ object multiArmBandit extends App {
   class Bandit[T](anArm:T) {
     val k:Int = 10
     var time=0
+    var regrets = 0.0
     val trueQ = DenseVector.fill[Double](k)(math.random)
     val qEstimation = DenseVector.fill[Double](k)(0)
     val actionCount = Array.fill[Int](k)(0)
@@ -186,14 +184,15 @@ object multiArmBandit extends App {
   def banditSimulation[T](n:Int, timeSteps:Int, bandits:Array[Bandit[T]])(implicit algo:Algorithm[T]) = {
     val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, timeSteps)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, timeSteps)
+    val regrets = DenseVector.zeros[Double](timeSteps)
     for (i <- 0 until n; t <- 1 until timeSteps ) {
       val bandit = bandits(i)
       val arm = algo.getArm(bandit)
       val reward = algo.play(bandit, arm)
       averageRewards(i, t) += reward
-      if (arm == algo.bestAction(bandit)) bestActionCounts(i, t) += 1
+      regrets(t)+= bandit.regrets
     }
-    (bestActionCounts, averageRewards.map(_/bandits.length) )
+    (bestActionCounts, averageRewards.map(_/bandits.length), regrets)
   }
 
   def epsilonGreedySimulation = {
@@ -202,7 +201,7 @@ object multiArmBandit extends App {
     val f1 = Figure()
     for (epsilon <- Seq(0.1, 0.2, 0.3)) {
       val bandits = Array.fill(1000)(new Bandit(averageGreedyArm(epsilon)))
-      val (bestActions, average) = banditSimulation(1000, timeSteps, bandits)
+      val (bestActions, average, _) = banditSimulation(1000, timeSteps, bandits)
 
       val p0 = f0.subplot(0)
       p0 += plot(linspace(0, timeSteps, timeSteps), sum(bestActions(::, *)).inner, colorcode = color(epsilon), name="epsilon ="+epsilon)
@@ -226,7 +225,7 @@ object multiArmBandit extends App {
       val epsilon=0.1
       for (stepSize <- Seq(0.1, 0.2, 0.3)) {
         val bandits = Array.fill(1000)(new Bandit(incrementalArm(epsilon, stepSize)))
-        val (bestActions, average) = banditSimulation(1000, timeSteps, bandits)
+        val (bestActions, average, _) = banditSimulation(1000, timeSteps, bandits)
 
         val p0 = f.subplot(0)
         p0 += plot(linspace(0, timeSteps, timeSteps), sum(bestActions(::, *)).inner, colorcode = color(stepSize), name="stepSize ="+stepSize)
@@ -250,7 +249,7 @@ object multiArmBandit extends App {
     val f1 = Figure()
     for (ucb <- Seq(1, 2, 3)) {
       val bandits = Array.fill(1000)(new Bandit(ucbArm(ucb)))
-      val (bestActions, average) = banditSimulation(1000, timeSteps, bandits)
+      val (bestActions, average, _) = banditSimulation(1000, timeSteps, bandits)
       val p0 = f.subplot(0)
       p0 += plot(linspace(0, timeSteps, timeSteps), sum(bestActions(::, *)).inner, colorcode = color(ucb), name="ucb ="+ucb)
       p0.xlabel = "Steps"
@@ -273,7 +272,7 @@ object multiArmBandit extends App {
     val f1 = Figure()
     for (gradient <- Seq(.1, .2, .3)) {
       val bandits = Array.fill(1000)(new Bandit(gradientArm(gradient, 0, true)))
-      val (bestActions, average) = banditSimulation(1000, timeSteps, bandits)
+      val (bestActions, average, _) = banditSimulation(1000, timeSteps, bandits)
       val p0 = f.subplot(0)
       p0 += plot(linspace(0, timeSteps, timeSteps), sum(bestActions(::, *)).inner, colorcode = color(gradient), name="Gradient ="+gradient)
       p0.xlabel = "Steps"
@@ -289,6 +288,18 @@ object multiArmBandit extends App {
       p1.legend=true
     }
   }
+  def bayseanSimulation = {
+    val timeSteps = 1000
+    val f = Figure()
+    val bandits = Array.fill(1000)(new Bandit(bayseanArm(trueReward=1)))
+    val (bestActions, average, regrets) = banditSimulation(1000, timeSteps, bandits)
+    val p0 = f.subplot(0)
+    p0 += plot(linspace(0, timeSteps, timeSteps), regrets, colorcode="RED",name="Baysean")
+    p0.xlabel = "Steps"
+    p0.ylabel = "regrets"
+    p0.title = "Baysean Regrets"
+
+  }
   private def  color(epslon:Double):String = epslon match {
     case 0.1 | 1 => "RED"
     case 0.2 | 2=> "BLUE"
@@ -298,8 +309,9 @@ object multiArmBandit extends App {
 
  // epsilonGreedySimulation
 //  incrementalSimulation
-  ucbSimulation
+  //ucbSimulation
  // gradientSimulation
+  bayseanSimulation
 
 
   object ExtendedRand extends RandBasis(new ThreadLocalRandomGenerator(new MersenneTwister())) {
