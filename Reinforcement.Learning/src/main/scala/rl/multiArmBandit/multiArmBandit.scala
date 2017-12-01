@@ -125,7 +125,6 @@ object multiArmBandit extends App {
 
     implicit object thompsonSamplingAlgorithm extends Algorithm[thompsonSamplingArm] {
       def getArm(bandit: Bandit[thompsonSamplingArm]): Int = {
-        //val dist = for ((x,y) <- (bandit.actionCount, bandit.actionProb)) yield Beta.distribution(y+1, x-y+1).draw
         val dist = DenseVector.zeros[Double](bandit.k)
         for (i <- 0 until  bandit.actionCount.length) {
           val  x = Beta.distribution( bandit.actionProb(i)+1, bandit.actionCount(i)+1).draw
@@ -143,14 +142,13 @@ object multiArmBandit extends App {
         reward
       }
     }
-    
+
     implicit object bayseanAlgorithm extends Algorithm[bayseanArm] {
       def getArm(bandit: Bandit[bayseanArm]): Int = {
        (bandit.k * Beta.distribution(bandit.actionCount(0)+1, bandit.actionCount(1)+1).draw).toInt
       }
 
       def play(bandit: Bandit[bayseanArm], arm: Int): Double = {
-        //val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
         val reward = math.random
         bandit.time += 1
         bandit.actionCount(arm) = bandit.actionCount(arm) + 1
