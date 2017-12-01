@@ -123,7 +123,6 @@ object multiArmBandit extends App {
       }
     }
 
-    //TODO: Thompson Sampling https://github.com/robertdavidwest/thompson_sampling/blob/master/thompson_sampling.py
     implicit object thompsonSamplingAlgorithm extends Algorithm[thompsonSamplingArm] {
       def getArm(bandit: Bandit[thompsonSamplingArm]): Int = {
         //val dist = for ((x,y) <- (bandit.actionCount, bandit.actionProb)) yield Beta.distribution(y+1, x-y+1).draw
@@ -133,18 +132,6 @@ object multiArmBandit extends App {
           dist(i) = x
         }
         argmax(dist)
-//        {
-//          val success = bandit.actionCount(i)
-//          val failure = bandit.time - success
-//          val reward = Beta.distribution(success+1, failure+1).draw
-//        } yield reward
-
-//        val success = bandit.actionCount(argmax(bandit.trueQ))
-//        val failure = sum(bandit.actionCount) - success
-//        //val dist = Beta.distribution(success+1, failure+1).draw
-//        val dist:DenseVector[Double]=new Beta(success+1, failure+1).sample(10)
-//        val index = argmax(dist)
-//        index
       }
 
       def play(bandit: Bandit[thompsonSamplingArm], arm: Int): Double = {
@@ -156,8 +143,7 @@ object multiArmBandit extends App {
         reward
       }
     }
-
-    //TODO: Baysean: https://github.com/ezraerb/BayseanBandit/blob/master/bandit.py
+    
     implicit object bayseanAlgorithm extends Algorithm[bayseanArm] {
       def getArm(bandit: Bandit[bayseanArm]): Int = {
        (bandit.k * Beta.distribution(bandit.actionCount(0)+1, bandit.actionCount(1)+1).draw).toInt
@@ -323,7 +309,7 @@ object multiArmBandit extends App {
 
   }
   def thompsonSamplingSimulation: Unit = {
-    val timeSteps = 3000
+    val timeSteps = 1000
     val f = Figure()
     val bandits = Array.fill(1000)(new Bandit(thompsonSamplingArm(trueReward=1)))
 
