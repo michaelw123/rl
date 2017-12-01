@@ -30,14 +30,17 @@
 package rl.multiArmBandit
 
 import breeze.linalg._
+import breeze.linalg.functions._
 import breeze.numerics.{exp, log, sqrt}
 import breeze.plot._
-import breeze.stats.distributions.{Binomial, Rand, RandBasis, ThreadLocalRandomGenerator, Beta}
+import breeze.stats.distributions.{Beta, Binomial, MultivariateGaussian, Rand, RandBasis, ThreadLocalRandomGenerator}
 import org.apache.commons.math3.random.MersenneTwister
 import breeze.stats.mean
+import spire.implicits.cforRange
 
-
+import scala.collection.IndexedSeq
 import scala.annotation.tailrec
+import scala.reflect.ClassTag
 
 /*
   * Created by Michael Wang on 10/30/2017.
@@ -121,23 +124,20 @@ object multiArmBandit extends App {
     }
 
     //TODO: Thompson Sampling https://github.com/robertdavidwest/thompson_sampling/blob/master/thompson_sampling.py
-    implicit object thomsonSamplingAlgorithm extends Algorithm[thomsonSamplingArm] {
-      def getArm(bandit: Bandit[thomsonSamplingArm]): Int = {
-        val index =  (bandit.k * Beta.distribution(bandit.actionCount(0), bandit.actionCount(1)).draw).toInt
-//        val expEstimation = bandit.qEstimation.map(exp(_))
-//        val theSum: Double = sum(expEstimation)
-//        bandit.actionProb = expEstimation.map(a => a / theSum)
-//        val index: Int = ExtendedRand.weightedChooseIndex(bandit.qEstimation.toArray, bandit.actionProb.toArray).draw
+    implicit object thompsonSamplingAlgorithm extends Algorithm[thompsonSamplingArm] {
+      def getArm(bandit: Bandit[thompsonSamplingArm]): Int = {
+        val success = bandit.actionCount(argmax(bandit.trueQ))
+        val failure = sum(bandit.actionCount) - success
+        //val dist = Beta.distribution(success+1, failure+1).draw
+        val dist:DenseVector[Double]=new Beta(success+1, failure+1).sample(10)
+        val index = argmax(dist)
         index
       }
 
-      def play(bandit: Bandit[thomsonSamplingArm], arm: Int): Double = {
+      def play(bandit: Bandit[thompsonSamplingArm], arm: Int): Double = {
         val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
         bandit.time += 1
-        bandit.actionCount(arm) = bandit.actionCount(arm) + 1
-        bandit.averageReward = (bandit.time - 1.0) / bandit.time * bandit.averageReward + reward / bandit.time
-        val oneHot = DenseVector.zeros[Double](bandit.k)
-        oneHot(arm) = 1
+        bandit.actionCount(arm) += 1
 
         reward
       }
@@ -166,31 +166,39 @@ object multiArmBandit extends App {
   case class incrementalArm(epsilon:Double, stepSize: Double) extends Arm
   case class ucbArm(ucb: Int) extends Arm
   case class gradientArm(stepSize: Double = 0, trueReward:Double =0, gradientaseline:Boolean=false, baseline:Double = 0) extends Arm
-  case class thomsonSamplingArm(trueReward:Double =0) extends Arm
+  case class thompsonSamplingArm(trueReward:Double =0) extends Arm
   case class bayseanArm(trueReward:Double =0) extends Arm
 
   class Bandit[T](anArm:T) {
     val k:Int = 10
     var time=0
     var regrets = 0.0
-    val trueQ = DenseVector.fill[Double](k)(math.random)
+    //val trueQ = DenseVector(Array.fill[Double](k)(math.random).sorted)
+    val trueQ = DenseVector(Array.fill[Double](k)(math.random))
+    //val a = (new MultivariateGaussian(DenseVector.zeros[Double](10), DenseMatrix.zeros[Double](10, 10))).draw()
+    //val trueQ:DenseVector[Double]=new Beta(0.5, 0.5).sample(10) // with implicit conversion
+
     val qEstimation = DenseVector.fill[Double](k)(0)
     val actionCount = Array.fill[Int](k)(0)
     var actionProb = DenseVector.zeros[Double](k)
     var averageReward:Double = 0
     var baseline:Double = 0
     def arm:T = anArm
+    def bestPlay = argmax(trueQ)
   }
   def banditSimulation[T](n:Int, timeSteps:Int, bandits:Array[Bandit[T]])(implicit algo:Algorithm[T]) = {
     val bestActionCounts = DenseMatrix.zeros[Double] (bandits.length, timeSteps)
     val averageRewards = DenseMatrix.zeros[Double] (bandits.length, timeSteps)
     val regrets = DenseVector.zeros[Double](timeSteps)
-    for (i <- 0 until n; t <- 1 until timeSteps ) {
-      val bandit = bandits(i)
-      val arm = algo.getArm(bandit)
-      val reward = algo.play(bandit, arm)
-      averageRewards(i, t) += reward
-      regrets(t)+= bandit.regrets
+    for (i <- 0 until n ) {
+      for (t <- 1 until timeSteps) {
+        val bandit = bandits(i)
+        val arm = algo.getArm(bandit)
+        val reward = algo.play(bandit, arm)
+        averageRewards(i, t) += reward
+        if (bandit.bestPlay == arm) bestActionCounts(i, t) += 1
+        regrets(t) += bandit.regrets
+      }
     }
     (bestActionCounts, averageRewards.map(_/bandits.length), regrets)
   }
@@ -219,7 +227,7 @@ object multiArmBandit extends App {
     }
   }
     def incrementalSimulation = {
-      val timeSteps = 1000
+      val timeSteps = 2000
       val f = Figure()
       val f1 = Figure()
       val epsilon=0.1
@@ -300,6 +308,19 @@ object multiArmBandit extends App {
     p0.title = "Baysean Regrets"
 
   }
+  def thompsonSamplingSimulation: Unit = {
+    val timeSteps = 3000
+    val f = Figure()
+    val bandits = Array.fill(1000)(new Bandit(thompsonSamplingArm(trueReward=1)))
+
+    val (bestActions, average, _) = banditSimulation(1000, timeSteps, bandits)
+    val p0 = f.subplot(0)
+    val xx=sum(bestActions(::, *))
+    p0 += plot(linspace(0, timeSteps, timeSteps), sum(bestActions(::, *)).inner, colorcode="RED",name="Thompsom Sampling")
+    p0.xlabel = "Steps"
+    p0.ylabel = "best Action"
+    p0.title = "Thompsom Sampling Best Actions"
+  }
   private def  color(epslon:Double):String = epslon match {
     case 0.1 | 1 => "RED"
     case 0.2 | 2=> "BLUE"
@@ -311,7 +332,10 @@ object multiArmBandit extends App {
 //  incrementalSimulation
   //ucbSimulation
  // gradientSimulation
-  bayseanSimulation
+  //bayseanSimulation
+  thompsonSamplingSimulation
+
+  //test
 
 
   object ExtendedRand extends RandBasis(new ThreadLocalRandomGenerator(new MersenneTwister())) {
@@ -361,5 +385,21 @@ object multiArmBandit extends App {
         }
       }
     }
+  }
+  implicit def indexedSeq2DenseVector[T](seq: IndexedSeq[T])(implicit elem2ordered: ClassTag[T]):DenseVector[T] = {
+
+    val result = new collection.mutable.ArrayBuffer[T]()
+    val n = seq.size
+    cforRange(0 until n) { k =>
+      result += seq(k)
+    }
+    new DenseVector(result.toArray)
+  }
+
+  def test = {
+    val dm = DenseMatrix((1.0,2.0,3.0),
+      (4.0,5.0,6.0))
+    val res = sum(dm(::, *))
+    println(res)
   }
 }
