@@ -126,18 +126,32 @@ object multiArmBandit extends App {
     //TODO: Thompson Sampling https://github.com/robertdavidwest/thompson_sampling/blob/master/thompson_sampling.py
     implicit object thompsonSamplingAlgorithm extends Algorithm[thompsonSamplingArm] {
       def getArm(bandit: Bandit[thompsonSamplingArm]): Int = {
-        val success = bandit.actionCount(argmax(bandit.trueQ))
-        val failure = sum(bandit.actionCount) - success
-        //val dist = Beta.distribution(success+1, failure+1).draw
-        val dist:DenseVector[Double]=new Beta(success+1, failure+1).sample(10)
-        val index = argmax(dist)
-        index
+        //val dist = for ((x,y) <- (bandit.actionCount, bandit.actionProb)) yield Beta.distribution(y+1, x-y+1).draw
+        val dist = DenseVector.zeros[Double](bandit.k)
+        for (i <- 0 until  bandit.actionCount.length) {
+          val  x = Beta.distribution( bandit.actionProb(i)+1, bandit.actionCount(i)+1).draw
+          dist(i) = x
+        }
+        argmax(dist)
+//        {
+//          val success = bandit.actionCount(i)
+//          val failure = bandit.time - success
+//          val reward = Beta.distribution(success+1, failure+1).draw
+//        } yield reward
+
+//        val success = bandit.actionCount(argmax(bandit.trueQ))
+//        val failure = sum(bandit.actionCount) - success
+//        //val dist = Beta.distribution(success+1, failure+1).draw
+//        val dist:DenseVector[Double]=new Beta(success+1, failure+1).sample(10)
+//        val index = argmax(dist)
+//        index
       }
 
       def play(bandit: Bandit[thompsonSamplingArm], arm: Int): Double = {
         val reward = bandit.trueQ.valueAt(arm) + math.random + bandit.arm.trueReward
         bandit.time += 1
         bandit.actionCount(arm) += 1
+        if (arm == argmax(bandit.trueQ)) bandit.actionProb(arm) += 1
 
         reward
       }
