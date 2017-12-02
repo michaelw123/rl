@@ -34,5 +34,6 @@ Upper-Confidence-Bound
 ![Alt text](Reinforcement.Learning/ucb_average.png?raw=true "UCB average")
 ![Alt text](Reinforcement.Learning/ucb_best_action.png?raw=true "UCB best action")
 
-Baysean
-![Alt text](Reinforcement.Learning/baysean-regrets.png?raw=true "Baysean Regrets")
+
+Thompson Sampling
+![Alt text](Reinforcement.Learning/thompsonSampling.png?raw=true "Thompson Sampling")
