@@ -24,7 +24,7 @@ package rl.mdp
 import breeze.linalg.{DenseMatrix, DenseVector, max}
 
 /**
-  * Created by MichaelXiaoqun on 2017-11-26.
+  * Created by Michael Wang on 2017-11-26.
   */
 object gridWorld extends App {
   trait Action
