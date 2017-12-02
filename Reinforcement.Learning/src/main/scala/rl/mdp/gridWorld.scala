@@ -61,15 +61,14 @@ object gridWorld extends App {
 
     case class Node(val x: Int, val y: Int) {
       var value: Double = 0
-
-      val north = policy(North, (x, y)) //next position (x,y), and reward
-      val east = policy(East, (x, y))
-      val south = policy(South, (x, y))
-      val west = policy(West, (x, y))
+      val actions = Seq( policy(North, (x, y)),
+                policy(East, (x, y)),
+                policy(South, (x, y)),
+                policy(West, (x, y)))
     }
     for (i <- 0 until 5000) {
-     // bellman
-      valueIteration
+      bellman
+     // valueIteration
     }
     println(grid.map(a => rounded(3, a.value)))
 
@@ -78,10 +77,7 @@ object gridWorld extends App {
         (i, j) =>  Node(i, j)
       }
       newGrid.toArray.foreach { node =>
-        node.value += ACTIONPROB * (node.north._2 + DISCOUNT * grid(node.north._1).value)
-        node.value += ACTIONPROB * (node.east._2 + DISCOUNT * grid(node.east._1).value)
-        node.value += ACTIONPROB * (node.south._2 + DISCOUNT * grid(node.south._1).value)
-        node.value += ACTIONPROB * (node.west._2 + DISCOUNT * grid(node.west._1).value)
+        node.value = node.actions.foldLeft(node.value)((a,b) =>  a + ACTIONPROB * (b._2 + DISCOUNT * grid(b._1).value))
       }
       grid = newGrid
   }
@@ -90,11 +86,7 @@ object gridWorld extends App {
       (i, j) => new Node(i, j)
     }
     newGrid.toArray.foreach { node =>
-      val v1 = node.north._2 + DISCOUNT * grid(node.north._1).value
-      val v2 =node.east._2 + DISCOUNT * grid(node.east._1).value
-      val v3 =node.south._2 + DISCOUNT * grid(node.south._1).value
-      val v4 = node.west._2 + DISCOUNT * grid(node.west._1).value
-      node.value = max(Seq(v1, v2, v3, v4))
+      node.value = max(node.actions.map(a => a._2 + DISCOUNT * grid(a._1).value))
     }
     grid = newGrid
   }
