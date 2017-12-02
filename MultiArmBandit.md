@@ -36,4 +36,5 @@ Upper-Confidence-Bound
 
 
 Thompson Sampling
+
 ![Alt text](Reinforcement.Learning/thompsonSampling.png?raw=true "Thompson Sampling")
