@@ -48,11 +48,8 @@ object GridWorldMDP extends App{
 //    def availableActions  = List(North, West)
 //  }
   val xx = gridWorldReward(2)
-  val yy = xx match {
-    case 0.0 => "A"
-    case 1.1 => "B"
-    case 2.0 => "C"
-  }
+  val yy = gridWorldReward.unapply(xx)
 
   println(yy)
+  println(xx)
 }
