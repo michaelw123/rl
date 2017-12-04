@@ -1,13 +1,12 @@
 package rl.mdp
 
-import rl.mdp.MDP.Reward
 
 /**
   * Created by MichaelXiaoqun on 2017-12-03.
   */
 class GridWorldMDP {
 
-  import MDP.{Action, Value}
+  import MDP.{Action, Value, Reward}
 
   sealed
   case object North extends Action
