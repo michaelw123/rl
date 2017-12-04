@@ -39,12 +39,12 @@ object MDP {
     def allStates:IndexedSeq[S]
   }
 
-  trait Valuable[Container,S] extends Statable[Container, S] {
+  trait Valuable[Container,S] extends Statable[Container, S] with Value {
     def value(state: S): Value
     def heuristic(state: S): Value
   }
 
-  trait Randomizable[Container,S] extends Valuable[Container,S] {
+  trait Randomizable[Container,S] extends Valuable[Container,S]   {
     def genRandom(): S
   }
 
