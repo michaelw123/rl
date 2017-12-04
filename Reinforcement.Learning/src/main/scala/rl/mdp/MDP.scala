@@ -25,34 +25,43 @@ import breeze.stats.distributions.Rand
 /**
   * Created by Michael Wang on 2017-12-03.
   */
-class MDP {
+object MDP {
+
   trait Action
+
   trait Value
+
   trait Reward
 
-  trait Statable[State] {
-    def transition(state:State, action:Action):(State, Reward)
-    def availableActions(state:State):Seq[Action]
+  trait Statable[S] {
+    def transition(state: S, action: Action): (S, Reward)
+
+    def availableActions(state: S): Seq[Action]
+    def allActions: IndexedSeq[Action]
+    def allStates:IndexedSeq[S]
   }
 
   trait Valuable[State] extends Statable[State] {
-    def value(state:State):Value
-    def heuristic(state:State): Value
-  }
-  trait Randomizable[State] extends Valuable[State]{
-    def genRandom(): State
-  }
-  implicit class StatableOps[S: Statable](state: S) {
-    val func = implicitly[Statable[S]]
-    def availableActions: Seq[Action] = func.availableActions(state)
-    def randomAction: Action = Rand.choose(availableActions).draw
-    def applyTransition(action: Action) = func.transition(state, action)
-  }
-  
-  trait Policy[G[_] <: Statable[_]]{
-    def nextAction[S: G](s: S): Action
-    def applyNext[S: G: Statable](s: S): (S, Reward) =
-      s.applyTransition(nextAction[S](s))
+    def value(state: State): Value
+
+    def heuristic(state: State): Value
   }
 
+  trait Randomizable[State] extends Valuable[State] {
+    def genRandom(): State
+  }
+
+  //  implicit class StatableOps[S: Statable](state: S) {
+  //    val func = implicitly[Statable[S]]
+  //    def availableActions: Seq[Action] = func.availableActions(state)
+  //    def randomAction: Action = Rand.choose(availableActions).draw
+  //    def applyTransition(action: Action) = func.transition(state, action)
+  //  }
+  //
+  //  trait Policy[G[_] <: Statable[_]]{
+  //    def nextAction[S: G](s: S): Action
+  //    def applyNext[S: G: Statable](s: S): (S, Reward) =
+  //      s.applyTransition(nextAction[S](s))
+  //  }
 }
+
