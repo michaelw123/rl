@@ -41,27 +41,27 @@ object MDP {
     def allStates:IndexedSeq[S]
   }
 
-  trait Valuable[State] extends Statable[State] {
-    def value(state: State): Value
+  trait Valuable[S] extends Statable[S] {
+    def value(state: S): Value
 
-    def heuristic(state: State): Value
+    def heuristic(state: S): Value
   }
 
-  trait Randomizable[State] extends Valuable[State] {
-    def genRandom(): State
+  trait Randomizable[S] extends Valuable[S] {
+    def genRandom(): S
   }
 
-  //  implicit class StatableOps[S: Statable](state: S) {
-  //    val func = implicitly[Statable[S]]
-  //    def availableActions: Seq[Action] = func.availableActions(state)
-  //    def randomAction: Action = Rand.choose(availableActions).draw
-  //    def applyTransition(action: Action) = func.transition(state, action)
-  //  }
-  //
-  //  trait Policy[G[_] <: Statable[_]]{
-  //    def nextAction[S: G](s: S): Action
-  //    def applyNext[S: G: Statable](s: S): (S, Reward) =
-  //      s.applyTransition(nextAction[S](s))
-  //  }
+    implicit class StatableOps[S: Statable](state: S) {
+      val func = implicitly[Statable[S]]
+      def availableActions: Seq[Action] = func.availableActions(state)
+      def randomAction: Action = Rand.choose(availableActions).draw
+      def applyTransition(action: Action) = func.transition(state, action)
+    }
+
+    trait Policy[G[_] <: Statable[_]]{
+      def nextAction[S: G](s: S): Action
+      def applyNext[S: G: Statable](s: S): (S, Reward) =
+        s.applyTransition(nextAction[S](s))
+    }
 }
 
