@@ -14,11 +14,15 @@ object GridWorldMDP extends App{
   case object South extends Action
   case object West extends Action
 
-  class gridWorldReward[Double](val reward:Double) extends Reward[Double]
-  object gridWorldReward {
-    def apply(r:Double) = new gridWorldReward(r)
-    def unapply(r:gridWorldReward[Double]):Double =r.reward
-  }
+  case class gridWorldReward(reward:Double) extends Reward[Double]
+  case class gridWorldReward1(reward:Int) extends Reward[Int]
+//  object gridWorldReward { self =>
+//    def apply(r:Double) = new gridWorldReward(r)
+//    def unapply(r:gridWorldReward):Double ={
+//      println("asdjask")
+//      r.reward
+//    }
+//  }
 
 //  grisWorldEnvironment[S<:State, CS[S]] extends MDPEnvironment[S<:State, CS[S]]  {
 //    def allActions: Seq[Action] = Seq(North, West, East, South)
@@ -47,9 +51,20 @@ object GridWorldMDP extends App{
 //    def availableStates : IndexedSeq[gridWorldState] = IndexedSeq(new gridWorldState(0, 1))
 //    def availableActions  = List(North, West)
 //  }
+def liftSomething2[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
+
+  val sumInts = liftSomething2[Int, Int](_ + _)
+
   val xx = gridWorldReward(2)
-  val yy = gridWorldReward.unapply(xx)
+  val yy = gridWorldReward(3)
+  val aa = sumInts(gridWorldReward1(2), gridWorldReward1(3))
+
+  val zz = xx match {
+    case yy => "A"
+    case _ => "B"
+  }
 
   println(yy)
   println(xx)
+  println(aa)
 }
