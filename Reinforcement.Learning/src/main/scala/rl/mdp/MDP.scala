@@ -30,8 +30,9 @@ object MDP {
   trait Action
   trait Value
   trait Reward
+  trait State
 
-  trait Statable[Container[A <: Action], S] {
+  trait Statable[Container[A], S] {
     def transition(state: S, action: Action): (S, Reward)
 
     def availableActions(state: S): Seq[Action]
@@ -39,16 +40,16 @@ object MDP {
     def allStates:IndexedSeq[S]
   }
 
-  trait Valuable[Container,S] extends Statable[Container, S] with Value {
+  trait Valuable[Container[S],S] extends Statable[Container[S], S] with Value {
     def value(state: S): Value
     def heuristic(state: S): Value
   }
 
-  trait Randomizable[Container,S] extends Valuable[Container,S]   {
+  trait Randomizable[Container[S],S] extends Valuable[Container[S],S]   {
     def genRandom(): S
   }
 
-  implicit class StatableOps[Container,S: Statable](state: S) {
+  implicit class StatableOps[Container[S],S : Statable](state: S) {
       val func = implicitly[Statable[Container,S]]
       def availableActions: Seq[Action] = func.availableActions(state)
       def randomAction: Action = Rand.choose(availableActions).draw
