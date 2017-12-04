@@ -1,23 +1,45 @@
 package rl.mdp
+import breeze.linalg.DenseMatrix
+import rl.core.mdp.MDP._
 
+import scala.collection.immutable.List
 
 /**
   * Created by MichaelXiaoqun on 2017-12-03.
   */
-class GridWorldMDP {
+object GridWorldMDP extends App{
 
-  import MDP.{Action, Value, Reward}
 
-  sealed
-  case object North extends Action
-  case object East extends Action
-  case object South extends Action
-  case object West extends Action
+   object North extends Action
+   object East extends Action
+   object South extends Action
+   object West extends Action
 
-  class gridWorldValue(value: Double) extends Value
+  class gridWorldValue[Double](v: Double) extends Valueable[Double]{
+    def unapply:Double = v
 
-  class gridWorldReward(reward: Double) extends Reward
+  }
 
-  case class State(i:Int, j:Int)
+  class gridWorldReward[Double](r: Double) extends Rewardable[Double] {
+    def unapply:Double = r
+  }
 
+
+  class gridWorldState[List[Action], gridWorldState, DenseMatrix[gridWorldState]]  extends Statable[List[Action], gridWorldState, IndexedSeq[gridWorldState]] {
+    val x:Int = 0
+    val y:Int = 0
+//    def apply(a:Int, b:Int) = new gridWorldState(x, y)
+//    def unapply = (x, y)
+    val xx = Seq(North, West, East, South)
+//    def availableActions : Seq[A] = (x, y) match {
+//      case (0, _) => Seq(East, South, West)
+//      case (_, 0) => Seq(South, West, North)
+//
+//    }
+//    def availableStates : IndexedSeq[gridWorldState] = IndexedSeq(new gridWorldState(0, 1))
+    //def availableActions  = List(North, West)
+  }
+  val xx = Seq(North, West, East, South)
+
+  println(xx)
 }
