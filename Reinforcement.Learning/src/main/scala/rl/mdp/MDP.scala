@@ -31,7 +31,7 @@ object MDP {
   trait Value
   trait Reward
 
-  trait Statable[Container[Action], S] {
+  trait Statable[Container[A <: Action], S] {
     def transition(state: S, action: Action): (S, Reward)
 
     def availableActions(state: S): Seq[Action]
