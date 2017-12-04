@@ -28,40 +28,37 @@ import breeze.stats.distributions.Rand
 object MDP {
 
   trait Action
-
   trait Value
-
   trait Reward
 
-  trait Statable[S] {
+  trait Statable[Container[Action], S] {
     def transition(state: S, action: Action): (S, Reward)
 
     def availableActions(state: S): Seq[Action]
-    def allActions: IndexedSeq[Action]
+    def allActions: Container[Action]
     def allStates:IndexedSeq[S]
   }
 
-  trait Valuable[S] extends Statable[S] {
+  trait Valuable[Container,S] extends Statable[Container, S] {
     def value(state: S): Value
-
     def heuristic(state: S): Value
   }
 
-  trait Randomizable[S] extends Valuable[S] {
+  trait Randomizable[Container,S] extends Valuable[Container,S] {
     def genRandom(): S
   }
 
-    implicit class StatableOps[S: Statable](state: S) {
-      val func = implicitly[Statable[S]]
+  implicit class StatableOps[Container,S: Statable](state: S) {
+      val func = implicitly[Statable[Container,S]]
       def availableActions: Seq[Action] = func.availableActions(state)
       def randomAction: Action = Rand.choose(availableActions).draw
       def applyTransition(action: Action) = func.transition(state, action)
-    }
+  }
 
-    trait Policy[G[_] <: Statable[_]]{
+  trait Policy[G[_] <: Statable[_, _]]{
       def nextAction[S: G](s: S): Action
       def applyNext[S: G: Statable](s: S): (S, Reward) =
         s.applyTransition(nextAction[S](s))
-    }
+  }
 }
 
