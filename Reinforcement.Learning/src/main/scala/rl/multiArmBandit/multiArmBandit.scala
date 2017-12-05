@@ -124,6 +124,7 @@ object multiArmBandit extends App {
     }
 
     implicit object thompsonSamplingAlgorithm extends Algorithm[thompsonSamplingArm] {
+      //actionProb: success, actionCount: failure
       def getArm(bandit: Bandit[thompsonSamplingArm]): Int = {
         val dist = DenseVector.zeros[Double](bandit.k)
         for (i <- 0 until  bandit.actionCount.length) {
