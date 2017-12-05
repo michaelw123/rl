@@ -30,10 +30,13 @@ object GridWorldMDP extends App{
     implicit def double2Value(v:Double):gridWorldValue = apply(v)
   }
 
-  class gridWorldState extends State
+  class gridWorldState extends State[Action, gridWorldValue, gridWorldReward, gridWorldState] {
+    override def availableActions:Seq[Action] = Seq(North, East, South, West)
+    override def value:gridWorldValue = 0.0
+    override def transition(action:Action):(gridWorldState, Reward) = (gridWorldState, gridWorldReward(0))
+  }
   object gridWorldState {
-    def availableActions:Seq[Action] = Seq(North, East, South, West)
-    def value:gridWorldValue = 0.0
+
   }
 
 
