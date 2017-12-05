@@ -73,15 +73,12 @@ object GridWorldMDP extends App{
 
   }
 
-  class gridWorldStateSpace[gridWorldState] extends StateSpace[gridWorldState] {
+  class gridWorldStateSpace extends StateSpace
+  object gridWorldStateSpace extends StateSpaceable [gridWorldState] {
     def allStates:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](10, 10) {
-      (i, j) => new gridWorldState(i, j)
-    }
-    implicit object StateZero extends Zero[gridWorldState] {
-      override def zero =  new gridWorldState(0,0)
+      (i,j) =>new gridWorldState(i, j)
     }
   }
-
 
 
 
@@ -116,5 +113,6 @@ object GridWorldMDP extends App{
   println(aa)
   println(qq)
 
+  println(gridWorldStateSpace.allStates)
 
 }
