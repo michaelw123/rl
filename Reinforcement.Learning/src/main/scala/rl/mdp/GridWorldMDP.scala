@@ -1,6 +1,7 @@
 package rl.mdp
 import breeze.linalg.DenseMatrix
-import rl.core.mdp.MDP.{State, _}
+import rl.core.mdp.MDP._
+
 
 import scala.collection.immutable.List
 
@@ -15,6 +16,11 @@ object GridWorldMDP extends App{
   case object West extends Action
 
   case class gridWorldReward(reward:Double) extends Reward[Double]
+  object gridWorldReward{
+    //def lift[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
+    //def sumDouble = lift[Double, Double](_ + _)
+    //def unapply(r:gridWorldReward) = r.reward
+  }
   case class gridWorldReward1(reward:Int) extends Reward[Int]
 //  object gridWorldReward { self =>
 //    def apply(r:Double) = new gridWorldReward(r)
@@ -51,13 +57,10 @@ object GridWorldMDP extends App{
 //    def availableStates : IndexedSeq[gridWorldState] = IndexedSeq(new gridWorldState(0, 1))
 //    def availableActions  = List(North, West)
 //  }
-def liftSomething2[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
 
-  val sumInts = liftSomething2[Int, Int](_ + _)
-
-  val xx = gridWorldReward(2)
-  val yy = gridWorldReward(3)
-  val aa = sumInts(gridWorldReward1(2), gridWorldReward1(3))
+  val xx = gridWorldReward(2.0)
+  val yy = gridWorldReward(3.0)
+ // val aa = xx + yy
 
   val zz = xx match {
     case yy => "A"
@@ -66,5 +69,5 @@ def liftSomething2[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) =
 
   println(yy)
   println(xx)
-  println(aa)
+  println(zz)
 }
