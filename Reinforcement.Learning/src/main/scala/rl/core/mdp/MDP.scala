@@ -35,15 +35,9 @@ object MDP {
     def value:V
     def apply(action:A):(S, R)
   }
-  trait Environment
   trait Agent[S, A, R, V] {
     def decision(state:S, action:A):(S, R)
   }
-
-//  trait StateSpace
-//  trait StateSpaceable[S] {
-//    def allStates:DenseMatrix[S]
-//  }
   trait Policy[S]
   trait DeterministicPolicy[S, A] extends Policy[S] {
     def pi(state:S):A
@@ -51,25 +45,6 @@ object MDP {
   trait  StochasticPolicy[S, A] extends Policy[S] {
     def pi(state:S, action:A):Double
   }
-//  trait MDPEnvironment[S<:State, CS[S]] extends Environment {
-//    def allActions: Seq[Action]
-//    def allStates:CS[S]
-//  }
-
-//  trait Actionable[A <: Action]  {
-//  }
-//  trait Valueable[V <: Value] {
-//    def unapply:V
-//  }
-//  trait Rewardable[R <: Reward] {
-//    def unapply:R
-//  }
-//  trait Policyable[P <: Policy, S <:State, A <:Action] {
-//      def nextAction(s:S):A
-//  }
-//  trait Statable[CA[Action], S<:State, CS[S]] {
-    //def availableActions : CA[Action]
-   // def availableStates : CS[S]
 
 
 }
