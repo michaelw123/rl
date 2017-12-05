@@ -21,7 +21,7 @@
 package rl.mdp
 import breeze.linalg._
 import breeze.storage.Zero
-import rl.core.mdp.MDP._
+import rl.core.mdp.MDP.{Stateable, _}
 
 import scala.collection.immutable.List
 
@@ -51,12 +51,12 @@ object GridWorldMDP extends App{
     implicit def double2Value(v:Double):gridWorldValue = new gridWorldValue(v)
   }
 
-  class gridWorldState(val x:Int, val y:Int) extends State
-  object gridWorldState extends Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
-    override def availableActions:Seq[Action] = Seq(North, East, South, West)
+  class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
+    override def availableActions:Seq[Action] = Seq[Action]() :+ North :+ East :+ South :+ West
     override def value:gridWorldValue = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
-
+  }
+  object gridWorldState{
     def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
     def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
   }
@@ -64,9 +64,6 @@ object GridWorldMDP extends App{
   object gridWorldPolicy extends StochasticPolicy[gridWorldState, Action] {
     def pi(state:gridWorldState, action:Action):Double = 0
   }
-//  object gridWorldPolicy {
-//
-//  }
 
 //  class gridWorldStateSpace(val width:Int=10, val height:Int=10) extends StateSpace {
 //  object gridWorldStateSpace extends StateSpaceable [gridWorldState] {
