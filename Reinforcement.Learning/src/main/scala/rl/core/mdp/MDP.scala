@@ -28,29 +28,33 @@ object MDP {
   trait Value
   trait Reward
   trait Policy
-  trait State
+  trait State[A, V, R, S]{
+    def availableActions:Seq[A]
+    def value:V
+    def transition(action:A):(S, Reward)
+  }
   trait Environment
   trait Agent
 
-  trait MDPEnvironment[A <:Action, CA[A], S<:State, CS[S]] extends Environment {
-    def allActions: CA[A]
-    def allStates:CS[S]
-  }
+//  trait MDPEnvironment[S<:State, CS[S]] extends Environment {
+//    def allActions: Seq[Action]
+//    def allStates:CS[S]
+//  }
 
-  trait Actionable[A <: Action]  {
-  }
-  trait Valueable[V <: Value] {
-    def unapply:V
-  }
-  trait Rewardable[R <: Reward] {
-    def unapply:R
-  }
-  trait Policyable[P <: Policy, S <:State, A <:Action] {
-      def nextAction(s:S):A
-  }
-  trait Statable[CA[Action], S<:State, CS[S]] {
+//  trait Actionable[A <: Action]  {
+//  }
+//  trait Valueable[V <: Value] {
+//    def unapply:V
+//  }
+//  trait Rewardable[R <: Reward] {
+//    def unapply:R
+//  }
+//  trait Policyable[P <: Policy, S <:State, A <:Action] {
+//      def nextAction(s:S):A
+//  }
+//  trait Statable[CA[Action], S<:State, CS[S]] {
     //def availableActions : CA[Action]
    // def availableStates : CS[S]
 
-  }
+
 }
