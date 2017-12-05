@@ -15,34 +15,32 @@ object GridWorldMDP extends App{
   case object South extends Action
   case object West extends Action
 
-  case class gridWorldReward(reward:Double) extends Reward[Double]
-  object gridWorldReward{
+  class gridWorldReward extends Reward
+  object gridWorldReward {
     //def lift[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
-    //def sumDouble = lift[Double, Double](_ + _)
-    //def unapply(r:gridWorldReward) = r.reward
+    def apply(r:Double):gridWorldReward = gridWorldReward(r)
+    def unapply(reward:Double):Option[Double] = if (reward != 0.0) Some(reward) else None
+    implicit def double2Reward(r:Double):gridWorldReward = apply(r)
   }
-  case class gridWorldReward1(reward:Int) extends Reward[Int]
-//  object gridWorldReward { self =>
-//    def apply(r:Double) = new gridWorldReward(r)
-//    def unapply(r:gridWorldReward):Double ={
-//      println("asdjask")
-//      r.reward
-//    }
-//  }
 
-//  grisWorldEnvironment[S<:State, CS[S]] extends MDPEnvironment[S<:State, CS[S]]  {
+  class gridWorldValue extends Value
+  object gridWorldValue{
+    def apply(v:Double):gridWorldValue = gridWorldValue(v)
+    def unapply(v:Double):Option[Double] = if (v != 0) Some(v) else None
+    implicit def double2Value(v:Double):gridWorldValue = apply(v)
+  }
+
+  class gridWorldState extends State
+  object gridWorldState {
+    def availableActions:Seq[Action] = Seq(North, East, South, West)
+    def value:gridWorldValue = 0.0
+  }
+
+
+  //  grisWorldEnvironment[S<:State, CS[S]] extends MDPEnvironment[S<:State, CS[S]]  {
 //    def allActions: Seq[Action] = Seq(North, West, East, South)
 //  }
-//  class gridWorldValue[Double](v: Double) extends Valueable[Double]{
-//    def unapply:Double = v
-//
-//  }
-//
-//  class gridWorldReward[Double](r: Double) extends Rewardable[Double] {
-//    def unapply:Double = r
-//  }
-//
-//
+
 //  class gridWorldState[List[Action], gridWorldState, DenseMatrix[gridWorldState]]  extends Statable[List[Action], gridWorldState, IndexedSeq[gridWorldState]] {
 //    val x:Int = 0
 //    val y:Int = 0
@@ -58,16 +56,24 @@ object GridWorldMDP extends App{
 //    def availableActions  = List(North, West)
 //  }
 
-  val xx = gridWorldReward(2.0)
-  val yy = gridWorldReward(3.0)
- // val aa = xx + yy
-
-  val zz = xx match {
-    case yy => "A"
+//  val xx= gridWorldReward(2.0)
+//  val yy = gridWorldReward(3.0)
+//  val mm:Double = 3.0
+// // val aa = xx + yy
+//
+//  val zz = xx match {
+//    case `yy` => "A"
+//    case _ => "B"
+//  }
+  val aa = gridWorldReward(9.0)
+  val qq = aa match {
+    case  gridWorldReward(8.0)=> "A"
     case _ => "B"
   }
+//  println(yy)
+//  println(xx)
+  println(aa)
+  println(qq)
 
-  println(yy)
-  println(xx)
-  println(zz)
+
 }
