@@ -20,6 +20,7 @@
  */
 package rl.core.mdp
 
+import breeze.linalg.DenseMatrix
 /**
   * Created by Michael Wang on 12/04/2017.
   */
@@ -27,7 +28,9 @@ object MDP {
   trait Action
   trait Value
   trait Reward
-  trait State[A, V, R, S]{
+  trait State
+
+  trait Stateable[A, V, R, S]{
     def availableActions:Seq[A]
     def value:V
     def apply(action:A):(S, R)
@@ -37,14 +40,15 @@ object MDP {
     def decision(state:S, action:A):(S, R)
   }
 
-  trait StateSpace[CS[_]] {
-    def allStates:CS[_]
-  }
+//  trait StateSpace
+//  trait StateSpaceable[S] {
+//    def allStates:DenseMatrix[S]
+//  }
   trait Policy[S]
   trait DeterministicPolicy[S, A] extends Policy[S] {
     def pi(state:S):A
   }
-  trait StochasticPolicy[S, A] extends Policy[S] {
+  trait  StochasticPolicy[S, A] extends Policy[S] {
     def pi(state:S, action:A):Double
   }
 //  trait MDPEnvironment[S<:State, CS[S]] extends Environment {
