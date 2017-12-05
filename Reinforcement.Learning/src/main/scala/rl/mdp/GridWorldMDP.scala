@@ -60,25 +60,20 @@ object GridWorldMDP extends App{
     def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
     def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
   }
-//  object gridWorldState {
-//    def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
-//    def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
-//    //implicit def tuple2State(x:Int, y:Int):gridWorldState = new gridWorldState(x, y)
-//  }
 
-  class gridWorldPolicy[gridWorldState, Action] extends StochasticPolicy[gridWorldState, Action] {
+  object gridWorldPolicy extends StochasticPolicy[gridWorldState, Action] {
     def pi(state:gridWorldState, action:Action):Double = 0
   }
-  object gridWorldPolicy {
+//  object gridWorldPolicy {
+//
+//  }
 
-  }
-
-  class gridWorldStateSpace extends StateSpace
-  object gridWorldStateSpace extends StateSpaceable [gridWorldState] {
-    def allStates:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](10, 10) {
-      (i,j) =>new gridWorldState(i, j)
-    }
-  }
+//  class gridWorldStateSpace(val width:Int=10, val height:Int=10) extends StateSpace {
+//  object gridWorldStateSpace extends StateSpaceable [gridWorldState] {
+//    def allStates:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](width, height) {
+//      (i,j) =>new gridWorldState(i, j)
+//    }
+//  }
 
 
 
@@ -101,7 +96,7 @@ object GridWorldMDP extends App{
 //    def availableActions  = List(North, West)
 //  }
 
-  val state = gridWorldState(0,1)
+  val state = new gridWorldState(0,1)
   val aa = gridWorldReward(9.0)
 
   val qq = aa match {
@@ -112,7 +107,7 @@ object GridWorldMDP extends App{
 //  println(xx)
   println(aa)
   println(qq)
-
-  println(gridWorldStateSpace.allStates)
+  val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
+  println(p)
 
 }
