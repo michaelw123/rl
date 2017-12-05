@@ -15,28 +15,31 @@ object GridWorldMDP extends App{
   case object South extends Action
   case object West extends Action
 
-  class gridWorldReward extends Reward
+  class gridWorldReward(val reward:Double) extends Reward
   object gridWorldReward {
     //def lift[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
-    def apply(r:Double):gridWorldReward = gridWorldReward(r)
+    //def apply(r:Double):gridWorldReward = gridWorldReward(r)
+    def apply(r:Double):Double = r
     def unapply(reward:Double):Option[Double] = if (reward != 0.0) Some(reward) else None
-    implicit def double2Reward(r:Double):gridWorldReward = apply(r)
+    implicit def double2Reward(r:Double):gridWorldReward = new gridWorldReward(r)
   }
 
-  class gridWorldValue extends Value
+  class gridWorldValue(val value:Double) extends Value
   object gridWorldValue{
-    def apply(v:Double):gridWorldValue = gridWorldValue(v)
+    def apply(v:Double):Double = v
     def unapply(v:Double):Option[Double] = if (v != 0) Some(v) else None
-    implicit def double2Value(v:Double):gridWorldValue = apply(v)
+    implicit def double2Value(v:Double):gridWorldValue = new gridWorldValue(v)
   }
 
-  class gridWorldState extends State[Action, gridWorldValue, gridWorldReward, gridWorldState] {
+  class gridWorldState(val x:Int, val y:Int) extends State[Action, gridWorldValue, gridWorldReward, gridWorldState] {
     override def availableActions:Seq[Action] = Seq(North, East, South, West)
     override def value:gridWorldValue = 0.0
-    override def transition(action:Action):(gridWorldState, Reward) = (gridWorldState, gridWorldReward(0))
+    override def transition(action:Action):(gridWorldState, Reward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
   object gridWorldState {
-
+    def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
+    def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
+    implicit def tuple2State(x:Int, y:Int):gridWorldState = new gridWorldState(x, y)
   }
 
 
@@ -69,9 +72,10 @@ object GridWorldMDP extends App{
 //    case _ => "B"
 //  }
   val aa = gridWorldReward(9.0)
+
   val qq = aa match {
-    case  gridWorldReward(8.0)=> "A"
-    case _ => "B"
+    case  gridWorldReward(9.1) => "match"
+    case _ => "not match"
   }
 //  println(yy)
 //  println(xx)
