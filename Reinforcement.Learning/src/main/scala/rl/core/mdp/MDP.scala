@@ -27,15 +27,26 @@ object MDP {
   trait Action
   trait Value
   trait Reward
-  trait Policy
   trait State[A, V, R, S]{
     def availableActions:Seq[A]
     def value:V
-    def transition(action:A):(S, Reward)
+    def apply(action:A):(S, R)
   }
   trait Environment
-  trait Agent
+  trait Agent[S, A, R, V] {
+    def decision(state:S, action:A):(S, R)
+  }
 
+  trait StateSpace[CS[_]] {
+    def allStates:CS[_]
+  }
+  trait Policy[S]
+  trait DeterministicPolicy[S, A] extends Policy[S] {
+    def pi(state:S):A
+  }
+  trait StochasticPolicy[S, A] extends Policy[S] {
+    def pi(state:S, action:A):Double
+  }
 //  trait MDPEnvironment[S<:State, CS[S]] extends Environment {
 //    def allActions: Seq[Action]
 //    def allStates:CS[S]
