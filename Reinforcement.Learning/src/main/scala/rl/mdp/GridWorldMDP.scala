@@ -19,9 +19,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package rl.mdp
-import breeze.linalg.DenseMatrix
+import breeze.linalg._
+import breeze.storage.Zero
 import rl.core.mdp.MDP._
-
 
 import scala.collection.immutable.List
 
@@ -51,16 +51,20 @@ object GridWorldMDP extends App{
     implicit def double2Value(v:Double):gridWorldValue = new gridWorldValue(v)
   }
 
-  class gridWorldState(val x:Int, val y:Int) extends State[Action, gridWorldValue, gridWorldReward, gridWorldState] {
+  class gridWorldState(val x:Int, val y:Int) extends State
+  object gridWorldState extends Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
     override def availableActions:Seq[Action] = Seq(North, East, South, West)
     override def value:gridWorldValue = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
-  }
-  object gridWorldState {
+
     def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
     def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
-    //implicit def tuple2State(x:Int, y:Int):gridWorldState = new gridWorldState(x, y)
   }
+//  object gridWorldState {
+//    def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
+//    def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
+//    //implicit def tuple2State(x:Int, y:Int):gridWorldState = new gridWorldState(x, y)
+//  }
 
   class gridWorldPolicy[gridWorldState, Action] extends StochasticPolicy[gridWorldState, Action] {
     def pi(state:gridWorldState, action:Action):Double = 0
@@ -73,7 +77,13 @@ object GridWorldMDP extends App{
     def allStates:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](10, 10) {
       (i, j) => new gridWorldState(i, j)
     }
+    implicit object StateZero extends Zero[gridWorldState] {
+      override def zero =  new gridWorldState(0,0)
+    }
   }
+
+
+
 
   //  grisWorldEnvironment[S<:State, CS[S]] extends MDPEnvironment[S<:State, CS[S]]  {
 //    def allActions: Seq[Action] = Seq(North, West, East, South)
