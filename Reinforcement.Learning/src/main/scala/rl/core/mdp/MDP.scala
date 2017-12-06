@@ -38,13 +38,18 @@ object MDP {
   trait Agent[S, A, R, V] {
     def decision(state:S, action:A):(S, R)
   }
-  trait Policy[S]
-  trait DeterministicPolicy[S, A] extends Policy[S] {
+  trait Policy
+  trait DeterministicPolicy[S, A] extends Policy {
     def pi(state:S):A
   }
-  trait  StochasticPolicy[S, A] extends Policy[S] {
+  trait  StochasticPolicy[S, A] extends Policy {
     def pi(state:S, action:A):Double
   }
-
+  trait Actions {
+    val allActions:Seq[Action]
+  }
+  trait States[S, C[S]] {
+    def allStates:C[S]
+  }
 
 }
