@@ -48,7 +48,7 @@ object MDP {
   }
 
   trait Algorithm[T] {
-    def run
+    def run(config:T)
   }
   trait MDPConfiguration
 
