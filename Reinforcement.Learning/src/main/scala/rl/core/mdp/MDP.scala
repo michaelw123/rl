@@ -37,6 +37,7 @@ object MDP {
   }
   trait Agent[S, A, R, V] {
     def decision(state:S, action:A):(S, R)
+    def runAlgorithm[ALGO](implicit algorithm:Algorithm[ALGO]):Unit
   }
   trait Policy
   trait DeterministicPolicy[S, A] extends Policy {
@@ -51,5 +52,15 @@ object MDP {
   trait States[S, C[_]] {
     def allStates:C[S]
   }
+  trait Algorithm[T] {
+    def run
+  }
+  implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
+    def run= {
 
+    }
+  }
+
+  trait Configuration
+  class BellmanConfig extends Configuration
 }

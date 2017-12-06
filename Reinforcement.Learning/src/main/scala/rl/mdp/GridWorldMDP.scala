@@ -37,14 +37,6 @@ object GridWorldMDP extends App{
   object gridWorldActions extends Actions {
      val allActions = Seq(North, East, South, West)
   }
-//  object gridWorldStates extends States[gridWorldState, DenseMatrix[_]] {
-//    val X = 10
-//    val Y = 10
-//    val allStates = DenseMatrix.tabulate[gridWorldState](X, Y) {
-//      (i,j) => new gridWorldState(i,j)
-//    }
-//  }
-
   class gridWorldReward(val reward:Double) extends Reward
   object gridWorldReward {
     //def lift[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
@@ -102,6 +94,10 @@ object GridWorldMDP extends App{
         case (_, _) => ((state.x, state.y), 0)
       }
       (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
+    }
+    implicit val config = new BellmanConfig
+    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]) ={
+      algorithm.run
     }
   }
 
