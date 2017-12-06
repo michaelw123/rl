@@ -27,4 +27,8 @@ object mdpTest extends App{
 
   val aDecision = gridWorldAgent.decision(aState, South)
   println(aDecision._1.x, aDecision._1.y, aDecision._2.reward)
+
+  val conf = BellmanConfig.setX(10).setY(20)
+
+  println(conf.getX, conf.getY)
 }

@@ -46,12 +46,7 @@ object MDP {
   trait  StochasticPolicy[S, A] extends Policy {
     def pi(state:S, action:A):Double
   }
-  trait Actions {
-    val allActions:Seq[Action]
-  }
-  trait States[S, C[_]] {
-    def allStates:C[S]
-  }
+
   trait Algorithm[T] {
     def run
   }
@@ -64,6 +59,7 @@ object MDP {
   trait MDPConfiguration
   abstract class BellmanConfig extends MDPConfiguration {
     def allStates[S, C[_]]:C[S]
+    def allActions:Seq[Action]
   }
 
 

@@ -32,9 +32,6 @@ object GridWorldMDP extends App{
   case object South extends Action
   case object West extends Action
 
-  object gridWorldActions extends Actions {
-     val allActions = Seq(North, East, South, West)
-  }
   class gridWorldReward(val reward:Double) extends Reward
   object gridWorldReward {
     //def lift[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
@@ -52,7 +49,7 @@ object GridWorldMDP extends App{
   }
 
   class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
-    override def availableActions:Seq[Action] = gridWorldActions.allActions
+    override def availableActions:Seq[Action] = BellmanConfig.allActions
     override def value:gridWorldValue = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
@@ -67,11 +64,22 @@ object GridWorldMDP extends App{
 
 
   object BellmanConfig {
-    val X=10
-    val Y=10
+    private var X=0
+    private var Y=0
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
     }
+    val allActions = Seq(North, East, South, West)
+    def setX(value:Int): this.type ={
+      X=value
+      this
+    }
+    def setY(value:Int): this.type ={
+      Y=value
+      this
+    }
+    def getX= X
+    def getY=Y
   }
   object gridWorldAgent extends Agent [gridWorldState, Action, gridWorldReward, gridWorldValue] {
     val A = (0, 1)
@@ -79,14 +87,16 @@ object GridWorldMDP extends App{
     val B = (0, 3)
     val PRIMEB = (2, 3)
     def decision(state:gridWorldState, action:Action):(gridWorldState, gridWorldReward) = {
+      val x = BellmanConfig.getX
+      val y = BellmanConfig.getY
       val r = (action, (state.x, state.y)) match  {
         case (_, A) => (PRIMEA, 10)
         case (_, B) => (PRIMEB, 5)
         case (North, (0, _)) => ((state.x, state.y), -1)
         case (North, b) => ((b._1 - 1, b._2), 0)
-        case (East, (_, BellmanConfig.Y)) => ((state.x, state.y), -1)
+        case (East, (_, y)) => ((state.x, state.y), -1)
         case (East, b) => ((b._1, b._2 + 1), 0)
-        case (South, (BellmanConfig.X, _)) => ((state.x, state.y), -1)
+        case (South, (x, _)) => ((state.x, state.y), -1)
         case (South, b) => ((b._1 + 1, b._2), 0)
         case (West, (_, 0)) => ((state.x, state.y), -1)
         case (West, b) => ((b._1, b._2 - 1), 0)
