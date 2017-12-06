@@ -48,7 +48,7 @@ object MDP {
   trait Actions {
     val allActions:Seq[Action]
   }
-  trait States[S, C[S]] {
+  trait States[S, C[_]] {
     def allStates:C[S]
   }
 

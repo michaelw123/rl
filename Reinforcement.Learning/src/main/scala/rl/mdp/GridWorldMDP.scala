@@ -20,7 +20,6 @@
  */
 package rl.mdp
 import breeze.linalg._
-import breeze.storage.Zero
 import rl.core.mdp.MDP._
 
 import scala.collection.immutable.List
@@ -76,33 +75,16 @@ object GridWorldMDP extends App{
     def pi(state:gridWorldState, action:Action):Double = 0
   }
 
-//  class gridWorldStateSpace(val width:Int=10, val height:Int=10) extends StateSpace {
-//  object gridWorldStateSpace extends StateSpaceable [gridWorldState] {
-//    def allStates:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](width, height) {
-//      (i,j) =>new gridWorldState(i, j)
-//    }
-//  }
+  implicit object gridWorldStates extends States[gridWorldState, DenseMatrix] {
+    def X=10
+    def Y=10
+    def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
+      (i,j) => new gridWorldState(i,j)
+    }
+  }
 
 
 
-  //  grisWorldEnvironment[S<:State, CS[S]] extends MDPEnvironment[S<:State, CS[S]]  {
-//    def allActions: Seq[Action] = Seq(North, West, East, South)
-//  }
-
-//  class gridWorldState[List[Action], gridWorldState, DenseMatrix[gridWorldState]]  extends Statable[List[Action], gridWorldState, IndexedSeq[gridWorldState]] {
-//    val x:Int = 0
-//    val y:Int = 0
-//    def apply(a:Int, b:Int) = new gridWorldState(x, y)
-//    def unapply = (x, y)
-//    val xx = Seq(North, West, East, South)
-//    def availableActions : Seq[A] = (x, y) match {
-//      case (0, _) => Seq(East, South, West)
-//      case (_, 0) => Seq(South, West, North)
-//
-//    }
-//    def availableStates : IndexedSeq[gridWorldState] = IndexedSeq(new gridWorldState(0, 1))
-//    def availableActions  = List(North, West)
-//  }
 
   val state = new gridWorldState(0,1)
   val aa = gridWorldReward(9.0)
@@ -118,8 +100,8 @@ object GridWorldMDP extends App{
   val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
   println(p)
 
-  val allstates = gridWorldActions.allActions
+  val allstates = gridWorldStates.allStates
 
-  println(allstates)
+  println(allstates.map(a => (a.x, a.y)))
 
 }
