@@ -62,14 +62,7 @@ object GridWorldMDP extends App{
   }
 
   class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
-    override def availableActions:Seq[Action] = {
-      var states = Seq[Action]()
-      if (x >0) states = states :+ North
-      if (x < gridWorldStates.X-1) states = states :+ South
-      if (y > 0)  states = states :+ West
-      if (y <  gridWorldStates.Y-1) states = states :+ East
-      states
-    }
+    override def availableActions:Seq[Action] = gridWorldActions.allActions
     override def value:gridWorldValue = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
@@ -82,32 +75,34 @@ object GridWorldMDP extends App{
     def pi(state:gridWorldState, action:Action):Double = 0
   }
 
-  implicit object gridWorldStates extends States[gridWorldState, DenseMatrix] {
-    def X=10
-    def Y=10
+   object gridWorldStates extends States[gridWorldState, DenseMatrix] {
+    val X=10
+     val Y=10
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
     }
   }
-
-  val state = new gridWorldState(0,1)
-  val aa = gridWorldReward(9.0)
-
-  val qq = aa match {
-    case  gridWorldReward(9.1) => "match"
-    case _ => "not match"
+  object gridWorldAgent extends Agent [gridWorldState, Action, gridWorldReward, gridWorldValue] {
+    val A = (0, 1)
+    val PRIMEA = (4, 1)
+    val B = (0, 3)
+    val PRIMEB = (2, 3)
+    def decision(state:gridWorldState, action:Action):(gridWorldState, gridWorldReward) = {
+      val r = (action, (state.x, state.y)) match  {
+        case (_, A) => (PRIMEA, 10)
+        case (_, B) => (PRIMEB, 5)
+        case (North, (0, _)) => ((state.x, state.y), -1)
+        case (North, b) => ((b._1 - 1, b._2), 0)
+        case (East, (_, gridWorldStates.Y)) => ((state.x, state.y), -1)
+        case (East, b) => ((b._1, b._2 + 1), 0)
+        case (South, (gridWorldStates.X, _)) => ((state.x, state.y), -1)
+        case (South, b) => ((b._1 + 1, b._2), 0)
+        case (West, (_, 0)) => ((state.x, state.y), -1)
+        case (West, b) => ((b._1, b._2 - 1), 0)
+        case (_, _) => ((state.x, state.y), 0)
+      }
+      (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
+    }
   }
-//  println(yy)
-//  println(xx)
-  println(aa)
-  println(qq)
-  val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
-  println(p)
-
-  val allstates = gridWorldStates.allStates
-
-  println(allstates.map(a => (a.x, a.y)))
-  val aState = new gridWorldState(10,19)
-  println(aState.availableActions)
 
 }

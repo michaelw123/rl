@@ -24,8 +24,9 @@ object mdpTest extends App{
   val allstates = gridWorldStates.allStates
 
   println(allstates.map(a => (a.x, a.y)))
-  val aState = new gridWorldState(10,19)
+  val aState = new gridWorldState(0, 4)
   println(aState.availableActions)
 
-
+  val aDecision = gridWorldAgent.decision(aState, North)
+  println(aDecision._1.x, aDecision._1.y, aDecision._2.reward)
 }
