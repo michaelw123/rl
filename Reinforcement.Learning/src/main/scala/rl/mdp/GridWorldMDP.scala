@@ -66,7 +66,7 @@ object GridWorldMDP extends App{
       val states = config.allStates
 
       states.toArray.foreach { state =>
-        state.value = state.availableActions.foldLeft(state.value)((a,b) =>  a + config.getActionProb * (a._2 + config.getDiscount * states(a._1).value))
+        state.value = state.availableActions.foldLeft(state.value)((a,b) =>  b + config.getActionProb * (a._2 + config.getDiscount * states(a._1).value))
       }
 
     }
