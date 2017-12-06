@@ -62,7 +62,14 @@ object GridWorldMDP extends App{
   }
 
   class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
-    override def availableActions:Seq[Action] = Seq[Action]() :+ North :+ East :+ South :+ West
+    override def availableActions:Seq[Action] = {
+      var states = Seq[Action]()
+      if (x >0) states = states :+ North
+      if (x < gridWorldStates.X-1) states = states :+ South
+      if (y > 0)  states = states :+ West
+      if (y <  gridWorldStates.Y-1) states = states :+ East
+      states
+    }
     override def value:gridWorldValue = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
@@ -83,9 +90,6 @@ object GridWorldMDP extends App{
     }
   }
 
-
-
-
   val state = new gridWorldState(0,1)
   val aa = gridWorldReward(9.0)
 
@@ -103,5 +107,7 @@ object GridWorldMDP extends App{
   val allstates = gridWorldStates.allStates
 
   println(allstates.map(a => (a.x, a.y)))
+  val aState = new gridWorldState(10,19)
+  println(aState.availableActions)
 
 }
