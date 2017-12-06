@@ -37,7 +37,7 @@ object MDP {
   }
   trait Agent[S, A, R, V] {
     def decision(state:S, action:A):(S, R)
-    def runAlgorithm[ALGO](implicit algorithm:Algorithm[ALGO]):Unit
+    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]):Unit
   }
   trait Policy
   trait DeterministicPolicy[S, A] extends Policy {
