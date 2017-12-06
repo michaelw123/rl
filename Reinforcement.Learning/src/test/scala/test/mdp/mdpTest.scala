@@ -52,5 +52,6 @@ object mdpTest extends App{
   val conf = config.setX(10).setY(20)
 
   println(conf.getX, conf.getY)
+
   gridWorldAgent.runAlgorithm(conf)
 }

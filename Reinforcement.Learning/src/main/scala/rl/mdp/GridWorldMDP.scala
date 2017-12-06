@@ -49,7 +49,7 @@ object GridWorldMDP extends App{
   }
 
   class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
-    override def availableActions:Seq[Action] = BellmanConfig.allActions
+    override def availableActions:Seq[Action] = gridWorldAgent.allActions
     override def value:gridWorldValue = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
@@ -82,16 +82,22 @@ object GridWorldMDP extends App{
       this
     }
     def getX= X
-    def getY=Y
+    def getY= Y
   }
   object gridWorldAgent extends Agent [gridWorldState, Action, gridWorldReward, gridWorldValue] {
+    var config:BellmanConfig= (None : Option[BellmanConfig]).orNull
     val A = (0, 1)
     val PRIMEA = (4, 1)
     val B = (0, 3)
     val PRIMEB = (2, 3)
+    def setConfig(conf:BellmanConfig) = {
+      config = conf
+      this
+
+    }
     def decision(state:gridWorldState, action:Action):(gridWorldState, gridWorldReward) = {
-      val x = BellmanConfig.getX
-      val y = BellmanConfig.getY
+      val x = config.getX
+      val y = config.getY
       val r = (action, (state.x, state.y)) match  {
         case (_, A) => (PRIMEA, 10)
         case (_, B) => (PRIMEB, 5)
@@ -111,6 +117,7 @@ object GridWorldMDP extends App{
     def runAlgorithm[T](config:T) (implicit algo:Algorithm[T]) ={
       algo.run
     }
+    def allActions = config.allActions
   }
 
 }
