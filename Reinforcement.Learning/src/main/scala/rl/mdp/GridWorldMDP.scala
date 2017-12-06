@@ -22,8 +22,6 @@ package rl.mdp
 import breeze.linalg._
 import rl.core.mdp.MDP._
 
-import scala.collection.immutable.List
-
 /**
   * Created by Michael Wang on 2017-12-03.
   */
@@ -67,9 +65,10 @@ object GridWorldMDP extends App{
     def pi(state:gridWorldState, action:Action):Double = 0
   }
 
-   object gridWorldStates extends States[gridWorldState, DenseMatrix] {
+
+  object BellmanConfig {
     val X=10
-     val Y=10
+    val Y=10
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
     }
@@ -85,9 +84,9 @@ object GridWorldMDP extends App{
         case (_, B) => (PRIMEB, 5)
         case (North, (0, _)) => ((state.x, state.y), -1)
         case (North, b) => ((b._1 - 1, b._2), 0)
-        case (East, (_, gridWorldStates.Y)) => ((state.x, state.y), -1)
+        case (East, (_, BellmanConfig.Y)) => ((state.x, state.y), -1)
         case (East, b) => ((b._1, b._2 + 1), 0)
-        case (South, (gridWorldStates.X, _)) => ((state.x, state.y), -1)
+        case (South, (BellmanConfig.X, _)) => ((state.x, state.y), -1)
         case (South, b) => ((b._1 + 1, b._2), 0)
         case (West, (_, 0)) => ((state.x, state.y), -1)
         case (West, b) => ((b._1, b._2 - 1), 0)
@@ -95,7 +94,7 @@ object GridWorldMDP extends App{
       }
       (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
     }
-    implicit val config = new BellmanConfig
+
     def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]) ={
       algorithm.run
     }

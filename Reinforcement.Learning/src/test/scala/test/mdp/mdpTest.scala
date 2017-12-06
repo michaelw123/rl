@@ -14,14 +14,12 @@ object mdpTest extends App{
     case  gridWorldReward(9.1) => "match"
     case _ => "not match"
   }
-  //  println(yy)
-  //  println(xx)
   println(aa)
   println(qq)
   val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
   println(p)
 
-  val allstates = gridWorldStates.allStates
+  val allstates = BellmanConfig.allStates
 
   println(allstates.map(a => (a.x, a.y)))
   val aState = new gridWorldState(2, 4)

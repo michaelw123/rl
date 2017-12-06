@@ -61,6 +61,10 @@ object MDP {
     }
   }
 
-  trait Configuration
-  class BellmanConfig extends Configuration
+  trait MDPConfiguration
+  abstract class BellmanConfig extends MDPConfiguration {
+    def allStates[S, C[_]]:C[S]
+  }
+
+
 }
