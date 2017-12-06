@@ -21,7 +21,7 @@
 package rl.mdp
 import breeze.linalg._
 import breeze.storage.Zero
-import rl.core.mdp.MDP.{Stateable, _}
+import rl.core.mdp.MDP._
 
 import scala.collection.immutable.List
 
@@ -34,6 +34,17 @@ object GridWorldMDP extends App{
   case object East extends Action
   case object South extends Action
   case object West extends Action
+
+  object gridWorldActions extends Actions {
+     val allActions = Seq(North, East, South, West)
+  }
+//  object gridWorldStates extends States[gridWorldState, DenseMatrix[_]] {
+//    val X = 10
+//    val Y = 10
+//    val allStates = DenseMatrix.tabulate[gridWorldState](X, Y) {
+//      (i,j) => new gridWorldState(i,j)
+//    }
+//  }
 
   class gridWorldReward(val reward:Double) extends Reward
   object gridWorldReward {
@@ -106,5 +117,9 @@ object GridWorldMDP extends App{
   println(qq)
   val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
   println(p)
+
+  val allstates = gridWorldActions.allActions
+
+  println(allstates)
 
 }
