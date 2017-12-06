@@ -20,7 +20,8 @@
  */
 package test.mdp
 
-import rl.mdp.GridWorldMDP._
+import rl.core.mdp.MDP._
+import rl.mdp.GridWorldMDP.{BellmanConfig, _}
 
 /**
   * Created by Michael Wang on 12/06/2017.
@@ -38,8 +39,8 @@ object mdpTest extends App{
   println(qq)
   val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
   println(p)
-
-  val allstates = BellmanConfig.allStates
+  val config = (new BellmanConfig).setX(10).setY(20)
+  val allstates = config.allStates
 
   println(allstates.map(a => (a.x, a.y)))
   val aState = new gridWorldState(2, 4)
@@ -48,7 +49,8 @@ object mdpTest extends App{
   val aDecision = gridWorldAgent.decision(aState, South)
   println(aDecision._1.x, aDecision._1.y, aDecision._2.reward)
 
-  val conf = BellmanConfig.setX(10).setY(20)
+  val conf = config.setX(10).setY(20)
 
   println(conf.getX, conf.getY)
+  gridWorldAgent.runAlgorithm(conf)
 }

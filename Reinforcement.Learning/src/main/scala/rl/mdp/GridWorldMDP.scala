@@ -61,9 +61,12 @@ object GridWorldMDP extends App{
   object gridWorldPolicy extends StochasticPolicy[gridWorldState, Action] {
     def pi(state:gridWorldState, action:Action):Double = 0
   }
-
-
-  object BellmanConfig {
+  implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
+    def run= {
+      println("hellmanAlgorithm")
+    }
+  }
+   class BellmanConfig extends MDPConfiguration {
     private var X=0
     private var Y=0
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
@@ -105,8 +108,8 @@ object GridWorldMDP extends App{
       (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
     }
 
-    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]) ={
-      algorithm.run
+    def runAlgorithm[T](config:T) (implicit algo:Algorithm[T]) ={
+      algo.run
     }
   }
 

@@ -50,17 +50,8 @@ object MDP {
   trait Algorithm[T] {
     def run
   }
-  implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
-    def run= {
-
-    }
-  }
-
   trait MDPConfiguration
-  abstract class BellmanConfig extends MDPConfiguration {
-    def allStates[S, C[_]]:C[S]
-    def allActions:Seq[Action]
-  }
+
 
 
 }
