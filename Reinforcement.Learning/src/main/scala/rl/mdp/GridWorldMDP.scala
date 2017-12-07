@@ -19,7 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package rl.mdp
-import breeze.linalg._
+import breeze.linalg.{DenseMatrix, _}
 import rl.core.mdp.MDP._
 
 /**
@@ -48,9 +48,9 @@ object GridWorldMDP extends App{
     implicit def double2Value(v:Double):gridWorldValue = new gridWorldValue(v)
   }
 
-  class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
+  class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, Double, gridWorldReward, gridWorldState] {
     override def availableActions:Seq[Action] = gridWorldAgent.allActions
-    override def value:Double = 0.0
+    override var value:Double = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
   object gridWorldState{
@@ -62,16 +62,17 @@ object GridWorldMDP extends App{
     def reward(state:gridWorldState, action:Action):Double = 0
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
-    def run(config:BellmanConfig) = {
-      var prevStates = config.allStates
+    def run (config:BellmanConfig): DenseMatrix[gridWorldState]= {
+      val resultState:DenseMatrix[gridWorldState] = config.allStates
       for (i <- 0 until config.getEpisodes) {
         val states = config.allStates
 
         //bellman equation
         val newStates = states.map(state => state.availableActions
-          .foldLeft(state.value)((a, b) => (a + config.getActionProb * (config.getPolicy.reward(state, b) + config.getDiscount * state.value))))
+          .foldLeft(state.value)((a, b) => (a + config.getActionProb * (config.getPolicy.reward(state, b) + config.getDiscount * resultState(state.x, state.y).value))))
+        resultState.map(a => a.value = newStates(a.x, a.y))
       }
-
+      resultState
     }
   }
    class BellmanConfig extends MDPConfiguration {

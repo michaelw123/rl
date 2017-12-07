@@ -31,21 +31,20 @@ object MDP {
   trait State
 
   trait Stateable[A, V, R, S]{
-    type VV = Double
     def availableActions:Seq[A]
-    def value:VV
+    def value:V
     def apply(action:A):(S, R)
   }
   trait Agent[S, A, R, V] {
     def decision(state:S, action:A):(S, R)
-    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]):Unit
+    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]):DenseMatrix[S]
   }
   trait Policy[S, A]{
     def reward(state:S, action:A):Double
   }
 
   trait Algorithm[T] {
-    def run(config:T)
+    def run(config:T):DenseMatrix[_]
   }
   trait MDPConfiguration
 

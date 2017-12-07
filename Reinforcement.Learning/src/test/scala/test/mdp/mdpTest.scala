@@ -20,8 +20,8 @@
  */
 package test.mdp
 
-import rl.core.mdp.MDP._
 import rl.mdp.GridWorldMDP.{BellmanConfig, _}
+import breeze.linalg._
 
 /**
   * Created by Michael Wang on 12/06/2017.
@@ -57,5 +57,5 @@ object mdpTest extends App{
 
   println(config.getX, config.getY)
 
-  gridWorldAgent.runAlgorithm(config)
+  val result:DenseMatrix[gridWorldState] = gridWorldAgent.runAlgorithm(config)
 }
