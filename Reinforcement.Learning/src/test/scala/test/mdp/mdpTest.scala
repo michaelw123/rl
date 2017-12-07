@@ -36,7 +36,7 @@ object mdpTest extends App{
   }
   println(aa)
   println(qq)
-  
+
   val config = (new BellmanConfig)
     .setX(5)
     .setY(5)

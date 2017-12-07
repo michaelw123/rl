@@ -59,7 +59,27 @@ object GridWorldMDP extends App{
   }
 
   object gridWorldPolicy extends Policy[gridWorldState, Action] {
-    def reward(state:gridWorldState, action:Action):Double = 0
+    //def reward(state:gridWorldState, action:Action):Double = 0
+    val A = (0, 1)
+    val PRIMEA = (4, 1)
+    val B = (0, 3)
+    val PRIMEB = (2, 3)
+    def reward(state:gridWorldState, action:Action):(gridWorldState, gridWorldReward) = {
+      val r = (action, (state.x, state.y)) match  {
+        case (_, A) => (PRIMEA, 10)
+        case (_, B) => (PRIMEB, 5)
+        case (North, (0, _)) => ((state.x, state.y), -1)
+        case (North, b) => ((b._1 - 1, b._2), 0)
+        case (East, (_, y)) => ((state.x, state.y), -1)
+        case (East, b) => ((b._1, b._2 + 1), 0)
+        case (South, (x, _)) => ((state.x, state.y), -1)
+        case (South, b) => ((b._1 + 1, b._2), 0)
+        case (West, (_, 0)) => ((state.x, state.y), -1)
+        case (West, b) => ((b._1, b._2 - 1), 0)
+        case (_, _) => ((state.x, state.y), 0)
+      }
+      (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
+    }
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig, gridWorldState] {
     def run(config:BellmanConfig): DenseMatrix[gridWorldState]= {
