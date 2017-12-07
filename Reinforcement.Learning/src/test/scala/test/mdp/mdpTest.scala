@@ -39,7 +39,11 @@ object mdpTest extends App{
   println(qq)
   val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
   println(p)
-  val config = (new BellmanConfig).setX(10).setY(20)
+  val config = (new BellmanConfig)
+    .setX(10)
+    .setY(20)
+    .setPolicy(gridWorldPolicy)
+
   gridWorldAgent.setConfig(config)
   val allstates = config.allStates
 
@@ -50,7 +54,9 @@ object mdpTest extends App{
   val aDecision = gridWorldAgent.decision(aState, South)
   println(aDecision._1.x, aDecision._1.y, aDecision._2.reward)
 
-  val conf = config.setX(10).setY(20)
+  val conf = config.setX(10)
+    .setY(20)
+    .setPolicy(gridWorldPolicy)
 
   println(conf.getX, conf.getY)
 

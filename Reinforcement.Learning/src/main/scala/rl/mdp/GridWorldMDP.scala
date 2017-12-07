@@ -64,6 +64,7 @@ object GridWorldMDP extends App{
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
     def run(config:BellmanConfig) = {
       val states = config.allStates
+      val policy = config.getPolicy
 
       states.toArray.foreach { state =>
         state.value = state.availableActions.foldLeft(state.value)((a,b) =>  a + config.getActionProb * (b + config.getDiscount * states(a.x).value))
@@ -75,8 +76,8 @@ object GridWorldMDP extends App{
     private var X=0
     private var Y=0
      private var actionProb=0.0
-
      private var discount=0.0
+     private var policy = (None : Option[Policy]).orNull
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
     }
@@ -97,6 +98,11 @@ object GridWorldMDP extends App{
        discount = value
        this
      }
+     def setPolicy(value:Policy) = {
+       policy = value
+       this
+     }
+     def getPolicy = policy
      def getDiscount = discount
     def getActionProb =  actionProb
     def getX= X
