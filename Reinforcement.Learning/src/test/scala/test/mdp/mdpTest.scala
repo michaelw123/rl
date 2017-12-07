@@ -40,6 +40,8 @@ object mdpTest extends App{
   val config = (new BellmanConfig)
     .setX(5)
     .setY(5)
+    .setActionProb(0.25)
+    .setDiscount(0.9)
     .setPolicy(gridWorldPolicy)
     .setEpisodes(100)
 
@@ -57,5 +59,11 @@ object mdpTest extends App{
 
   val result = gridWorldAgent.runAlgorithm(config)
 
-  println(result.map(a => a.value))
+  println(result.map(a => rounded(3, a.value)))
+
+
+  def rounded(x: Int, n:Double) = {
+    val w = math.pow(10, x)
+    (n * w).toLong.toDouble / w
+  }
 }
