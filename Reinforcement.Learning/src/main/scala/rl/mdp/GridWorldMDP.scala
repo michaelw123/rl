@@ -64,7 +64,7 @@ object GridWorldMDP extends App{
     val PRIMEA = (4, 1)
     val B = (0, 3)
     val PRIMEB = (2, 3)
-    def reward(state:gridWorldState, action:Action):(gridWorldState, gridWorldReward) = {
+    override def reward(state:gridWorldState, action:Action):(gridWorldState, Double) = {
       val r = (action, (state.x, state.y)) match  {
         case (_, A) => (PRIMEA, 10)
         case (_, B) => (PRIMEB, 5)
@@ -78,7 +78,7 @@ object GridWorldMDP extends App{
         case (West, b) => ((b._1, b._2 - 1), 0)
         case (_, _) => ((state.x, state.y), 0)
       }
-      (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
+      (new gridWorldState(r._1._1, r._1._2), r._2)
     }
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig, gridWorldState] {
@@ -89,7 +89,7 @@ object GridWorldMDP extends App{
 
         //bellman equation
         val newStates = states.map(state => state.availableActions
-          .foldLeft(state.value)((a, b) => (a + config.getActionProb * (config.getPolicy.reward(state, b) + config.getDiscount * resultState(state.x, state.y).value))))
+          .foldLeft(state.value)((a, b) => (a + config.getActionProb * (config.getPolicy.reward(state, b)._2 + config.getDiscount * resultState(state.x, state.y).value))))
         resultState.map(a => a.value = newStates(a.x, a.y))
       }
       resultState

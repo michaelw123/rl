@@ -40,7 +40,7 @@ object MDP {
     def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T, S]):DenseMatrix[S]
   }
   trait Policy[S, A]{
-    def reward(state:S, action:A):Double
+    def reward(state:S, action:A):(S, Double)
   }
 
   trait Algorithm[T, S] {
