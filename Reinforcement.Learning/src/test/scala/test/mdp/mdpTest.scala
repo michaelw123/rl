@@ -43,7 +43,7 @@ object mdpTest extends App{
     .setActionProb(0.25)
     .setDiscount(0.9)
     .setPolicy(gridWorldPolicy)
-    .setEpisodes(100)
+    .setEpisodes(1000)
 
   gridWorldAgent.setConfig(config)
   val allstates = config.allStates
