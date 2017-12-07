@@ -58,13 +58,14 @@ object GridWorldMDP extends App{
     def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
   }
 
-  object gridWorldPolicy extends StochasticPolicy[gridWorldState, Action] {
-    def pi(state:gridWorldState, action:Action):Double = 0
+  object gridWorldPolicy extends Policy[gridWorldState, Action] {
+    def reward(state:gridWorldState, action:Action):Double = 0
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
     def run(config:BellmanConfig) = {
       val states = config.allStates
-      val policy = config.getPolicy
+      val rewardFun = config.getPolicy.reward
+    states.map(state => policy.reward)
 
       states.toArray.foreach { state =>
         state.value = state.availableActions.foldLeft(state.value)((a,b) =>  a + config.getActionProb * (b + config.getDiscount * states(a.x).value))
@@ -77,7 +78,7 @@ object GridWorldMDP extends App{
     private var Y=0
      private var actionProb=0.0
      private var discount=0.0
-     private var policy = (None : Option[Policy]).orNull
+     private var policy = (None : Option[Policy[gridWorldState, Action]]).orNull
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
     }
@@ -98,11 +99,11 @@ object GridWorldMDP extends App{
        discount = value
        this
      }
-     def setPolicy(value:Policy) = {
+     def setPolicy(value:Policy[gridWorldState, Action]) = {
        policy = value
        this
      }
-     def getPolicy = policy
+     def getPolicy:Policy[gridWorldState, Action] = policy
      def getDiscount = discount
     def getActionProb =  actionProb
     def getX= X

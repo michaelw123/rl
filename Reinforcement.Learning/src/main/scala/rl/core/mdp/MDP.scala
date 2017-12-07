@@ -39,12 +39,8 @@ object MDP {
     def decision(state:S, action:A):(S, R)
     def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]):Unit
   }
-  trait Policy
-  trait DeterministicPolicy[S, A] extends Policy {
-    def pi(state:S):A
-  }
-  trait  StochasticPolicy[S, A] extends Policy {
-    def pi(state:S, action:A):Double
+  trait Policy[S, A]{
+    def reward(state:S, action:A):Double
   }
 
   trait Algorithm[T] {
