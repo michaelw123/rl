@@ -50,7 +50,7 @@ object GridWorldMDP extends App{
 
   class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldValue, gridWorldReward, gridWorldState] {
     override def availableActions:Seq[Action] = gridWorldAgent.allActions
-    override def value:gridWorldValue = 0.0
+    override def value:Double = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
   object gridWorldState{
@@ -63,12 +63,13 @@ object GridWorldMDP extends App{
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
     def run(config:BellmanConfig) = {
-      val states = config.allStates
-      val rewardFun = config.getPolicy.reward
-    states.map(state => policy.reward)
+      var prevStates = config.allStates
+      for (i <- 0 until config.getEpisodes) {
+        val states = config.allStates
 
-      states.toArray.foreach { state =>
-        state.value = state.availableActions.foldLeft(state.value)((a,b) =>  a + config.getActionProb * (b + config.getDiscount * states(a.x).value))
+        //bellman equation
+        val newStates = states.map(state => state.availableActions
+          .foldLeft(state.value)((a, b) => (a + config.getActionProb * (config.getPolicy.reward(state, b) + config.getDiscount * state.value))))
       }
 
     }
@@ -79,6 +80,7 @@ object GridWorldMDP extends App{
      private var actionProb=0.0
      private var discount=0.0
      private var policy = (None : Option[Policy[gridWorldState, Action]]).orNull
+     private var episodes = 0
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
     }
@@ -91,18 +93,23 @@ object GridWorldMDP extends App{
       Y=value
       this
     }
-     def setActionProb(value:Double) {
+     def setActionProb(value:Double): this.type ={
        actionProb = value
        this
      }
-     def setDiscount(value:Double) {
+     def setDiscount(value:Double): this.type ={
        discount = value
        this
      }
-     def setPolicy(value:Policy[gridWorldState, Action]) = {
+     def setPolicy(value:Policy[gridWorldState, Action]): this.type = {
        policy = value
        this
      }
+     def setEpisodes(value:Int ): this.type = {
+       episodes = value
+       this
+     }
+     def getEpisodes = episodes
      def getPolicy:Policy[gridWorldState, Action] = policy
      def getDiscount = discount
     def getActionProb =  actionProb

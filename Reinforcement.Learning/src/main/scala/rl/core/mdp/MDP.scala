@@ -31,8 +31,9 @@ object MDP {
   trait State
 
   trait Stateable[A, V, R, S]{
+    type VV = Double
     def availableActions:Seq[A]
-    def value:V
+    def value:VV
     def apply(action:A):(S, R)
   }
   trait Agent[S, A, R, V] {

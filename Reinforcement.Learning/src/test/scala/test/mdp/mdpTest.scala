@@ -37,12 +37,13 @@ object mdpTest extends App{
   }
   println(aa)
   println(qq)
-  val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
-  println(p)
+  //val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
+ // println(p)
   val config = (new BellmanConfig)
     .setX(10)
     .setY(20)
     .setPolicy(gridWorldPolicy)
+    .setEpisodes(100)
 
   gridWorldAgent.setConfig(config)
   val allstates = config.allStates
