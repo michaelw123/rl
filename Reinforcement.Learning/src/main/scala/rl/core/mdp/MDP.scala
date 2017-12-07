@@ -37,14 +37,14 @@ object MDP {
   }
   trait Agent[S, A, R, V] {
     def decision(state:S, action:A):(S, R)
-    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T]):DenseMatrix[S]
+    def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T, S]):DenseMatrix[S]
   }
   trait Policy[S, A]{
     def reward(state:S, action:A):Double
   }
 
-  trait Algorithm[T] {
-    def run[S](config:T):DenseMatrix[S]
+  trait Algorithm[T, S] {
+    def run(config:T):DenseMatrix[S]
   }
   trait MDPConfiguration
 
