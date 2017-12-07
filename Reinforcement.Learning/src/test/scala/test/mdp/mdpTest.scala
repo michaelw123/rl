@@ -20,8 +20,7 @@
  */
 package test.mdp
 
-import rl.mdp.GridWorldMDP.{BellmanConfig, _}
-import breeze.linalg._
+import rl.mdp.GridWorldMDP._
 
 /**
   * Created by Michael Wang on 12/06/2017.
@@ -37,8 +36,7 @@ object mdpTest extends App{
   }
   println(aa)
   println(qq)
-  //val p = gridWorldPolicy.pi(new gridWorldState(0,1), North)
- // println(p)
+  
   val config = (new BellmanConfig)
     .setX(5)
     .setY(5)
