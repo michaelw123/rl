@@ -57,5 +57,5 @@ object mdpTest extends App{
 
   println(config.getX, config.getY)
 
-  val result:DenseMatrix[gridWorldState] = gridWorldAgent.runAlgorithm(config)
+  val result = gridWorldAgent.runAlgorithm(config)
 }
