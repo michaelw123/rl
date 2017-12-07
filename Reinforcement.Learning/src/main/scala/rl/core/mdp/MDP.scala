@@ -44,7 +44,7 @@ object MDP {
   }
 
   trait Algorithm[T] {
-    def run(config:T):DenseMatrix[_]
+    def run[S](config:T):DenseMatrix[S]
   }
   trait MDPConfiguration
 

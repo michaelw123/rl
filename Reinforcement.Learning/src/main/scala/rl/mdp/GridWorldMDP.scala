@@ -62,7 +62,7 @@ object GridWorldMDP extends App{
     def reward(state:gridWorldState, action:Action):Double = 0
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig] {
-    def run (config:BellmanConfig): DenseMatrix[gridWorldState]= {
+    def run[S] (config:BellmanConfig): DenseMatrix[S]= {
       val resultState:DenseMatrix[gridWorldState] = config.allStates
       for (i <- 0 until config.getEpisodes) {
         val states = config.allStates
@@ -147,7 +147,7 @@ object GridWorldMDP extends App{
       (new gridWorldState(r._1._1, r._1._2), new gridWorldReward(r._2))
     }
 
-    def runAlgorithm[T](config:T) (implicit algo:Algorithm[T]) ={
+    def runAlgorithm[T](config:T) (implicit algo:Algorithm[T]):DenseMatrix[gridWorldState] ={
       algo.run(config)
     }
     def allActions = config.allActions
