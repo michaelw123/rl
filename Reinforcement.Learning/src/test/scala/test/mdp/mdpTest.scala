@@ -52,9 +52,6 @@ object mdpTest extends App{
   val aState = new gridWorldState(2, 4)
   println(aState.availableActions)
 
-  val aDecision = gridWorldAgent.decision(aState, South)
-  println(aDecision._1.x, aDecision._1.y, aDecision._2.reward)
-
   println(config.getX, config.getY)
 
   val result = gridWorldAgent.runAlgorithm(config)

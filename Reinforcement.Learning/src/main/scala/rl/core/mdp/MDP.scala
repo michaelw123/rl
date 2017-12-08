@@ -36,7 +36,6 @@ object MDP {
     def apply(action:A):(S, R)
   }
   trait Agent[S, A, R, V] {
-    def decision(state:S, action:A):(S, R)
     def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T, S]):DenseMatrix[S]
   }
   trait Policy[S, A, C]{
