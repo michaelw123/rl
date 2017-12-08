@@ -49,7 +49,6 @@ object GridWorldMDP extends App{
   }
 
   class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, Double, gridWorldReward, gridWorldState] {
-    override def availableActions:Seq[Action] = gridWorldAgent.allActions
     var value:Double = 0.0
     override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
   }
@@ -82,6 +81,8 @@ object GridWorldMDP extends App{
       }
       (new gridWorldState(r._1._1, r._1._2), r._2)
     }
+    def getAvailableActions(state:gridWorldState):Seq[Action] = Seq(North, East, South, West)
+
   }
   implicit object hellmanAlgorithm extends Algorithm[BellmanConfig, gridWorldState] {
     def run(config:BellmanConfig): DenseMatrix[gridWorldState]= {
@@ -90,7 +91,7 @@ object GridWorldMDP extends App{
         val states = config.allStates
 
         //bellman equation
-        val newStates = states.map(state => state.availableActions.foldLeft(state.value)((a, b) => {
+        val newStates = states.map(state => config.getPolicy.getAvailableActions(state).foldLeft(state.value)((a, b) => {
             val (nextState, reward)  = config.getPolicy.reward(state, b, config)
             (a + config.getActionProb * (reward + config.getDiscount * resultState(nextState.x, nextState.y).value))
           }))
@@ -104,7 +105,7 @@ object GridWorldMDP extends App{
       val resultState = config.allStates
       for (i <- 0 until config.getEpisodes) {
         //bellman equation
-        val newStates = config.allStates.map(state => max(state.availableActions.map(a => {
+        val newStates = config.allStates.map(state => max( config.getPolicy.getAvailableActions(state).map(a => {
           val (nextState, reward)  = config.getPolicy.reward(state, a, config)
           reward + config.getDiscount * resultState(nextState.x, nextState.y).value
         })))
@@ -169,7 +170,6 @@ object GridWorldMDP extends App{
     def runAlgorithm[T](config:T) (implicit algo:Algorithm[T, gridWorldState]):DenseMatrix[gridWorldState] ={
       algo.run(config)
     }
-    def allActions = config.allActions
   }
 
 }

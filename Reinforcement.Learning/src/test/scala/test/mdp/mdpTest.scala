@@ -51,7 +51,6 @@ object mdpTest extends App{
 
   println(allstates.map(a => (a.x, a.y)))
   val aState = new gridWorldState(2, 4)
-  println(aState.availableActions)
 
   println(config.getX, config.getY)
 

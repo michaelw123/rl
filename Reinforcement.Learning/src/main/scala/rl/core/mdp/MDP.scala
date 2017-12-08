@@ -31,7 +31,6 @@ object MDP {
   trait State
 
   trait Stateable[A, V, R, S]{
-    def availableActions:Seq[A]
     def value:V
     def apply(action:A):(S, R)
   }
@@ -40,6 +39,7 @@ object MDP {
   }
   trait Policy[S, A, C]{
     def reward(state:S, action:A, config:C):(S, Double)
+    def getAvailableActions(state:S):Seq[A]
   }
 
   trait Algorithm[T, S] {
