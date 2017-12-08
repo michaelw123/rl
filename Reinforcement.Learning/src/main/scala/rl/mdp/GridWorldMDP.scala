@@ -102,8 +102,8 @@ object GridWorldMDP extends App{
    class BellmanConfig extends MDPConfiguration {
     private var X=0
     private var Y=0
-     private var actionProb=0.0
-     private var discount=0.0
+     private var actionProb=0.1
+     private var discount=0.9
      private var policy = (None : Option[Policy[gridWorldState, Action, BellmanConfig]]).orNull
      private var episodes = 0
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
@@ -150,10 +150,7 @@ object GridWorldMDP extends App{
     def setConfig(conf:BellmanConfig) = {
       config = conf
       this
-
     }
-
-
     def runAlgorithm[T](config:T) (implicit algo:Algorithm[T, gridWorldState]):DenseMatrix[gridWorldState] ={
       algo.run(config)
     }

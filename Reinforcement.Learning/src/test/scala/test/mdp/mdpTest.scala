@@ -21,6 +21,7 @@
 package test.mdp
 
 import rl.mdp.GridWorldMDP._
+import rl.utils._
 
 /**
   * Created by Michael Wang on 12/06/2017.
@@ -58,9 +59,4 @@ object mdpTest extends App{
 
   println(result.map(a => rounded(3, a.value)))
 
-
-  def rounded(x: Int, n:Double) = {
-    val w = math.pow(10, x)
-    (n * w).toLong.toDouble / w
-  }
 }
