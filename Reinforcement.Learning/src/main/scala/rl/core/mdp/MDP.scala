@@ -26,15 +26,13 @@ import breeze.linalg.DenseMatrix
   */
 object MDP {
   trait Action
-  trait Value
-  trait Reward
   trait State
 
-  trait Stateable[A, V, R, S]{
-    def value:V
-    def apply(action:A):(S, R)
+  trait Stateable[A, S]{
+    def value:Double
+    def apply(action:A):(S, Double)
   }
-  trait Agent[S, A, R, V] {
+  trait Agent[S, V] {
     def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T, S]):DenseMatrix[S]
   }
   trait Policy[S, A, C]{

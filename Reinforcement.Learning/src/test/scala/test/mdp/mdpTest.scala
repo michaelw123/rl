@@ -29,14 +29,6 @@ import rl.utils._
 object mdpTest extends App{
 
   val state = new gridWorldState(0,1)
-  val aa = gridWorldReward(9.0)
-
-  val qq = aa match {
-    case  gridWorldReward(9.1) => "match"
-    case _ => "not match"
-  }
-  println(aa)
-  println(qq)
 
   val config = (new BellmanConfig)
     .setX(10)

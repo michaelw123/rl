@@ -32,25 +32,9 @@ object GridWorldMDP extends App{
   case object South extends Action
   case object West extends Action
 
-  class gridWorldReward(val reward:Double) extends Reward
-  object gridWorldReward {
-    //def lift[T, R](f: (T, T) => R): (Reward[T], Reward[T]) => R = (a, b) => f(a.reward, b.reward)
-    //def apply(r:Double):gridWorldReward = gridWorldReward(r)
-    def apply(r:Double):Double = r
-    def unapply(reward:Double):Option[Double] = if (reward != 0.0) Some(reward) else None
-    implicit def double2Reward(r:Double):gridWorldReward = new gridWorldReward(r)
-  }
-
-  class gridWorldValue(val value:Double) extends Value
-  object gridWorldValue{
-    def apply(v:Double):Double = v
-    def unapply(v:Double):Option[Double] = if (v != 0) Some(v) else None
-    implicit def double2Value(v:Double):gridWorldValue = new gridWorldValue(v)
-  }
-
-  class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, Double, gridWorldReward, gridWorldState] {
+  class gridWorldState(val x:Int, val y:Int) extends State with  Stateable[Action, gridWorldState] {
     var value:Double = 0.0
-    override def apply(action:Action):(gridWorldState, gridWorldReward) = (new gridWorldState(0,0), new gridWorldReward(0.0))
+    override def apply(action:Action):(gridWorldState, Double) = (new gridWorldState(0,0), 0.0)
   }
   object gridWorldState{
     def apply(xx:Int, yy:Int):(Int, Int) = (xx, yy)
@@ -157,7 +141,7 @@ object GridWorldMDP extends App{
     def getX= X
     def getY= Y
   }
-  object gridWorldAgent extends Agent [gridWorldState, Action, gridWorldReward, gridWorldValue] {
+  object gridWorldAgent extends Agent [gridWorldState, Action] {
     var config:BellmanConfig= (None : Option[BellmanConfig]).orNull
     val A = (0, 1)
     val PRIMEA = (4, 1)
