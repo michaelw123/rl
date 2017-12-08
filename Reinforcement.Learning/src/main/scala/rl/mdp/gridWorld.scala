@@ -67,8 +67,8 @@ object gridWorld extends App {
                 policy(West, (x, y)))
     }
     for (i <- 0 until 5000) {
-      bellman
-     // valueIteration
+      //bellman
+     valueIteration
     }
     println(grid.map(a => rounded(3, a.value)))
 

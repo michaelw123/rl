@@ -99,6 +99,21 @@ object GridWorldMDP extends App{
       resultState
     }
   }
+  implicit object OptimalValueIterationAlgorithm extends Algorithm[OptimalValueIterationConfig, gridWorldState]{
+    def run(config: OptimalValueIterationConfig): DenseMatrix[gridWorldState]= {
+      val resultState = config.allStates
+      for (i <- 0 until config.getEpisodes) {
+        //bellman equation
+        val newStates = config.allStates.map(state => max(state.availableActions.map(a => {
+          val (nextState, reward)  = config.getPolicy.reward(state, a, config)
+          reward + config.getDiscount * resultState(nextState.x, nextState.y).value
+        })))
+        resultState.map(a => a.value = newStates(a.x, a.y))
+      }
+      resultState
+    }
+  }
+  class OptimalValueIterationConfig extends BellmanConfig
    class BellmanConfig extends MDPConfiguration {
     private var X=0
     private var Y=0
