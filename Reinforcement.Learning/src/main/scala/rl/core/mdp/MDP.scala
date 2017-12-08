@@ -39,8 +39,8 @@ object MDP {
     def decision(state:S, action:A):(S, R)
     def runAlgorithm[T](config:T) (implicit algorithm:Algorithm[T, S]):DenseMatrix[S]
   }
-  trait Policy[S, A]{
-    def reward(state:S, action:A):(S, Double)
+  trait Policy[S, A, C]{
+    def reward(state:S, action:A, config:C):(S, Double)
   }
 
   trait Algorithm[T, S] {

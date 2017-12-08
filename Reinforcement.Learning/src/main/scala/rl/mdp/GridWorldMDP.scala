@@ -58,21 +58,23 @@ object GridWorldMDP extends App{
     def unapply(state:gridWorldState):Option[(Int, Int)] = Some((state.x,  state.y))
   }
 
-  object gridWorldPolicy extends Policy[gridWorldState, Action] {
+  object gridWorldPolicy extends Policy[gridWorldState, Action, BellmanConfig] {
     //def reward(state:gridWorldState, action:Action):Double = 0
     val A = (0, 1)
     val PRIMEA = (4, 1)
     val B = (0, 3)
     val PRIMEB = (2, 3)
-    override def reward(state:gridWorldState, action:Action):(gridWorldState, Double) = {
+    override def reward(state:gridWorldState, action:Action, config:BellmanConfig):(gridWorldState, Double) = {
+      val Y =  config.getY-1
+      val X = config.getX-1
       val r = (action, (state.x, state.y)) match  {
         case (_, A) => (PRIMEA, 10)
         case (_, B) => (PRIMEB, 5)
         case (North, (0, _)) => ((state.x, state.y), -1)
         case (North, b) => ((b._1 - 1, b._2), 0)
-        case (East, (_, y)) => ((state.x, state.y), -1)
+        case (East, (_, Y)) => ((state.x, state.y), -1)
         case (East, b) => ((b._1, b._2 + 1), 0)
-        case (South, (x, _)) => ((state.x, state.y), -1)
+        case (South, (X, _)) => ((state.x, state.y), -1)
         case (South, b) => ((b._1 + 1, b._2), 0)
         case (West, (_, 0)) => ((state.x, state.y), -1)
         case (West, b) => ((b._1, b._2 - 1), 0)
@@ -89,7 +91,7 @@ object GridWorldMDP extends App{
 
         //bellman equation
         val newStates = states.map(state => state.availableActions.foldLeft(state.value)((a, b) => {
-            val (nextState, reward)  = config.getPolicy.reward(state, b)
+            val (nextState, reward)  = config.getPolicy.reward(state, b, config)
             (a + config.getActionProb * (reward + config.getDiscount * resultState(nextState.x, nextState.y).value))
           }))
         resultState.map(a => a.value = newStates(a.x, a.y))
@@ -102,7 +104,7 @@ object GridWorldMDP extends App{
     private var Y=0
      private var actionProb=0.0
      private var discount=0.0
-     private var policy = (None : Option[Policy[gridWorldState, Action]]).orNull
+     private var policy = (None : Option[Policy[gridWorldState, Action, BellmanConfig]]).orNull
      private var episodes = 0
     def allStates:DenseMatrix[gridWorldState]=DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState(i,j)
@@ -124,7 +126,7 @@ object GridWorldMDP extends App{
        discount = value
        this
      }
-     def setPolicy(value:Policy[gridWorldState, Action]): this.type = {
+     def setPolicy(value:Policy[gridWorldState, Action, BellmanConfig]): this.type = {
        policy = value
        this
      }
@@ -133,7 +135,7 @@ object GridWorldMDP extends App{
        this
      }
      def getEpisodes = episodes
-     def getPolicy:Policy[gridWorldState, Action] = policy
+     def getPolicy:Policy[gridWorldState, Action, BellmanConfig] = policy
      def getDiscount = discount
     def getActionProb =  actionProb
     def getX= X
