@@ -1,4 +1,4 @@
-package rl.experiment.rl.core
+package rl.experiment.rl.mdp.core
 
 import breeze.linalg.DenseMatrix
 //import rl.mdp.GridWorldMDP.{BellmanConfig, gridWorldState}
