@@ -1,4 +1,4 @@
-package rl.experiment.rl.mdp
+package rl.experiment.mdp
 
 /**
   * Created by Michael Wang on 2017-12-09.
@@ -20,15 +20,15 @@ Problem Environment belongs to the Problem that defines state space, etc
 package object core {
   trait Action
   trait State {
-    type I = (Int, Int)
+    type I
     val id:I
     var value:Double
   }
 
   trait Agent[S, E] {
-    def value(state:S) (implicit vf:ValueFunction[E, S], env:E):Double = vf.value(env, state)
+    def run(state:S) (implicit policy;T):Double = vf.value(env, state)
   }
-  trait Policy[S, A, E]{
+  trait Policy[S, A]{
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
   }

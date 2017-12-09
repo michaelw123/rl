@@ -1,4 +1,4 @@
-package rl.experiment.rl.mdp.core
+package rl.experiment.mdp.core
 
 import breeze.linalg.DenseMatrix
 //import rl.mdp.GridWorldMDP.{BellmanConfig, gridWorldState}
@@ -9,7 +9,7 @@ import breeze.linalg.DenseMatrix
   */
 
 object ValueFunction {
-  class BellmanConfig extends Environment[Action, State, DenseMatrix[_]] {
+  object BellmanConfig extends Environment[Action, State, DenseMatrix[_]] {
 
     val allStates:DenseMatrix[State] = DenseMatrix.zeros[State](X, Y)
     val allActions:Seq[Action]=Seq(???)
@@ -46,7 +46,7 @@ object ValueFunction {
     def getX= X
     def getY= Y
   }
-  object Bellman extends ValueFunction[BellmanConfig, State] {
-    def value(config:BellmanConfig, state:State):Double = 0
-  }
+//  object Bellman extends ValueFunction[BellmanConfig, State] {
+//    def value(config:BellmanConfig, state:State):Double = 0
+//  }
 }
