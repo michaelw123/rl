@@ -11,9 +11,9 @@ object GridWorld {
   case object South extends Action
   case object West extends Action
 
-  trait gridWorldPolicy extends Policy[State, Action] {
-    def reward(state:State, action:Action):(State, Double)
-    def availableActions(state: gridWorldState): Seq[Action] = Seq(North, East, South, West)
+  object gridWorldPolicy extends Policy[gridWorldState, Action] {
+    override def reward(state:gridWorldState, action:Action):(State, Double) = ???
+    override def availableActions(state: gridWorldState): Seq[Action] = Seq(North, East, South, West)
   }
 
   class gridWorldState(val x:Int, val y:Int, val value:Double) extends State {
@@ -22,11 +22,10 @@ object GridWorld {
   }
 
 
-  object gridWorldPolicy
+
 
   object gridWorldAgent extends Agent[State, Action, Policy, DenseMatrix]{
-    val policy:Policy
-    def setPolicy(value:gridWorldPolicy) = policy
+    def setPolicy(value:Policy) = ???
 
   }
 

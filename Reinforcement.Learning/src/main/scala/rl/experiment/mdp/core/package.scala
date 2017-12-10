@@ -25,20 +25,19 @@ package object core {
     val id:I
     var value:Double
   }
-
-  trait Agent[S, A, P, CS[_]] {
-    def run[VF](state:S)(implicit vf:VF):Double
-  }
   trait Policy[S, A]{
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
   }
-
-  trait ValueFunction[S, CS[_]] {
-    def observe(state:S):CS[S]
-  }
   trait Environment[A, S, CS[_]] {
     val allStates:CS[S]
     val allActions:Seq[A]
+  }
+  trait Agent[S, A, P, CS[_]] {
+    def observe[VF](state:S)(implicit vf:VF):CS[S]
+  }
+
+  trait ValueFunction[S, CS[_]] {
+    def value(state:S):CS[S]
   }
 }
