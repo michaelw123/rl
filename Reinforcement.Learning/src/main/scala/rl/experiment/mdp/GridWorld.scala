@@ -24,7 +24,10 @@ object GridWorld {
 
   object gridWorldPolicy
 
-  object gridWorldAgent extends Agent
+  object gridWorldAgent extends Agent[State, Action]{
+
+
+  }
 
 
 }

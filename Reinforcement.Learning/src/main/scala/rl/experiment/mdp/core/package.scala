@@ -9,6 +9,7 @@ S: State
 E: Environment
 A: Action
 CS: Container of States, most likely, DenseVector or DenseMatrix from breeze
+VF: ValueFunction
 For simplicity, reward and value are Double, and the container of actions are Seq
 The id of the state depends on the container used, for instance, (Int, Int) for matrix, Int for scalar container
 Note: policy/action/state belong to problems to be solved, such as GridWorld problem, while a value function belongs to an algorithm, such as Bellman
@@ -25,8 +26,8 @@ package object core {
     var value:Double
   }
 
-  trait Agent[S, E] {
-    def run(state:S) (implicit policy;T):CS[State] = vf.value(env, state)
+  trait Agent[S, A, P, CS[_]] {
+    def run[VF](state:S)(implicit vf:VF):Double
   }
   trait Policy[S, A]{
     def reward(state:S, action:A):(S, Double)
