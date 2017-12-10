@@ -25,7 +25,7 @@ object ValueFunction {
     def getDiscount = discount
 
 
-    override def value(state:State):DenseMatrix[State] = ???
+    override def observe(state:State):DenseMatrix[State] = ???
   }
 
 }

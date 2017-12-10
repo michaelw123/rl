@@ -1,5 +1,6 @@
 package rl.experiment.mdp
 
+import breeze.linalg.DenseMatrix
 import rl.experiment.mdp.core._
 /**
   * Created by MichaelXiaoqun on 2017-12-09.
@@ -20,12 +21,12 @@ object GridWorld {
     val id:I = (x, y)
   }
 
-  def setPolicy(value:gridWorldPolicy) = policy
 
   object gridWorldPolicy
 
-  object gridWorldAgent extends Agent[State, Action]{
-
+  object gridWorldAgent extends Agent[State, Action, Policy, DenseMatrix]{
+    val policy:Policy
+    def setPolicy(value:gridWorldPolicy) = policy
 
   }
 

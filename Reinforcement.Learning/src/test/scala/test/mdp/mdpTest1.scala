@@ -15,8 +15,9 @@ object mdpTest1 extends App {
 
   DenseMatrix[GrisWorldState] result = gridWorldAgent
    .setValueFunctions(Bellman)
+    .setPolicy(gridWorldPolicy)
     .setEpoch(100)
-    .run
+    .fit
 
   println(result)
 

@@ -35,7 +35,7 @@ package object core {
   }
 
   trait ValueFunction[S, CS[_]] {
-    def value(state:S):CS[S]
+    def observe(state:S):CS[S]
   }
   trait Environment[A, S, CS[_]] {
     val allStates:CS[S]
