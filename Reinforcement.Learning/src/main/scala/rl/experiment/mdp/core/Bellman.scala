@@ -9,7 +9,7 @@ import breeze.linalg.DenseMatrix
   */
 
 object ValueFunction {
-  object BellmanConfig extends Environment[Action, State, DenseMatrix[_]] {
+  implicit object Bellman extends ValueFunction[State, DenseMatrix[_]] {
 
     val allStates:DenseMatrix[State] = DenseMatrix.zeros[State](X, Y)
     val allActions:Seq[Action]=Seq(???)
@@ -45,8 +45,8 @@ object ValueFunction {
     def getActionProb =  actionProb
     def getX= X
     def getY= Y
+
+    override def value(state:State):DenseMatrix[State] = ???
   }
-//  object Bellman extends ValueFunction[BellmanConfig, State] {
-//    def value(config:BellmanConfig, state:State):Double = 0
-//  }
+
 }

@@ -26,15 +26,15 @@ package object core {
   }
 
   trait Agent[S, E] {
-    def run(state:S) (implicit policy;T):Double = vf.value(env, state)
+    def run(state:S) (implicit policy;T):CS[State] = vf.value(env, state)
   }
   trait Policy[S, A]{
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
   }
 
-  trait ValueFunction[E, S] {
-    def value(env:E, state:S):Double
+  trait ValueFunction[S, CS[_]] {
+    def value(state:S):CS[S]
   }
   trait Environment[A, S, CS[_]] {
     val allStates:CS[S]
