@@ -25,16 +25,15 @@ object GridWorld {
   }
 
   class gridWorldState(val id:(Int, Int), var value:Double) extends State
-  
-  class gridWorldAgent extends Agent[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[_], Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[_]]]{
+
+  object gridWorldAgent extends Agent[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState], Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState]]]{
     private var policy:gridWorldPolicy = ???
     def setPolicy(value:gridWorldPolicy):this.type = {
       policy=value
       this
     }
     private var env:Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState]] = ???
-    //private var vf:ValueFunction = ???
-    override def observe[VF <: ValueFunction](state: gridWorldState)(implicit vf:VF): DenseMatrix[gridWorldState] = {
+    override def observe[VF <: ValueFunction](implicit vf:VF): DenseMatrix[gridWorldState] = {
       val allStates =env.allStates
       allStates.map(state => {
         state.value = policy.availableActions(state)

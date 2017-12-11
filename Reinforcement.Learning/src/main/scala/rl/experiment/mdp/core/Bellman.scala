@@ -8,7 +8,7 @@ import breeze.linalg.DenseMatrix
   * Created by MichaelXiaoqun on 2017-12-09.
   */
 
-object ValueFunction {
+
   object Bellman extends ValueFunction {
     private var discount = 0.0
     override def setDiscount(value:Double): this.type ={
@@ -32,4 +32,4 @@ object ValueFunction {
     }
   }
 
-}
+

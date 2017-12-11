@@ -1,6 +1,6 @@
 package test.mdp
 
-import rl.experiment.mdp.GridWorld
+import rl.experiment.mdp.GridWorld._
 import rl.experiment.mdp.core._
 import rl.experiment.mdp.core.ValueFunction.Bellman
 
@@ -10,11 +10,7 @@ import rl.experiment.mdp.core.ValueFunction.Bellman
 object mdpTest1 extends App {
 
 
-  val result = gridWorldAgent
-   .setValueFunctions(Bellman)
-    .setPolicy(gridWorldPolicy)
-    .setEpoch(100)
-    .fit
+  val result = gridWorldAgent.observe
 
   println(result)
 
