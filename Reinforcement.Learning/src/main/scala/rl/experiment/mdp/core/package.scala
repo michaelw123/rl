@@ -29,7 +29,7 @@ package object core {
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
   }
-  trait Environment[A, S, P, CS[_]] {
+  trait Environment[A, S, P, CS[S]] {
     val allStates:CS[S]
     val allActions:Seq[A]
     def reward(state:S, action:A)(implicit policy:P):Double
