@@ -37,8 +37,9 @@ object GridWorld {
       policy=value
       this
     }
-    private var env:Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[_]] = ???
-    override def observe[VF](state: gridWorldState)(implicit vf: ValueFunction): DenseMatrix[gridWorldState] = {
+    private var env:Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState]] = ???
+    private var vf:ValueFunction = ???
+    override def observe[VF](state: gridWorldState): DenseMatrix[gridWorldState] = {
       val allStates =env.allStates
       val actions = policy.availableActions(state)
       val (nextState, reward) = policy.reward(state, North)
