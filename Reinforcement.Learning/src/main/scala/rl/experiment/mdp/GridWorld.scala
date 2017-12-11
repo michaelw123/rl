@@ -29,10 +29,13 @@ object GridWorld {
 
 
 
-  object gridWorldAgent extends Agent[gridWorldState, gridWorldAction, gridWorldPolicy, DenseMatrix]{
+  object gridWorldAgent extends Agent[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[_], Environment[A, S, P, CS[S]], VF]{
+
     def setPolicy(value:gridWorldPolicy) = ???
 
-    override def observe[VF](state: gridWorldState)(implicit vf: VF): DenseMatrix[gridWorldState] = ???
+    override def observe[VF](state: gridWorldState)(implicit vf: VF): DenseMatrix[gridWorldState] = {
+
+    }
 
   }
 
