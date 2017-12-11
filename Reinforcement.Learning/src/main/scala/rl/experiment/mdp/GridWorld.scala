@@ -24,14 +24,8 @@ object GridWorld {
     override def getActionProb(action:gridWorldAction):Double = 0.25
   }
 
-  class gridWorldState(val x:Int, val y:Int, var value:Double) extends State {
-    type I = (Int, Int)
-    val id:I = (x, y)
-  }
-
-
-
-
+  class gridWorldState(val id:(Int, Int), var value:Double) extends State
+  
   class gridWorldAgent extends Agent[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[_], Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[_]]]{
     private var policy:gridWorldPolicy = ???
     def setPolicy(value:gridWorldPolicy):this.type = {
