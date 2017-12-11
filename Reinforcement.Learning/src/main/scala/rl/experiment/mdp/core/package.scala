@@ -28,6 +28,7 @@ package object core {
   trait Policy[S, A]{
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
+    def getActionProb(action:A):Double
   }
   trait Environment[A, S, P, CS[S]] {
     val allStates:CS[S]

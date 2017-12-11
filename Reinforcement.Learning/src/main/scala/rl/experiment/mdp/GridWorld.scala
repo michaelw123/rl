@@ -41,10 +41,16 @@ object GridWorld {
     private var vf:ValueFunction = ???
     override def observe[VF](state: gridWorldState): DenseMatrix[gridWorldState] = {
       val allStates =env.allStates
-      val actions = policy.availableActions(state)
-      val (nextState, reward) = policy.reward(state, North)
-      val value = vf.value(state.value, nextState.value, reward, 0.25)
-      state.value = value
+      allStates.map(state => {
+        val actions = policy.availableActions(state)
+        val value = actions.foldLeft(state.value)((a, b) => {
+          val (nextState, reward) = policy.reward(state, b)
+          val actionProb = policy.getActionProb(b)
+          val value = vf.value(state.value, nextState.value, reward, actionProb)
+          value
+        })
+        state.value = value
+      })
       allStates
 
     }
