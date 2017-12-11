@@ -35,8 +35,8 @@ package object core {
     val allActions:Seq[A]
     def reward(state:S, action:A)(implicit policy:P):Double
   }
-  trait Agent[A, S, P, CS[_], E[A, S, P, CS[S]], VF] {
-    def observe[VF](state:S):CS[S]
+  trait Agent[A, S, P, CS[_], E[A, S, P, CS[S]]] {
+    def observe[VF <: ValueFunction](state:S)(implicit vf: VF):CS[S]
   }
 
   trait ValueFunction{
