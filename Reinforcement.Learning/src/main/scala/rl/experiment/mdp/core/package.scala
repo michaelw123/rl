@@ -29,15 +29,18 @@ package object core {
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
   }
-  trait Environment[A, S, CS[_]] {
+  trait Environment[A, S, P, CS[_]] {
     val allStates:CS[S]
     val allActions:Seq[A]
+    def reward(state:S, action:A)(implicit policy:P):Double
   }
-  trait Agent[S, A, P, CS[_]] {
+  trait Agent[A, S, P, CS[_], E[A, S, P, CS[S]], VF] {
     def observe[VF](state:S)(implicit vf:VF):CS[S]
   }
 
-  trait ValueFunction[S, CS[_]] {
-    def value(state:S):CS[S]
+  trait ValueFunction{
+    def setDiscount(value:Double): this.type
+    def getDiscount:Double
+    def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
   }
 }

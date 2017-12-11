@@ -9,23 +9,27 @@ import breeze.linalg.DenseMatrix
   */
 
 object ValueFunction {
-  implicit object Bellman extends ValueFunction[State, DenseMatrix[_]] {
-
-    val allStates:DenseMatrix[State] = DenseMatrix.zeros[State](X, Y)
-    val allActions:Seq[Action]=Seq(???)
-
-
-    private var discount=0.9
-
-    def setDiscount(value:Double): this.type ={
+  object Bellman extends ValueFunction {
+    private var discount = 0.0
+    override def setDiscount(value:Double): this.type ={
       discount = value
       this
     }
-
-    def getDiscount = discount
-
-
-    override def value(state:State):DenseMatrix[State] = ???
+    override def getDiscount = discount
+    override def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double = {
+      (statevalue + prob * (reward + discount * nextStateValue))
+    }
+  }
+  object optimalValueIteration extends ValueFunction {
+    private var discount = 0.0
+    override def setDiscount(value:Double): this.type ={
+      discount = value
+      this
+    }
+    override def getDiscount = discount
+    override def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double = {
+      reward + discount * nextStateValue
+    }
   }
 
 }

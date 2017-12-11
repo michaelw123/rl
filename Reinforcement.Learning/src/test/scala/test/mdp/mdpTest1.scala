@@ -9,11 +9,8 @@ import rl.experiment.mdp.core.ValueFunction.Bellman
   */
 object mdpTest1 extends App {
 
-  implicit object gridWorldPolicy {
 
-  }
-
-  DenseMatrix[GrisWorldState] result = gridWorldAgent
+  val result = gridWorldAgent
    .setValueFunctions(Bellman)
     .setPolicy(gridWorldPolicy)
     .setEpoch(100)
