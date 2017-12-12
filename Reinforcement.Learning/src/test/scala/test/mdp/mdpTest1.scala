@@ -20,10 +20,10 @@ object mdpTest1 extends App {
 //    val allActions:Seq[gridWorldAction] = Seq(North, East, South, West)
 //  }
   implicit object gridWorldEnv extends Environment[ gridWorldAction, gridWorldState]{
-    val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
+    def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
            (i,j) => new gridWorldState((i,j), 0.0)
     }
-    val allActions:Seq[gridWorldAction]= Seq(North, East, South, West)
+    def allActions:Seq[gridWorldAction]= Seq(North, East, South, West)
   }
   implicit val policy:gridWorldPolicy = new gridWorldPolicy {
     override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = {

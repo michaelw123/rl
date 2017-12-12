@@ -33,8 +33,8 @@ package object core {
     def getActionProb(action:A):Double
   }
   trait Environment[A, S] {
-    val stateSpace:DenseMatrix[S]
-    val allActions:Seq[A]
+    def stateSpace:DenseMatrix[S]
+    def allActions:Seq[A]
   }
   trait Agent[A, S] {
     //def setEnvironment(env:Environment[A, S, CS[S]]):this.type

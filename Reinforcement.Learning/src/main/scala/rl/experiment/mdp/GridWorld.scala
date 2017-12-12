@@ -54,7 +54,8 @@ object GridWorld {
           var resultState:DenseMatrix[gridWorldState] =env.stateSpace
           val newStates = env.stateSpace
           for (i <- 0 until epoch) {
-            newStates.map(state => state.value=0.0)
+            val newStates = env.stateSpace
+            //newStates.map(state => state.value=0.0)
             newStates.map(state => {
               state.value = policy.availableActions(state)
                 .foldLeft(state.value)((a, b) => {
