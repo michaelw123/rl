@@ -43,6 +43,14 @@ object ValueFunctions {
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       (statevalue + prob * (reward + discount * nextStateValue))
     }
+    override def value[S <: State, P <:Policy[S, _]] (state:S)(implicit policy:P):Double = {
+      val actions = policy.availableActions(state)
+      actions.foldLeft(state.value)((a,b) =>
+        val (nextState, reward) = policy.reward(state, b)
+        val actionProb = policy.getActionProb(b)
+        vf.value(a, resultState(nextState.id).value, reward, actionProb)
+      )
+    }
   }
 
   implicit object optimalValueIteration extends ValueFunction {
@@ -57,6 +65,9 @@ object ValueFunctions {
 
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       reward + discount * nextStateValue
+    }
+    override def value[S, P] (state:S)(implicit policy:P):Double = {
+      policy.availableActions
     }
   }
 

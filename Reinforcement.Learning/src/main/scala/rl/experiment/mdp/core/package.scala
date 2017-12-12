@@ -66,5 +66,6 @@ package object core {
     def setDiscount(value:Double): this.type
     def getDiscount:Double
     def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
+    def value[S, P](state:S)(implicit policy:P)
   }
 }
