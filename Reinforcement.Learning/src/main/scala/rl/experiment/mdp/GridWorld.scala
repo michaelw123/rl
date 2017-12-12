@@ -1,9 +1,7 @@
 package rl.experiment.mdp
 
 import breeze.linalg.DenseMatrix
-import rl.experiment.mdp.GridWorld.gridWorldAction.North
-import rl.experiment.mdp.GridWorld.gridWorldPolicy
-import rl.experiment.mdp.core._
+import rl.experiment.mdp.core.{Environment, _}
 /**
   * Created by MichaelXiaoqun on 2017-12-09.
   */
@@ -19,22 +17,21 @@ object GridWorld {
 
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
-    override def reward(state:gridWorldState, action:gridWorldAction):(State, Double) = ???
+    override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = ???
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(North, East, South, West)
-    override def getActionProb(action:gridWorldAction):Double = 0.25
+    override def getActionProb(action:gridWorldAction):Double = ???
   }
 
   class gridWorldState(val id:(Int, Int), var value:Double) extends State
 
-  object gridWorldAgent extends Agent[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState], Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState]]]{
-    private var policy:gridWorldPolicy = ???
-    def setPolicy(value:gridWorldPolicy):this.type = {
-      policy=value
-      this
-    }
-    private var env:Environment[gridWorldAction, gridWorldState, gridWorldPolicy, DenseMatrix[gridWorldState]] = ???
-    override def observe[VF <: ValueFunction](implicit vf:VF): DenseMatrix[gridWorldState] = {
-      val allStates =env.allStates
+  object gridWorldAgent extends Agent[gridWorldAction, gridWorldState]{
+    //private var env:Environment[gridWorldAction, gridWorldState, DenseMatrix[gridWorldState]] = ???
+//     def setEnvironment(value: Environment[gridWorldAction, gridWorldState, DenseMatrix[gridWorldState]]):this.type = {
+//      env = value
+//      this
+//    }
+    override def observe[VF <: ValueFunction, P <:Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldAction, gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+      val allStates:DenseMatrix[gridWorldState] =env.stateSpace
       allStates.map(state => {
         state.value = policy.availableActions(state)
           .foldLeft(state.value)((a, b) => {

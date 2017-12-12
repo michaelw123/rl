@@ -1,5 +1,8 @@
 package rl.experiment.mdp
 
+import breeze.linalg.DenseMatrix
+import rl.experiment.mdp.core.Policy
+
 /**
   * Created by Michael Wang on 2017-12-09.
   */
@@ -30,13 +33,13 @@ package object core {
     def availableActions(state:S):Seq[A]
     def getActionProb(action:A):Double
   }
-  trait Environment[A, S, P, CS[S]] {
-    val allStates:CS[S]
+  trait Environment[A, S] {
+    val stateSpace:DenseMatrix[S]
     val allActions:Seq[A]
-    def reward(state:S, action:A)(implicit policy:P):Double
   }
-  trait Agent[A, S, P, CS[S], E[A, S, P, CS[S]]] {
-    def observe[VF <: ValueFunction](implicit vf: VF):CS[S]
+  trait Agent[A, S] {
+    //def setEnvironment(env:Environment[A, S, CS[S]]):this.type
+    def observe[VF <: ValueFunction,  P <:Policy[A, S],  E <: Environment[A, S]](implicit vf: VF, policy:P, env:E):DenseMatrix[S]
   }
 
   trait ValueFunction{
