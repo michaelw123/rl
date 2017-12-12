@@ -21,7 +21,7 @@ object mdpTest1 extends App {
 //  }
   implicit object gridWorldEnv extends Environment[ gridWorldAction, gridWorldState]{
     val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
-           (i,j) => new gridWorldState((i,j), 0)
+           (i,j) => new gridWorldState((i,j), 0.0)
     }
     val allActions:Seq[gridWorldAction]= Seq(North, East, South, West)
   }
@@ -51,7 +51,7 @@ object mdpTest1 extends App {
   }
   import rl.experiment.mdp.core.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
-  val result = gridWorldAgent.setEpoch(100).observe
+  val result = gridWorldAgent.setEpoch(1000).observe
 
 
   println(result.map(a => rounded(3, a.value)))

@@ -31,8 +31,8 @@ object mdpTest extends App{
   val state = new gridWorldState(0,1)
 
   val config = (new BellmanConfig)
-    .setX(10)
-    .setY(10)
+    .setX(5)
+    .setY(5)
     .setActionProb(0.25)
     .setDiscount(0.9)
     .setPolicy(gridWorldPolicy)
@@ -50,15 +50,15 @@ object mdpTest extends App{
 
   println(result.map(a => rounded(3, a.value)))
 
-  val configVI = (new OptimalValueIterationConfig)
-    .setX(5)
-    .setY(5)
-    .setDiscount(0.9)
-    .setPolicy(gridWorldPolicy)
-    .setEpisodes(1000)
-  gridWorldAgent.setConfig(configVI)
-  val resultVi = gridWorldAgent.runAlgorithm(configVI)
-
-  println(resultVi.map(a => rounded(3, a.value)))
+//  val configVI = (new BellmanConfig)
+//    .setX(5)
+//    .setY(5)
+//    .setDiscount(0.9)
+//    .setPolicy(gridWorldPolicy)
+//    .setEpisodes(1000)
+//  gridWorldAgent.setConfig(configVI)
+//  val resultVi = gridWorldAgent.runAlgorithm(configVI)
+//
+//  println(resultVi.map(a => rounded(3, a.value)))
 
 }
