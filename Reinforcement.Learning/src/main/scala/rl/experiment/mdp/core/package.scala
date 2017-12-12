@@ -38,7 +38,8 @@ package object core {
   }
   trait Agent[A, S] {
     //def setEnvironment(env:Environment[A, S, CS[S]]):this.type
-    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[A, S]](implicit vf: VF, policy:P, env:E):DenseMatrix[S]
+   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[A, S]](implicit vf: VF, policy:P, env:E):DenseMatrix[S]
+   // def test[VF <: ValueFunction, P <: Policy[S, A]](a:A, s:S)(implicit vf:VF, p:P) :Double
   }
 
   trait ValueFunction{

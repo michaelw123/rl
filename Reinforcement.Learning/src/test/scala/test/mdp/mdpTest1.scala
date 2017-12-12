@@ -3,7 +3,7 @@ package test.mdp
 import rl.experiment.mdp.GridWorld.gridWorldAction._
 import rl.experiment.mdp.GridWorld._
 import rl.experiment.mdp.core._
-import rl.experiment.mdp.core.Bellman
+import rl.experiment.mdp.core.ValueFunctions.Bellman
 import breeze.linalg.DenseMatrix
 
 /**
@@ -19,13 +19,13 @@ object mdpTest1 extends App {
 //    }
 //    val allActions:Seq[gridWorldAction] = Seq(North, East, South, West)
 //  }
-  implicit object gridWorldEnv extends Environment[DenseMatrix[gridWorldState], gridWorldAction, gridWorldState]{
+  implicit object gridWorldEnv extends Environment[ gridWorldAction, gridWorldState]{
     val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
            (i,j) => new gridWorldState((i,j), 0)
     }
     val allActions:Seq[gridWorldAction]= Seq(North, East, South, West)
   }
-  val policy:gridWorldPolicy = new gridWorldPolicy {
+  implicit val policy:gridWorldPolicy = new gridWorldPolicy {
     override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = {
       val A = (0, 1)
       val PRIMEA = (4, 1)
@@ -51,7 +51,7 @@ object mdpTest1 extends App {
   val result = gridWorldAgent.observe
 
 
-  println(result)
+  println(result.map(a => a.value))
 
 
 
