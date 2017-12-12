@@ -23,9 +23,8 @@ Problem Environment belongs to the Problem that defines state space, etc
  */
 package object core {
   trait Action
-  trait State {
-    type I
-    val id:I
+  trait State[ID] {
+    val id:ID
     var value:Double
   }
   trait Policy[S, A]{
@@ -39,7 +38,7 @@ package object core {
   }
   trait Agent[A, S] {
     //def setEnvironment(env:Environment[A, S, CS[S]]):this.type
-    def observe[VF <: ValueFunction,  P <:Policy[A, S],  E <: Environment[A, S]](implicit vf: VF, policy:P, env:E):DenseMatrix[S]
+    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[A, S]](implicit vf: VF, policy:P, env:E):DenseMatrix[S]
   }
 
   trait ValueFunction{

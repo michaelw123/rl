@@ -22,7 +22,7 @@ object GridWorld {
     override def getActionProb(action:gridWorldAction):Double = ???
   }
 
-  class gridWorldState(val id:(Int, Int), var value:Double) extends State
+  class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
   object gridWorldAgent extends Agent[gridWorldAction, gridWorldState]{
     //private var env:Environment[gridWorldAction, gridWorldState, DenseMatrix[gridWorldState]] = ???
@@ -30,7 +30,7 @@ object GridWorld {
 //      env = value
 //      this
 //    }
-    override def observe[VF <: ValueFunction, P <:Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldAction, gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+    override def observe[VF <: ValueFunction, P <: gridWorldPolicy, E <: Environment[gridWorldAction, gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
       val allStates:DenseMatrix[gridWorldState] =env.stateSpace
       allStates.map(state => {
         state.value = policy.availableActions(state)
