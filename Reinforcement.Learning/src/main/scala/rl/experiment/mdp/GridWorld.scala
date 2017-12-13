@@ -51,9 +51,11 @@ object GridWorld {
     //      this
     //    }
       override def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[ gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
-          var resultState:DenseMatrix[gridWorldState] =env.stateSpace
-          val newStates = env.stateSpace
+          //var resultState:DenseMatrix[gridWorldState] =env.result
+          //val newStates = env.stateSpace
+          env.setResult(env.stateSpace)
           for (i <- 0 until epoch) {
+            //var resultState:DenseMatrix[gridWorldState] =env.result
             val newStates = env.stateSpace
             //newStates.map(state => state.value=0.0)
             newStates.map(state => {
@@ -61,22 +63,22 @@ object GridWorld {
                 .foldLeft(state.value)((a, b) => {
                   val (nextState, reward) = policy.reward(state, b)
                   val actionProb = policy.getActionProb(b)
-                  vf.value(a, resultState(nextState.id).value, reward, actionProb)
+                  vf.value(a, nextState.value, reward, actionProb)
                 })
             })
-            resultState = newStates
+            env.setResult(newStates)
           }
-      resultState
+      env.result
     }
-     def observe1[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
-      var resultState:DenseMatrix[gridWorldState] =env.stateSpace
-      for (i <- 0 until epoch) {
-        val newStates = env.stateSpace
-        newStates.map(state => state.value = vf.value(state))
-        resultState = newStates
-      }
-      resultState
-    }
+//     def observe1[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+//      var resultState:DenseMatrix[gridWorldState] =env.stateSpace
+//      for (i <- 0 until epoch) {
+//        val newStates = env.stateSpace
+//        newStates.map(state => state.value = vf.value(state)(policy))
+//        resultState = newStates
+//      }
+//      resultState
+//    }
     private var epoch = 10
     def setEpoch(value:Int) : this.type ={
       epoch = value

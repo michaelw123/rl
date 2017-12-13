@@ -54,8 +54,9 @@ package object core {
   }
   trait Environment [S]{
     def stateSpace:DenseMatrix[S]
-    val result:DenseMatrix[S]
+    var result:DenseMatrix[S]
     def allActions:Seq[Action]
+    def setResult(value :DenseMatrix[S]) = result = value
   }
   trait Agent[A, S] {
     //def setEnvironment(env:Environment[A, S, CS[S]]):this.type
@@ -67,7 +68,7 @@ package object core {
     def setDiscount(value:Double): this.type
     def getDiscount:Double
     def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
-    def value[ID, P](state:State[ID])(implicit policy:P):Double
-    def value[ID, P](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit
+   // def value[ID, P](state:State[ID])(implicit policy:P):Double
+    //def value[ID, P](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit
   }
 }
