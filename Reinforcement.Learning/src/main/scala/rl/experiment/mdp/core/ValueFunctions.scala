@@ -50,18 +50,21 @@ object ValueFunctions {
 //        0.0
 //      })
 //    }
-//    override def value[ID, P<:Policy[State[ID], Action]](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit = {
-//      val result = env.result
-//      val newStates = env.stateSpace
-//      newStates.map(state => state.value = {
-//        val actions = policy.availableActions(state)
-//        actions.foldLeft(state.value)((a, b) => {
-//          val (nextState, reward) = policy.reward(state, b)
-//          val actionProb = policy.getActionProb(b)
-//          value(a, nextState.value, reward, actionProb)
-//        })
-//      })
-//    }
+
+    //def value[ID, P](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit
+    override def value[ID, P<:Policy[State[ID], Action]](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit = {
+      val result = env.result
+      val newStates = env.stateSpace
+      newStates.map(state => state.value = {
+        val actions = policy.availableActions(state)
+        actions.foldLeft(state.value)((a, b) => {
+          val (nextState, reward) = policy.reward(state, b)
+          val actionProb = policy.getActionProb(b)
+          value(a, nextState.value, reward, actionProb)
+        })
+      })
+      env.setResult(newStates)
+    }
   }
 
 //  implicit object optimalValueIteration extends ValueFunction {
@@ -80,7 +83,7 @@ object ValueFunctions {
 //    override def value[ID, P <:Policy[State[ID], Action]] (state:State[ID])(implicit policy:P):Unit = {
 //      policy.availableActions(state)
 //    }
-//  }
+ //}
 
 }
 

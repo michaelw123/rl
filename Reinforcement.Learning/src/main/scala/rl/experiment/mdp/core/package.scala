@@ -69,6 +69,6 @@ package object core {
     def getDiscount:Double
     def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
    // def value[ID, P](state:State[ID])(implicit policy:P):Double
-    //def value[ID, P](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit
+    def value[ID, P<:Policy[State[ID], Action]](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit
   }
 }
