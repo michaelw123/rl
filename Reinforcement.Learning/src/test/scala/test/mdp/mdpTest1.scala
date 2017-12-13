@@ -39,9 +39,12 @@ object mdpTest1 extends App {
 //    }
 //    val allActions:Seq[gridWorldAction] = Seq(North, East, South, West)
 //  }
-  implicit object gridWorldEnv extends Environment[ gridWorldAction, gridWorldState]{
+  implicit object gridWorldEnv extends Environment[gridWorldState]{
     def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
            (i,j) => new gridWorldState((i,j), 0.0)
+    }
+    val result:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
+      (i,j) => new gridWorldState((i,j), 0.0)
     }
     def allActions:Seq[gridWorldAction]= Seq(North, East, South, West)
   }

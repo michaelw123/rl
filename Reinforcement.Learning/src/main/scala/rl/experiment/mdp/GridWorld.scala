@@ -50,7 +50,7 @@ object GridWorld {
     //      env = value
     //      this
     //    }
-        override def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldAction, gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+      override def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[ gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
           var resultState:DenseMatrix[gridWorldState] =env.stateSpace
           val newStates = env.stateSpace
           for (i <- 0 until epoch) {
@@ -66,6 +66,15 @@ object GridWorld {
             })
             resultState = newStates
           }
+      resultState
+    }
+     def observe1[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+      var resultState:DenseMatrix[gridWorldState] =env.stateSpace
+      for (i <- 0 until epoch) {
+        val newStates = env.stateSpace
+        newStates.map(state => state.value = vf.value(state))
+        resultState = newStates
+      }
       resultState
     }
     private var epoch = 10
