@@ -23,7 +23,7 @@ package rl.experiment.mdp.core
 import breeze.linalg.DenseMatrix
 //import rl.mdp.GridWorldMDP.{BellmanConfig, gridWorldState}
 
-//import rl.experiment.rl.core.Configuration
+import rl.experiment.mdp.core.State
 /**
   * Created by MichaelXiaoqun on 2017-12-09.
   */
@@ -43,7 +43,7 @@ object ValueFunctions {
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       (statevalue + prob * (reward + discount * nextStateValue))
     }
-    override def value[S <: State, P <:Policy[S, _]] (state:S)(implicit policy:P):Double = {
+    override def value[State, P <:Policy[State, _]] (state:State)(implicit policy:P):Double = {
       val actions = policy.availableActions(state)
       actions.foldLeft(state.value)((a,b) =>
         val (nextState, reward) = policy.reward(state, b)
