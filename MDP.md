@@ -1,6 +1,6 @@
-<h5>Markov Decision Process</h5>
+<h3>Markov Decision Process</h3>
 
-Bellman Equation:
+<h5>Bellman Equation:</h5>
 
 ![Bellman Equation](Reinforcement.Learning/bellman.PNG?raw=true "Bellman Equation")
 
@@ -15,7 +15,7 @@ Bellman Equation:
 -1.857  -1.345  -1.229  -1.422  -1.975
 
 
-Value Iteration:
+<h5>Value Iteration:</h5>
 
 ![Value Iteration](Reinforcement.Learning/valueIteration.PNG?raw=true "Value Iteration")
 
@@ -30,7 +30,7 @@ Value Iteration:
 14.419  16.021  14.419  12.977  11.679
 
 
-Q-learning with learning rate = 0.5
+<h5>Q-learning with learning rate = 0.5</h5>
 
 ![Q-Learning](Reinforcement.Learning/qlearning.PNG?raw=true "Q-Learning")
 
