@@ -50,7 +50,7 @@ package object core {
   trait Policy[S, A]{
     def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
-    def getActionProb(action:A):Double
+    def getActionProb(state:S, action:A):Double
   }
   trait Environment [CS[_], S]{
     def stateSpace:CS[S]

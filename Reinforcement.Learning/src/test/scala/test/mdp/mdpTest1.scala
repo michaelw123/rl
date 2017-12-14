@@ -32,7 +32,7 @@ import rl.utils.rounded
 object mdpTest1 extends App {
   val X = 5
   val Y = 5
-  
+
   implicit object gridWorldEnv extends Environment[DenseMatrix, gridWorldState]{
     def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
            (i,j) => new gridWorldState((i,j), 0.0)
@@ -63,6 +63,7 @@ object mdpTest1 extends App {
       }
       (gridWorldEnv.result(r._1), r._2)
     }
+
   }
 //  import rl.experiment.mdp.core.ValueFunctions.Bellman
 //  Bellman.setDiscount(0.9)
