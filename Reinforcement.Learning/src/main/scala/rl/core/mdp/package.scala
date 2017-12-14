@@ -18,10 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package rl.experiment.mdp
-
-import breeze.linalg.DenseMatrix
-import rl.experiment.mdp.core.{Environment, Policy}
+package rl.core
 
 /**
   * Created by Michael Wang on 2017-12-09.
@@ -41,7 +38,7 @@ ValueFunction Environment belongs to the valueFunction that defines the attribut
 Problem Environment belongs to the Problem that defines state space, etc
 
  */
-package object core {
+package object mdp {
   trait Action
   trait State[ID] {
     val id:ID

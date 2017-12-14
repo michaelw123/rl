@@ -18,10 +18,9 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package rl.experiment.mdp
+package rl.core.mdp
 
 import breeze.linalg.DenseMatrix
-import rl.experiment.mdp.core.{Environment, _}
 /**
   * Created by Michael Wang on 2017-12-09.
   */

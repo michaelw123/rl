@@ -20,45 +20,61 @@
  */
 package test.mdp
 
-import rl.mdp.GridWorldMDP._
-import rl.utils._
+import rl.core.mdp.GridWorld.gridWorldAction._
+import rl.core.mdp.GridWorld._
+import rl.core.mdp._
+import breeze.linalg.DenseMatrix
+import rl.utils.rounded
 
 /**
-  * Created by Michael Wang on 12/06/2017.
+  * Created by Michael Wang on 2017-12-09.
   */
-object mdpTest extends App{
+object mdpTest extends App {
+  val X = 5
+  val Y = 5
 
-  val state = new gridWorldState(0,1)
+  implicit object gridWorldEnv extends Environment[DenseMatrix, gridWorldState]{
+    def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
+      (i,j) => new gridWorldState((i,j), 0.0)
+    }
+    var result:DenseMatrix[gridWorldState] = result
+    def allActions:Seq[gridWorldAction]= Seq(North, East, South, West)
+  }
+  implicit val policy:gridWorldPolicy = new gridWorldPolicy {
+    override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
+      val A = (0, 1)
+      val PRIMEA = (4, 1)
+      val B = (0, 3)
+      val PRIMEB = (2, 3)
+      val XSIZE = X - 1
+      val YSIZE = Y - 1
+      val r = (action, state.id) match {
+        case (_, A) => (PRIMEA, 10)
+        case (_, B) => (PRIMEB, 5)
+        case (North, (_, 0)) => (state.id, -1)
+        case (North, b) => ((b._1, b._2 - 1), 0)
+        case (East, (YSIZE, _)) => (state.id, -1)
+        case (East, b) => ((b._1 + 1, b._2), 0)
+        case (South, (_, XSIZE)) => (state.id, -1)
+        case (South, b) => ((b._1, b._2 + 1), 0)
+        case (West, (0, _)) => (state.id, -1)
+        case (West, b) => ((state.id._1 - 1, state.id._2), 0)
+        case (_, _) => (state.id, 0)
+      }
+      (gridWorldEnv.result(r._1), r._2)
+    }
+  }
+  //import rl.core.mdp.ValueFunctions.Bellman
+  //Bellman.setDiscount(0.9)
 
-  val config = (new BellmanConfig)
-    .setX(5)
-    .setY(5)
-    .setActionProb(0.25)
-    .setDiscount(0.9)
-    .setPolicy(gridWorldPolicy)
-    .setEpisodes(1000)
+    import rl.core.mdp.ValueFunctions.optimalValueIteration
+    optimalValueIteration.setDiscount(0.9)
+  gridWorldEnv.setResult(gridWorldEnv.stateSpace)
+  val result = gridWorldAgent.setEpoch(1000).observe
 
-  gridWorldAgent.setConfig(config)
-  val allstates = config.allStates
-
-  println(allstates.map(a => (a.x, a.y)))
-  val aState = new gridWorldState(2, 4)
-
-  println(config.getX, config.getY)
-
-  val result = gridWorldAgent.runAlgorithm(config)
 
   println(result.map(a => rounded(3, a.value)))
 
-//  val configVI = (new BellmanConfig)
-//    .setX(5)
-//    .setY(5)
-//    .setDiscount(0.9)
-//    .setPolicy(gridWorldPolicy)
-//    .setEpisodes(1000)
-//  gridWorldAgent.setConfig(configVI)
-//  val resultVi = gridWorldAgent.runAlgorithm(configVI)
-//
-//  println(resultVi.map(a => rounded(3, a.value)))
+
 
 }
