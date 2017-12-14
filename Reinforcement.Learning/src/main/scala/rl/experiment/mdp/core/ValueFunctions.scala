@@ -41,29 +41,9 @@ object ValueFunctions {
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       (statevalue + prob * (reward + discount * nextStateValue))
     }
-//    override def value[ID, P <:Policy[State[ID], Action]] (state:State[ID])(implicit policy:P):Double = {
-//      val actions = policy.availableActions(state)
-//      actions.foldLeft(state.value)((a,b) => {
-//        val (nextState, reward) = policy.reward(state, b)
-//        val actionProb = policy.getActionProb(b)
-//        //value(a, resultState(nextState.id).value, reward, actionProb)
-//        0.0
-//      })
-//    }
 
-    //def value[ID, P](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit
-    override def value[ID, P<:Policy[State[ID], Action]](state:State[ID])(implicit policy:P, env:Environment[State[ID]]):Unit = {
-      val result = env.result
-      val newStates = env.stateSpace
-      newStates.map(state => state.value = {
-        val actions = policy.availableActions(state)
-        actions.foldLeft(state.value)((a, b) => {
-          val (nextState, reward) = policy.reward(state, b)
-          val actionProb = policy.getActionProb(b)
-          value(a, nextState.value, reward, actionProb)
-        })
-      })
-      env.setResult(newStates)
+    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
+      vrp.foldLeft(state.value)((a,b) => a + b._3 * (b._2 + discount * b._1))
     }
   }
 

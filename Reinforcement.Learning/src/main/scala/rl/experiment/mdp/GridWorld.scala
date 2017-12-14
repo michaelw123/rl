@@ -33,8 +33,7 @@ object GridWorld {
     case object South extends gridWorldAction
     case object West extends gridWorldAction
   }
-
-
+  
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
     override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = ???
@@ -45,36 +44,23 @@ object GridWorld {
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
   object gridWorldAgent extends Agent[gridWorldAction, gridWorldState] {
-    //private var env:Environment[gridWorldAction, gridWorldState, DenseMatrix[gridWorldState]] = ???
-    //     def setEnvironment(value: Environment[gridWorldAction, gridWorldState, DenseMatrix[gridWorldState]]):this.type = {
-    //      env = value
-    //      this
-    //    }
-      override def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[ gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
-           env.setResult(env.stateSpace)
-          var resultState:DenseMatrix[gridWorldState] =env.result
-          for (i <- 0 until epoch) {
-            val newStates = env.stateSpace
-            newStates.map(state => {
-              state.value = policy.availableActions(state)
-                .foldLeft(state.value)((a, b) => {
-                  val (nextState, reward) = policy.reward(state, b)
-                  val actionProb = policy.getActionProb(b)
-                  vf.value(a, nextState.value, reward, actionProb)
-                })
-            })
-            env.setResult(newStates)
-          }
-      env.result
-    }
-     def observe1[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldState]] (implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
-       env.setResult(env.stateSpace)
-       var resultState:DenseMatrix[gridWorldState] =env.stateSpace
+    def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
       for (i <- 0 until epoch) {
-        resultState.map(state => vf.value(state)(policy, env))
-        env.setResult(resultState)
+        val newStates = env.stateSpace
+
+        newStates.map(state => {
+          val actions = policy.availableActions(state)
+          val vrp = for (action <- actions;
+             (nextState, reward) = policy.reward(state, action);
+             actionProb = policy.getActionProb(action)
+            //vvrp :+ (state.value, nextState.value, reward, actionProb)
+          ) yield (nextState.value, reward, actionProb)
+          state.value = vf.value(state, vrp)
+        })
+        env.setResult(newStates)
+
       }
-       env.result
+      env.result
     }
     private var epoch = 10
     def setEpoch(value:Int) : this.type ={
