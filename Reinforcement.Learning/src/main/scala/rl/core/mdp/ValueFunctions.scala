@@ -62,7 +62,28 @@ object ValueFunctions {
       vrp.map(b => b._2 + discount * b._1) max
     }
  }
+  implicit object qlearning extends ValueFunction {
+    private var discount = 0.0
+    private var learningRate = 0.5
 
+    def setLearningRate(value:Double):this.type = {
+      learningRate = value
+      this
+    }
+    override def setDiscount(value: Double): this.type = {
+      discount = value
+      this
+    }
+
+    override def getDiscount = discount
+
+    override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
+      reward + discount * nextStateValue
+    }
+    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
+      state.value * (1 - learningRate) + learningRate * vrp.map(b => b._2 + discount * b._1).max
+    }
+  }
 }
 
 
