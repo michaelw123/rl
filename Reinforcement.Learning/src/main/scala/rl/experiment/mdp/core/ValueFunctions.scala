@@ -47,23 +47,23 @@ object ValueFunctions {
     }
   }
 
-//  implicit object optimalValueIteration extends ValueFunction {
-//    private var discount = 0.0
-//
-//    override def setDiscount(value: Double): this.type = {
-//      discount = value
-//      this
-//    }
-//
-//    override def getDiscount = discount
-//
-//    override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
-//      reward + discount * nextStateValue
-//    }
-//    override def value[ID, P <:Policy[State[ID], Action]] (state:State[ID])(implicit policy:P):Unit = {
-//      policy.availableActions(state)
-//    }
- //}
+  implicit object optimalValueIteration extends ValueFunction {
+    private var discount = 0.0
+
+    override def setDiscount(value: Double): this.type = {
+      discount = value
+      this
+    }
+
+    override def getDiscount = discount
+
+    override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
+      reward + discount * nextStateValue
+    }
+    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
+      vrp.map(b => b._2 + discount * b._1) max
+    }
+ }
 
 }
 

@@ -70,8 +70,11 @@ object mdpTest1 extends App {
       (gridWorldEnv.result(r._1), r._2)
     }
   }
-  import rl.experiment.mdp.core.ValueFunctions.Bellman
-  Bellman.setDiscount(0.9)
+//  import rl.experiment.mdp.core.ValueFunctions.Bellman
+//  Bellman.setDiscount(0.9)
+
+  import rl.experiment.mdp.core.ValueFunctions.optimalValueIteration
+  optimalValueIteration.setDiscount(0.9)
   gridWorldEnv.setResult(gridWorldEnv.stateSpace)
   val result = gridWorldAgent.setEpoch(1000).observe
 
