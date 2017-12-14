@@ -20,8 +20,6 @@
  */
 package rl.experiment.mdp.core
 
-import breeze.linalg.DenseMatrix
-
 /**
   * Created by MichaelXiaoqun on 2017-12-09.
   */
