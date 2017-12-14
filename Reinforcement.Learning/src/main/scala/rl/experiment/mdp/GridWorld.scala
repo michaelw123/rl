@@ -43,8 +43,7 @@ object GridWorld {
 
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
-  abstract class gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]
-  object gridWorldAgent{
+  object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
     def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix, gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
       for (i <- 0 until epoch) {
         val newStates = env.stateSpace
@@ -67,6 +66,4 @@ object GridWorld {
       this
     }
   }
-
-
 }
