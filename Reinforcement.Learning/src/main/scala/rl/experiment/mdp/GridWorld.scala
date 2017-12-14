@@ -33,7 +33,7 @@ object GridWorld {
     case object South extends gridWorldAction
     case object West extends gridWorldAction
   }
-  
+
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
     override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = ???
@@ -43,8 +43,9 @@ object GridWorld {
 
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
-  object gridWorldAgent extends Agent[gridWorldAction, gridWorldState] {
-    def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+  abstract class gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]
+  object gridWorldAgent{
+    def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix, gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
       for (i <- 0 until epoch) {
         val newStates = env.stateSpace
 
@@ -53,12 +54,10 @@ object GridWorld {
           val vrp = for (action <- actions;
              (nextState, reward) = policy.reward(state, action);
              actionProb = policy.getActionProb(action)
-            //vvrp :+ (state.value, nextState.value, reward, actionProb)
           ) yield (nextState.value, reward, actionProb)
           state.value = vf.value(state, vrp)
         })
         env.setResult(newStates)
-
       }
       env.result
     }

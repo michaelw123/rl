@@ -52,20 +52,20 @@ package object core {
     def availableActions(state:S):Seq[A]
     def getActionProb(action:A):Double
   }
-  trait Environment [S]{
-    def stateSpace:DenseMatrix[S]
-    var result:DenseMatrix[S]
+  trait Environment [CS[_], S]{
+    def stateSpace:CS[S]
+    var result:CS[S]
     def allActions:Seq[Action]
-    def setResult(value :DenseMatrix[S]) = result = value
+    def setResult(value :CS[S]) = result = value
   }
-  trait Agent[A, S] {
-   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[S]](implicit vf: VF, policy:P, env:E):DenseMatrix[S]
+  trait Agent[A, CS[_], S] {
+   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S]](implicit vf: VF, policy:P, env:E):CS[S]
   }
 
   trait ValueFunction{
     def setDiscount(value:Double): this.type
     def getDiscount:Double
     def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
-    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double
+    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double // next state value, reward, action prob
   }
 }
