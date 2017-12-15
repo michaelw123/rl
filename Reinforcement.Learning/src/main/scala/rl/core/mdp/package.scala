@@ -35,7 +35,7 @@ The id of the state depends on the container used, for instance, (Int, Int) for 
 Note: policy/action/state belong to problems to be solved, such as GridWorld problem, while a value function belongs to an algorithm, such as Bellman
 equation. Agent glues them together.
 ValueFunction Environment belongs to the valueFunction that defines the attributes of the algorithm, i.e., Discount
-Problem Environment belongs to the Problem that defines state space, etc
+Problem Environment belongs to the Problem that defines state space and action space, etc.
 
  */
 package object mdp {
