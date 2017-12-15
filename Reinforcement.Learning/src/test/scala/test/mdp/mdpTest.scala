@@ -75,7 +75,7 @@ object mdpTest extends App {
   qlearning.setDiscount(0.9)
       .setLearningRate(.5)
   gridWorldEnv.update(gridWorldEnv.stateSpace)
-  val result = gridWorldAgent.setEpoch(1000).observe
+  val result = gridWorldAgent.setEpoch(20).observe
 
 
   println(result.map(a => rounded(3, a.value)))
