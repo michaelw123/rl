@@ -52,9 +52,9 @@ package object mdp {
   }
   trait Environment [CS[_], S]{
     def stateSpace:CS[S]
-    var result:CS[S] = stateSpace
+    var currentStates:CS[S] = stateSpace
     def actionSpace:Seq[Action]
-    def update(value :CS[S]) = result = value
+    def update(value :CS[S]) = currentStates = value
   }
   trait Agent[A, CS[_], S] {
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S]](implicit vf: VF, policy:P, env:E):CS[S]

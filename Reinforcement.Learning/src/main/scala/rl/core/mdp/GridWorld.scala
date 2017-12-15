@@ -58,7 +58,7 @@ object GridWorld {
         })
         env.update(newStates)
       }
-      env.result
+      env.currentStates
     }
     private var epoch = 10
     def setEpoch(value:Int) : this.type ={
