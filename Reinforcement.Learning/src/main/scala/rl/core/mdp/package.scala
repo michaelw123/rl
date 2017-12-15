@@ -52,7 +52,7 @@ package object mdp {
   }
   trait Environment [CS[_], S]{
     def stateSpace:CS[S]
-    var currentStates:CS[S] = stateSpace
+    var currentStates:CS[S]
     def actionSpace:Seq[Action]
     def update(value :CS[S]) = currentStates = value
   }

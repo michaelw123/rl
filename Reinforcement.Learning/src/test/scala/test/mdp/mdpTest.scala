@@ -30,15 +30,16 @@ import rl.utils.rounded
   * Created by Michael Wang on 2017-12-09.
   */
 object mdpTest extends App {
-  val X = 50
-  val Y = 20
+  val X = 5
+  val Y = 5
 
   implicit object gridWorldEnv extends Environment[DenseMatrix, gridWorldState]{
     def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState((i,j), 0.0)
     }
     def actionSpace:Seq[gridWorldAction]= Seq(North, East, South, West)
-    def getStates:DenseMatrix[gridWorldState] = result
+    def getStates:DenseMatrix[gridWorldState] = currentStates
+    var currentStates = stateSpace
   }
   implicit val policy:gridWorldPolicy = new gridWorldPolicy {
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
@@ -67,12 +68,12 @@ object mdpTest extends App {
   //import rl.core.mdp.ValueFunctions.Bellman
   //Bellman.setDiscount(0.9)
 
-    import rl.core.mdp.ValueFunctions.optimalValueIteration
-    optimalValueIteration.setDiscount(0.9)
+   // import rl.core.mdp.ValueFunctions.optimalValueIteration
+   // optimalValueIteration.setDiscount(0.9)
 
-  //import rl.core.mdp.ValueFunctions.qlearning
-  //qlearning.setDiscount(0.9)
-  //    .setLearningRate(.5)
+  import rl.core.mdp.ValueFunctions.qlearning
+  qlearning.setDiscount(0.9)
+      .setLearningRate(.5)
   gridWorldEnv.update(gridWorldEnv.stateSpace)
   val result = gridWorldAgent.setEpoch(1000).observe
 
