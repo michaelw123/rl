@@ -37,8 +37,8 @@ object mdpTest extends App {
     def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState((i,j), 0.0)
     }
-    var result:DenseMatrix[gridWorldState] = result
     def actionSpace:Seq[gridWorldAction]= Seq(North, East, South, West)
+    def getStates:DenseMatrix[gridWorldState] = result
   }
   implicit val policy:gridWorldPolicy = new gridWorldPolicy {
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
@@ -61,7 +61,7 @@ object mdpTest extends App {
         case (West, b) => ((state.id._1 - 1, state.id._2), 0)
         case (_, _) => (state.id, 0)
       }
-      (gridWorldEnv.result(r._1), r._2)
+      (gridWorldEnv.getStates(r._1), r._2)
     }
   }
   //import rl.core.mdp.ValueFunctions.Bellman

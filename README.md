@@ -28,6 +28,7 @@ References:
 
 [Markov Decision Processes in Artificial Intelligence, Olivier Sigaud](https://zodml.org/sites/default/files/Markov_Decision_Processes_and_Artificial_Intelligence.pdf)
 
+[Reinforcement Learning: A Survey](https://www.jair.org/media/301/live-301-1562-jair.pdf)
 
 Project Homepage:
 
