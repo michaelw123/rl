@@ -38,6 +38,7 @@ object GridWorld {
     override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = ???
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(North, East, South, West)
     override def getActionProb(state:gridWorldState,  action:gridWorldAction):Double = 0.25
+    override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
   }
 
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
@@ -52,10 +53,10 @@ object GridWorld {
           val vrp = for (action <- actions;
              (nextState, reward) = policy.reward(state, action);
              actionProb = policy.getActionProb(state, action)
-          ) yield (nextState.value, reward, actionProb)
+          ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
           state.value = vf.value(state, vrp)
         })
-        env.setResult(newStates)
+        env.update(newStates)
       }
       env.result
     }
