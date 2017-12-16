@@ -30,6 +30,8 @@ References:
 
 [Reinforcement Learning: A Survey](https://www.jair.org/media/301/live-301-1562-jair.pdf)
 
+[Reinforcement Learning Methods and Tutorials](https://github.com/MorvanZhou/Reinforcement-learning-with-tensorflow)
+
 Project Homepage:
 
 https://github.com/michaelw123/rl
