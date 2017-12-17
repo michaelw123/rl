@@ -47,13 +47,11 @@ object GridWorld {
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
     def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix, gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
-      def iterating:DenseMatrix[gridWorldState] = {
+      def iterating:Unit = {
         val newStates = observeOnce
         val x: Double = sum(abs(env.currentStates.map(a => a.value) - newStates.map(b => b.value)))
         env.update(newStates)
-        if (x < exitValue) {
-          env.currentStates
-      } else {
+        if (x > exitValue) {
           iterating
         }
       }
@@ -71,7 +69,6 @@ object GridWorld {
           })
           env.update(newStates)
         }
-        env.currentStates
       }
       def observeOnce:DenseMatrix[gridWorldState] = {
         val newStates = env.stateSpace
