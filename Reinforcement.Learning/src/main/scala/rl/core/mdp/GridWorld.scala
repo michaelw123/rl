@@ -23,6 +23,8 @@ package rl.core.mdp
 import breeze.linalg.operators.OpSub
 import breeze.linalg.{DenseMatrix, ImmutableNumericOps, sum}
 import breeze.numerics.abs
+
+import scala.annotation.tailrec
 /**
   * Created by Michael Wang on 2017-12-09.
   */
@@ -47,6 +49,7 @@ object GridWorld {
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
     def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix, gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+      @tailrec
       def iterating:Unit = {
         val newStates = observeOnce
         val x: Double = sum(abs(env.currentStates.map(a => a.value) - newStates.map(b => b.value)))
