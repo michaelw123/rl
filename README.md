@@ -15,7 +15,7 @@ Some of the planned topics are:
 * Dynamic Programming
 * Monte Carlo Methods
 * Temporal-Difference Learning
-* Q-Learning
+
 
 
 References:
