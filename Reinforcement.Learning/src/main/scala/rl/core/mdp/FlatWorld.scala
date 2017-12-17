@@ -49,7 +49,7 @@ object FlatWorld {
 
   class flatWorldState(val id:Int, var value:Double) extends State[Int]
 
-  object gridWorldAgent extends Agent[flatWorldAction, DenseVector, flatWorldState]{
+  object flatWorldAgent extends Agent[flatWorldAction, DenseVector, flatWorldState]{
     def observe[VF <: ValueFunction, P <: Policy[flatWorldState, flatWorldAction], E <: Environment[DenseVector, flatWorldState]](implicit vf:VF, policy:P, env:E): DenseVector[flatWorldState] = {
       @tailrec
       def iterating:Unit = {
