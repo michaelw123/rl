@@ -20,7 +20,9 @@
  */
 package rl.core.mdp
 
-import breeze.linalg.DenseMatrix
+import breeze.linalg.operators.OpSub
+import breeze.linalg.{DenseMatrix, ImmutableNumericOps, sum}
+import breeze.numerics.abs
 /**
   * Created by Michael Wang on 2017-12-09.
   */
@@ -45,24 +47,60 @@ object GridWorld {
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
     def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix, gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
-      for (i <- 0 until epoch) {
+      def iterating:DenseMatrix[gridWorldState] = {
+        val newStates = observeOnce
+        val x: Double = sum(abs(env.currentStates.map(a => a.value) - newStates.map(b => b.value)))
+        env.update(newStates)
+        if (x < exitValue) {
+          env.currentStates
+      } else {
+          iterating
+        }
+      }
+      def looping = {
+        for (i <- 0 until epoch) {
+          val newStates = env.stateSpace
+
+          newStates.map(state => {
+            val actions = policy.availableActions(state)
+            val vrp = for (action <- actions;
+                           (nextState, reward) = policy.reward(state, action);
+                           actionProb = policy.getActionProb(state, action)
+            ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
+            state.value = vf.value(state, vrp)
+          })
+          env.update(newStates)
+        }
+        env.currentStates
+      }
+      def observeOnce:DenseMatrix[gridWorldState] = {
         val newStates = env.stateSpace
 
         newStates.map(state => {
           val actions = policy.availableActions(state)
           val vrp = for (action <- actions;
-             (nextState, reward) = policy.reward(state, action);
-             actionProb = policy.getActionProb(state, action)
+                         (nextState, reward) = policy.reward(state, action);
+                         actionProb = policy.getActionProb(state, action)
           ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
           state.value = vf.value(state, vrp)
         })
-        env.update(newStates)
+        newStates
+      }
+      exitValue match {
+        case 0.0 => looping
+        case _ => iterating
       }
       env.currentStates
     }
-    private var epoch = 10
+
+    private var epoch = 1
     def setEpoch(value:Int) : this.type ={
       epoch = value
+      this
+    }
+    private var exitValue=0.0
+    def setExitValue(value:Double) = {
+      exitValue = value
       this
     }
   }
