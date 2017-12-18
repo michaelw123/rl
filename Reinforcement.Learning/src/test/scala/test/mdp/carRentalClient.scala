@@ -20,13 +20,32 @@
  */
 
 package test.mdp
-
+import breeze.linalg.DenseMatrix
+import rl.core.mdp.Environment
+import rl.core.mdp.GridWorld.{gridWorldAgent, gridWorldPolicy, gridWorldState, gridWorldAction}
+import rl.utils.rounded
 /**
   * Created by Michael Wang on 12/18/2017.
   *
   * This program is an application to solve Car Rental problem in Sunnton/Barto's book
-  * "Reinforcement Learning: An Introduction (2nd Edition)" chapter 4, on the MDP framework developed in this project using flatWorld model
+  * "Reinforcement Learning: An Introduction (2nd Edition)" chapter 4, on the MDP framework developed in this project using gridWorld model
   */
 object carRentalClient extends App {
+  val X = 20
+  val Y = 20
+  implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
+    val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X, Y) { (i,j) => new gridWorldState((i,j), 0)}
+    val actionSpace:Seq[gridWorldAction]= Seq(new gridWorldAction{override val value:Int= -5}, new gridWorldAction{override val value:Int= -4},
+                      new gridWorldAction{override val value:Int= -3}, new gridWorldAction{override val value:Int= -2},
+                      new gridWorldAction{override val value:Int= -2}, new gridWorldAction{override val value:Int= 0},
+                      new gridWorldAction{override val value:Int= 1}, new gridWorldAction{override val value:Int= 2},
+                      new gridWorldAction{override val value:Int= 3}, new gridWorldAction{override val value:Int= 4},
+                      new gridWorldAction{override val value:Int= 5})
+    def getStates:DenseMatrix[gridWorldState] = currentStates
+    var currentStates = stateSpace
+    override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
+      (new gridWorldState((0,0), 0), 0)
+    }
 
+  }
 }

@@ -22,9 +22,9 @@ package test.mdp
 
 import breeze.linalg.{DenseMatrix, DenseVector}
 import rl.core.mdp.Environment
-import rl.core.mdp.FlatWorld.flatWorldAction.{East, North, South, West}
-import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldAgent, flatWorldPolicy, flatWorldState}
-import rl.core.mdp.GridWorld.gridWorldState
+import rl.core.mdp.FlatWorld.flatWorldAction
+import test.mdp.dpClient.flatWorldAction.{East, North, South, West}
+import rl.core.mdp.FlatWorld.{flatWorldAgent, flatWorldPolicy, flatWorldState}
 import rl.utils.rounded
 
 
@@ -64,6 +64,14 @@ object dpClient extends App{
     }
     override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = actionProb(state.id, action.value)
     override def updateActionProb(state:flatWorldState, action:flatWorldAction, value:Double):Unit =  actionProb(state.id, action.value) = value
+    override def availableActions(state: flatWorldState): Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
+  }
+  object flatWorldAction {
+    sealed
+    case class North(override val value:Int = 0) extends flatWorldAction
+    case class East(override val value:Int = 1) extends flatWorldAction
+    case class South(override val value:Int = 2) extends flatWorldAction
+    case class West(override val value:Int = 3) extends flatWorldAction
   }
 
   import rl.core.mdp.ValueFunctions.Bellman

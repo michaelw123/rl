@@ -32,17 +32,10 @@ import scala.annotation.tailrec
   */
 object FlatWorld {
   trait flatWorldAction extends Action
-  object flatWorldAction {
-    sealed
-    case class North(override val value:Int = 0) extends flatWorldAction
-    case class East(override val value:Int = 1) extends flatWorldAction
-    case class South(override val value:Int = 2) extends flatWorldAction
-    case class West(override val value:Int = 3) extends flatWorldAction
-  }
+
 
   class flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
-    import flatWorldAction._
-    override def availableActions(state: flatWorldState): Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
+    override def availableActions(state: flatWorldState): Seq[flatWorldAction] = ???
     override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = 0.25
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
   }
