@@ -26,7 +26,6 @@ import rl.core.mdp.FlatWorld.flatWorldAction.{East, North, South, West}
 import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldAgent, flatWorldPolicy, flatWorldState}
 import rl.utils.rounded
 
-import scala.reflect.ClassTag
 
 /**
   * Created by Michael Wang on 2017-12-17.
@@ -63,7 +62,7 @@ object dptest extends App{
   Bellman.setDiscount(1.0)
 
   val result = flatWorldAgent.setEpoch(1000)
-   // .setExitValue(0.001)
+   // .setExitDelta(0.001)
     .observe
 
   println(result.map(a => rounded(3, a.value)))
