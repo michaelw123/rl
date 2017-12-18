@@ -27,6 +27,6 @@ package test.mdp
   * This program is an application to solve Car Rental problem in Sunnton/Barto's book
   * "Reinforcement Learning: An Introduction (2nd Edition)" chapter 4, on the MDP framework developed in this project using flatWorld model
   */
-object carRentalTest extends App {
+object carRentalClient extends App {
 
 }

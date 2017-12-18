@@ -29,7 +29,7 @@ import rl.utils.rounded
 /**
   * Created by Michael Wang on 2017-12-09.
   */
-object mdpTest extends App {
+object mdpClient extends App {
   val X = 5
   val Y = 5
 

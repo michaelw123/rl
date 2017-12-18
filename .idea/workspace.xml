@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="49bb649b-27e9-4ec5-bff2-2218ba531b32" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalTest.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalTest.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dptest.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpTest.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpTest.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpTest.scala" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/connect5/target/" />
@@ -84,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dptest.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dptest.scala">
+      <file leaf-file-name="dpClient.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="868">
-              <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+              <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#1132#1179#0" expanded="true" />
@@ -97,22 +96,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+            <state relative-caret-position="336">
+              <caret line="32" column="17" lean-forward="true" selection-start-line="32" selection-start-column="17" selection-end-line="32" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="carRentalTest.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalTest.scala">
+      <file leaf-file-name="carRentalClient.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="18" column="58" lean-forward="false" selection-start-line="18" selection-start-column="58" selection-end-line="18" selection-end-column="58" />
-              <folding />
+            <state relative-caret-position="425">
+              <caret line="25" column="3" lean-forward="true" selection-start-line="25" selection-start-column="3" selection-end-line="25" selection-end-column="3" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -163,8 +164,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mdpTest.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpTest.scala">
+      <file leaf-file-name="mdpClient.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="409">
               <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
@@ -269,6 +270,7 @@
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalTest.scala" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala" />
       </list>
     </option>
   </component>
@@ -488,7 +490,7 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="test.mdp.mdpTest" />
+      <option name="MAIN_CLASS_NAME" value="test.mdp.mdpClient" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -548,7 +550,7 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="test.mdp.dptest" />
+      <option name="MAIN_CLASS_NAME" value="test.mdp.dpClient" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -1044,13 +1046,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505572429394</updated>
     </task>
-    <task id="LOCAL-00180" summary="mdp core">
-      <created>1512956611337</created>
-      <option name="number" value="00180" />
-      <option name="presentableId" value="LOCAL-00180" />
-      <option name="project" value="LOCAL" />
-      <updated>1512956611337</updated>
-    </task>
     <task id="LOCAL-00181" summary="mdp core">
       <created>1512956799397</created>
       <option name="number" value="00181" />
@@ -1387,7 +1382,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513611175066</updated>
     </task>
-    <option name="localTasksCounter" value="229" />
+    <task id="LOCAL-00229" summary="mdp core">
+      <created>1513611866583</created>
+      <option name="number" value="00229" />
+      <option name="presentableId" value="LOCAL-00229" />
+      <option name="project" value="LOCAL" />
+      <updated>1513611866583</updated>
+    </task>
+    <option name="localTasksCounter" value="230" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1798,7 +1800,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpTest.scala">
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="409">
           <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
@@ -1809,10 +1811,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dptest.scala">
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="868">
-          <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#1132#1179#0" expanded="true" />
@@ -1831,14 +1833,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="18" column="58" lean-forward="false" selection-start-line="18" selection-start-column="58" selection-end-line="18" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MDP.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="463">
@@ -1849,9 +1843,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="336">
+          <caret line="32" column="17" lean-forward="true" selection-start-line="32" selection-start-column="17" selection-end-line="32" selection-end-column="17" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="3" lean-forward="true" selection-start-line="25" selection-start-column="3" selection-end-line="25" selection-end-column="3" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

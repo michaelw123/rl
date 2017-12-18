@@ -32,7 +32,7 @@ import rl.utils.rounded
   * Created by Michael Wang on 2017-12-17.
   * To test Dynamic Programming for MDP
   */
-object dptest extends App{
+object dpClient extends App{
   val SIZE = 16
   val Y = 4
 
