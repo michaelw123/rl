@@ -65,8 +65,8 @@ object dpClient extends App{
     val actionProb : DenseMatrix[Double] = DenseMatrix.tabulate[Double] (flatWorldEnv.stateSpace.length, flatWorldEnv.actionSpace.length){
       (i,j) =>0.25
     }
-    override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = actionProb(state.id, action.value)
-    override def updateActionProb(state:flatWorldState, action:flatWorldAction, value:Double):Unit =  actionProb(state.id, action.value) = value
+//    override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = actionProb(state.id, action.value)
+//    override def updateActionProb(state:flatWorldState, action:flatWorldAction, value:Double):Unit =  actionProb(state.id, action.value) = value
     override def availableActions(state: flatWorldState): Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
   }
   object flatWorldAction {

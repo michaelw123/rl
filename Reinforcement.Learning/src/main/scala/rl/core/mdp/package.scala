@@ -48,8 +48,6 @@ package object mdp {
   }
   trait Policy[S, A]{
     def availableActions(state:S):Seq[A]
-    def getActionProb(state:S, action:A):Double
-    def updateActionProb(state:S, action:A, value:Double):Unit = ???
   }
   trait Environment [CS[_], S, A]{
     def stateSpace:CS[S]

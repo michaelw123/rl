@@ -28,4 +28,6 @@ package object utils {
     val w = math.pow(10, x)
     (n * w).toLong.toDouble / w
   }
+  import breeze.stats.distributions.Poisson
+  def poisson(mean:Int, k:Int): Double = new Poisson(mean).cdf(k)
 }

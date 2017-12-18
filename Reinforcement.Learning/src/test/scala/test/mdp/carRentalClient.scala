@@ -22,8 +22,9 @@
 package test.mdp
 import breeze.linalg.DenseMatrix
 import rl.core.mdp.Environment
+import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldState}
 import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldPolicy, gridWorldState}
-import rl.utils.rounded
+import rl.utils._
 
 
 /**
@@ -70,12 +71,10 @@ object carRentalClient extends App {
       }
       (new gridWorldState(state.id,0), reward - cost)
     }
+    override def transactionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = 0.25
+    override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
 
   }
 
-
-
-  import breeze.stats.distributions.Poisson
-  def poisson(mean:Int, k:Int): Double = new Poisson(mean).cdf(k)
 
 }

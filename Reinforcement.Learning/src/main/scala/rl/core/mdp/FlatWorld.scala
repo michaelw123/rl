@@ -36,7 +36,6 @@ object FlatWorld {
 
   class flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
     override def availableActions(state: flatWorldState): Seq[flatWorldAction] = ???
-    override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = 0.25
   }
 
   class flatWorldState(val id:Int, var value:Double) extends State[Int]

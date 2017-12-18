@@ -40,7 +40,7 @@ object GridWorld {
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
-    override def getActionProb(state:gridWorldState,  action:gridWorldAction):Double = 0.25
+
   }
 
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
