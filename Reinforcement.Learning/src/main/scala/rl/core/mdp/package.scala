@@ -39,7 +39,9 @@ Problem Environment belongs to the Problem that defines state space and action s
 
  */
 package object mdp {
-  trait Action
+  trait Action {
+    val value = 0
+  }
   trait State[ID] {
     val id:ID
     var value:Double
@@ -47,6 +49,7 @@ package object mdp {
   trait Policy[S, A]{
     def availableActions(state:S):Seq[A]
     def getActionProb(state:S, action:A):Double
+    def updateActionProb(state:S, action:A, value:Double):Unit = ???
     def cost(state:S, action:A):Double
   }
   trait Environment [CS[_], S, A]{

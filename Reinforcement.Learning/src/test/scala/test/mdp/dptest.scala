@@ -20,10 +20,11 @@
  */
 package test.mdp
 
-import breeze.linalg.DenseVector
+import breeze.linalg.{DenseMatrix, DenseVector}
 import rl.core.mdp.Environment
 import rl.core.mdp.FlatWorld.flatWorldAction.{East, North, South, West}
 import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldAgent, flatWorldPolicy, flatWorldState}
+import rl.core.mdp.GridWorld.gridWorldState
 import rl.utils.rounded
 
 
@@ -36,8 +37,8 @@ object dptest extends App{
   val Y = 4
 
   implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
-    def stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
-    def actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
+    val stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
+    val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseVector[flatWorldState] = currentStates
     var currentStates = stateSpace
     override def reward(state: flatWorldState, action: flatWorldAction): (flatWorldState, Double) = {
@@ -51,11 +52,19 @@ object dptest extends App{
         case (a:South, _) => (state.id + 4, -1)
         case (a:West, 4 | 8 | 12) => (state.id, -1)
         case (a:West, _) => (state.id - 1, -1)
+        case (_, _) => (state.id, 0) //shall not be here
       }
       (flatWorldEnv.getStates(r._1), r._2)
     }
   }
-  implicit val policy:flatWorldPolicy = new flatWorldPolicy
+  implicit val policy:flatWorldPolicy = new flatWorldPolicy{
+    //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
+    val actionProb : DenseMatrix[Double] = DenseMatrix.tabulate[Double] (flatWorldEnv.stateSpace.length, flatWorldEnv.actionSpace.length){
+      (i,j) =>0.25
+    }
+    override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = actionProb(state.id, action.value)
+    override def updateActionProb(state:flatWorldState, action:flatWorldAction, value:Double):Unit =  actionProb(state.id, action.value) = value
+  }
 
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(1.0)

@@ -34,10 +34,10 @@ object FlatWorld {
   trait flatWorldAction extends Action
   object flatWorldAction {
     sealed
-    case class North(value:Int = 0) extends flatWorldAction
-    case class East(value:Int = 1) extends flatWorldAction
-    case class South(value:Int = 2) extends flatWorldAction
-    case class West(value:Int = 3) extends flatWorldAction
+    case class North(override val value:Int = 0) extends flatWorldAction
+    case class East(override val value:Int = 1) extends flatWorldAction
+    case class South(override val value:Int = 2) extends flatWorldAction
+    case class West(override val value:Int = 3) extends flatWorldAction
   }
 
   class flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {

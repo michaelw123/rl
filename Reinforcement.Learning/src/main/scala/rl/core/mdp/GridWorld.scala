@@ -31,10 +31,10 @@ import scala.annotation.tailrec
 object GridWorld {
   trait gridWorldAction extends Action
   object gridWorldAction {
-    case class North(value:Int=0) extends gridWorldAction
-    case class East(value:Int=1) extends gridWorldAction
-    case class South(value:Int=2) extends gridWorldAction
-    case class West(value:Int=3) extends gridWorldAction
+    case class North(override val value:Int=0) extends gridWorldAction
+    case class East(override val value:Int=1) extends gridWorldAction
+    case class South(override val value:Int=2) extends gridWorldAction
+    case class West(override val value:Int=3) extends gridWorldAction
   }
 
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
