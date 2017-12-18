@@ -33,6 +33,17 @@ import rl.utils.rounded
 object carRentalClient extends App {
   val X = 20
   val Y = 20
+
+  val MOVINGCOST=2.0
+  // expectation for rental requests in first location
+  val RENTAL_REQUEST_FIRST_LOC = 3
+  // expectation for rental requests in second location
+  val RENTAL_REQUEST_SECOND_LOC = 4
+  // expectation for # of cars returned in first location
+  val   RETURNS_FIRST_LOC = 3
+  // expectation for # of cars returned in second location
+  val   RETURNS_SECOND_LOC = 2
+
   implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
     val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X, Y) { (i,j) => new gridWorldState((i,j), 0)}
     val actionSpace:Seq[gridWorldAction]= Seq(new gridWorldAction{override val value:Int= -5}, new gridWorldAction{override val value:Int= -4},
@@ -44,6 +55,9 @@ object carRentalClient extends App {
     def getStates:DenseMatrix[gridWorldState] = currentStates
     var currentStates = stateSpace
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
+      val cost = scala.math.abs(action.value) * MOVECOST
+      val firstLocationCar = state.id._1
+      val secondLocationCar = state.id._2
       (new gridWorldState((0,0), 0), 0)
     }
 
