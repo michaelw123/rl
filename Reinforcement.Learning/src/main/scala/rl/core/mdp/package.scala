@@ -45,19 +45,19 @@ package object mdp {
     var value:Double
   }
   trait Policy[S, A]{
-    def reward(state:S, action:A):(S, Double)
     def availableActions(state:S):Seq[A]
     def getActionProb(state:S, action:A):Double
     def cost(state:S, action:A):Double
   }
-  trait Environment [CS[_], S]{
+  trait Environment [CS[_], S, A]{
     def stateSpace:CS[S]
     var currentStates:CS[S]
-    def actionSpace:Seq[Action]
+    def actionSpace:Seq[A]
     def update(value :CS[S]) = currentStates = value
+    def reward(state:S, action:A):(S, Double)
   }
   trait Agent[A, CS[_], S] {
-   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S]](implicit vf: VF, policy:P, env:E):CS[S]
+   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](implicit vf: VF, policy:P, env:E):CS[S]
   }
 
   trait ValueFunction{

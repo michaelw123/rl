@@ -39,7 +39,6 @@ object GridWorld {
 
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
-    override def reward(state:gridWorldState, action:gridWorldAction):(gridWorldState, Double) = ???
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(North, East, South, West)
     override def getActionProb(state:gridWorldState,  action:gridWorldAction):Double = 0.25
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
@@ -48,7 +47,7 @@ object GridWorld {
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
-    def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix, gridWorldState]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
+    def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix,gridWorldState, gridWorldAction]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
       @tailrec
       def iterating:Unit = {
         val newStates = observeOnce
@@ -65,7 +64,7 @@ object GridWorld {
           newStates.map(state => {
             val actions = policy.availableActions(state)
             val vrp = for (action <- actions;
-                           (nextState, reward) = policy.reward(state, action);
+                           (nextState, reward) = env.reward(state, action);
                            actionProb = policy.getActionProb(state, action)
             ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
             state.value = vf.value(state, vrp)
@@ -79,7 +78,7 @@ object GridWorld {
         newStates.map(state => {
           val actions = policy.availableActions(state)
           val vrp = for (action <- actions;
-                         (nextState, reward) = policy.reward(state, action);
+                         (nextState, reward) = env.reward(state, action);
                          actionProb = policy.getActionProb(state, action)
           ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
           state.value = vf.value(state, vrp)

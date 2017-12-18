@@ -35,13 +35,11 @@ object dptest extends App{
   val SIZE = 16
   val Y = 4
 
-  implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState]{
+  implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
     def stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     def actionSpace:Seq[flatWorldAction]= Seq(North, East, South, West)
     def getStates:DenseVector[flatWorldState] = currentStates
     var currentStates = stateSpace
-  }
-  implicit val policy:flatWorldPolicy = new flatWorldPolicy {
     override def reward(state: flatWorldState, action: flatWorldAction): (flatWorldState, Double) = {
       val r = (action, state.id) match {
         case (_, 0 | 15) => (state.id, 0)
@@ -57,6 +55,7 @@ object dptest extends App{
       (flatWorldEnv.getStates(r._1), r._2)
     }
   }
+  implicit val policy:flatWorldPolicy = new flatWorldPolicy
 
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(1.0)
