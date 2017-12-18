@@ -50,7 +50,6 @@ package object mdp {
     def availableActions(state:S):Seq[A]
     def getActionProb(state:S, action:A):Double
     def updateActionProb(state:S, action:A, value:Double):Unit = ???
-    def cost(state:S, action:A):Double
   }
   trait Environment [CS[_], S, A]{
     def stateSpace:CS[S]
@@ -58,6 +57,8 @@ package object mdp {
     def actionSpace:Seq[A]
     def update(value :CS[S]) = currentStates = value
     def reward(state:S, action:A):(S, Double)
+    def transactionProb(state:S, action:A, nextState:S):Double //transaction probability
+    def cost(state:S, action:A):Double
   }
   trait Agent[A, CS[_], S] {
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](implicit vf: VF, policy:P, env:E):CS[S]

@@ -37,7 +37,6 @@ object FlatWorld {
   class flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
     override def availableActions(state: flatWorldState): Seq[flatWorldAction] = ???
     override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = 0.25
-    override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
   }
 
   class flatWorldState(val id:Int, var value:Double) extends State[Int]
@@ -62,7 +61,7 @@ object FlatWorld {
             val vrp = for (action <- actions;
                            (nextState, reward) = env.reward(state, action);
                            actionProb = policy.getActionProb(state, action)
-            ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
+            ) yield (nextState.value, reward - env.cost(state, action), actionProb)
             state.value = vf.value(state, vrp)
           })
           env.update(newStates)
@@ -76,7 +75,7 @@ object FlatWorld {
           val vrp = for (action <- actions;
                          (nextState, reward) = env.reward(state, action);
                          actionProb = policy.getActionProb(state, action)
-          ) yield (nextState.value, reward - policy.cost(state, action), actionProb)
+          ) yield (nextState.value, reward - env.cost(state, action), actionProb)
           state.value = vf.value(state, vrp)
         })
         newStates

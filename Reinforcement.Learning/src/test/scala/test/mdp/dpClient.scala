@@ -25,6 +25,7 @@ import rl.core.mdp.Environment
 import rl.core.mdp.FlatWorld.flatWorldAction
 import test.mdp.dpClient.flatWorldAction.{East, North, South, West}
 import rl.core.mdp.FlatWorld.{flatWorldAgent, flatWorldPolicy, flatWorldState}
+import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
 import rl.utils.rounded
 
 
@@ -56,6 +57,8 @@ object dpClient extends App{
       }
       (flatWorldEnv.getStates(r._1), r._2)
     }
+    override def transactionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
+    override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
   }
   implicit val policy:flatWorldPolicy = new flatWorldPolicy{
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
