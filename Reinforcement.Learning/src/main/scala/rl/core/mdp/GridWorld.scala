@@ -31,15 +31,15 @@ import scala.annotation.tailrec
 object GridWorld {
   trait gridWorldAction extends Action
   object gridWorldAction {
-    case object North extends gridWorldAction
-    case object East extends gridWorldAction
-    case object South extends gridWorldAction
-    case object West extends gridWorldAction
+    case class North(value:Int=0) extends gridWorldAction
+    case class East(value:Int=1) extends gridWorldAction
+    case class South(value:Int=2) extends gridWorldAction
+    case class West(value:Int=3) extends gridWorldAction
   }
 
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
-    override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(North, East, South, West)
+    override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
     override def getActionProb(state:gridWorldState,  action:gridWorldAction):Double = 0.25
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
   }

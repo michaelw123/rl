@@ -37,7 +37,7 @@ object mdpTest extends App {
     def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState((i,j), 0.0)
     }
-    def actionSpace:Seq[gridWorldAction]= Seq(North, East, South, West)
+    def actionSpace:Seq[gridWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseMatrix[gridWorldState] = currentStates
     var currentStates = stateSpace
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
@@ -50,14 +50,14 @@ object mdpTest extends App {
       val r = (action, state.id) match {
         case (_, A) => (PRIMEA, 10)
         case (_, B) => (PRIMEB, 5)
-        case (North, (_, 0)) => (state.id, -1)
-        case (North, b) => ((b._1, b._2 - 1), 0)
-        case (East, (XSIZE, _)) => (state.id, -1)
-        case (East, b) => ((b._1 + 1, b._2), 0)
-        case (South, (_, YSIZE)) => (state.id, -1)
-        case (South, b) => ((b._1, b._2 + 1), 0)
-        case (West, (0, _)) => (state.id, -1)
-        case (West, b) => ((state.id._1 - 1, state.id._2), 0)
+        case (a: North, (_, 0)) => (state.id, -1)
+        case (a: North, b) => ((b._1, b._2 - 1), 0)
+        case (a: East, (XSIZE, _)) => (state.id, -1)
+        case (a: East, b) => ((b._1 + 1, b._2), 0)
+        case (a: South, (_, YSIZE)) => (state.id, -1)
+        case (a: South, b) => ((b._1, b._2 + 1), 0)
+        case (a: West, (0, _)) => (state.id, -1)
+        case (a: West, b) => ((state.id._1 - 1, state.id._2), 0)
         case (_, _) => (state.id, 0)
       }
       (gridWorldEnv.getStates(r._1), r._2)
