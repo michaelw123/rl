@@ -20,7 +20,6 @@
  */
 package rl.core.mdp
 
-import breeze.linalg.operators.OpSub
 import breeze.linalg.{DenseMatrix, ImmutableNumericOps, sum}
 import breeze.numerics.abs
 

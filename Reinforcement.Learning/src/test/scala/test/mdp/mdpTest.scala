@@ -82,5 +82,4 @@ object mdpTest extends App {
   println(result.map(a => rounded(3, a.value)))
 
 
-
 }
