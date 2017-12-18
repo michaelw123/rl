@@ -75,7 +75,7 @@ object mdpClient extends App {
       .setLearningRate(.5)
   gridWorldEnv.update(gridWorldEnv.stateSpace)
   val result = gridWorldAgent   //.setEpoch(0)
-    .setExitValue(0.001)
+    .setExitDelta(0.001)
     .observe
 
 

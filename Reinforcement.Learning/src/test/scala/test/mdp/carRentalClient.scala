@@ -22,8 +22,10 @@
 package test.mdp
 import breeze.linalg.DenseMatrix
 import rl.core.mdp.Environment
-import rl.core.mdp.GridWorld.{gridWorldAgent, gridWorldPolicy, gridWorldState, gridWorldAction}
+import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldPolicy, gridWorldState}
 import rl.utils.rounded
+
+
 /**
   * Created by Michael Wang on 12/18/2017.
   *
@@ -34,7 +36,10 @@ object carRentalClient extends App {
   val X = 20
   val Y = 20
 
+  val MAXREQUEST = 10
+  val MAXRETURN = 5
   val MOVINGCOST=2.0
+  val RENTINCOME = 10.0
   // expectation for rental requests in first location
   val RENTAL_REQUEST_FIRST_LOC = 3
   // expectation for rental requests in second location
@@ -55,11 +60,22 @@ object carRentalClient extends App {
     def getStates:DenseMatrix[gridWorldState] = currentStates
     var currentStates = stateSpace
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
-      val cost = scala.math.abs(action.value) * MOVECOST
-      val firstLocationCar = state.id._1
-      val secondLocationCar = state.id._2
-      (new gridWorldState((0,0), 0), 0)
+      val cost = scala.math.abs(action.value) * MOVINGCOST
+      val firstLocationRequest = state.id._1
+      val secondLocationRequest = state.id._2
+      var reward = 0.0
+      for (firstLocationRequest <- 0 until state.id._1 - action.value; secondLocationRequest <- 0 until state.id._2+action.value) {
+         val probRequest = poisson(RENTAL_REQUEST_FIRST_LOC, firstLocationRequest) * poisson(RENTAL_REQUEST_SECOND_LOC, secondLocationRequest)
+         reward += (firstLocationRequest+RENTAL_REQUEST_SECOND_LOC) *RENTINCOME * probRequest
+      }
+      (new gridWorldState(state.id,0), reward - cost)
     }
 
   }
+
+
+
+  import breeze.stats.distributions.Poisson
+  def poisson(mean:Int, k:Int): Double = new Poisson(mean).cdf(k)
+
 }

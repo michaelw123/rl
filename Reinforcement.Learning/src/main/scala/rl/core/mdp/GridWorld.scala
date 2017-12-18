@@ -53,7 +53,7 @@ object GridWorld {
         val newStates = observeOnce
         val x: Double = sum(abs(env.currentStates.map(a => a.value) - newStates.map(b => b.value)))
         env.update(newStates)
-        if (x > exitValue) {
+        if (x > exitDelta) {
           iterating
         }
       }
@@ -85,7 +85,7 @@ object GridWorld {
         })
         newStates
       }
-      exitValue match {
+      exitDelta match {
         case 0.0 => looping
         case _ => iterating
       }
@@ -97,9 +97,9 @@ object GridWorld {
       epoch = value
       this
     }
-    private var exitValue=0.0
-    def setExitValue(value:Double) = {
-      exitValue = value
+    private var exitDelta=0.0
+    def setExitDelta(value:Double) = {
+      exitDelta = value
       this
     }
   }
