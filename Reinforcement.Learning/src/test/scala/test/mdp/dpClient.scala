@@ -33,10 +33,9 @@ import rl.utils.rounded
   * To test Dynamic Programming for MDP
   */
 object dpClient extends App{
-  val SIZE = 16
-  val Y = 4
-
   implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
+    val SIZE = 16
+    val Y = 4
     val stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseVector[flatWorldState] = currentStates
