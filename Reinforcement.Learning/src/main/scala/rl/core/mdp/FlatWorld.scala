@@ -56,7 +56,7 @@ object FlatWorld {
           val newStates = env.stateSpace
 
           newStates.map(state => {
-            val actions = policy.availableActions(state)
+            val actions = env.availableActions(state)
             val vrp = for (action <- actions;
                            (nextState, reward) = env.reward(state, action);
                            actionProb = env.transactionProb(state, action, nextState)
@@ -70,7 +70,7 @@ object FlatWorld {
         val newStates = env.stateSpace
 
         newStates.map(state => {
-          val actions = policy.availableActions(state)
+          val actions = env.availableActions(state)
           val vrp = for (action <- actions;
                          (nextState, reward) = env.reward(state, action);
                          actionProb = env.transactionProb(state, action, nextState)

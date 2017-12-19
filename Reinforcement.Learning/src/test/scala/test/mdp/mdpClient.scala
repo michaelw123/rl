@@ -76,12 +76,12 @@ object mdpClient extends App {
   //import rl.core.mdp.ValueFunctions.Bellman
   //Bellman.setDiscount(0.9)
 
-   // import rl.core.mdp.ValueFunctions.optimalValueIteration
-   // optimalValueIteration.setDiscount(0.9)
+    import rl.core.mdp.ValueFunctions.optimalValueIteration
+    optimalValueIteration.setDiscount(0.9)
 
-  import rl.core.mdp.ValueFunctions.qlearning
-  qlearning.setDiscount(0.9)
-      .setLearningRate(.5)
+ // import rl.core.mdp.ValueFunctions.qlearning
+ // qlearning.setDiscount(0.9)
+  //    .setLearningRate(.5)
   gridWorldEnv.update(gridWorldEnv.stateSpace)
   val result = gridWorldAgent   //.setEpoch(0)
     .setExitDelta(0.001)

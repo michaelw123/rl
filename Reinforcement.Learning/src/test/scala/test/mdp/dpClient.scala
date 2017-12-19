@@ -25,7 +25,6 @@ import rl.core.mdp.Environment
 import rl.core.mdp.FlatWorld.flatWorldAction
 import test.mdp.dpClient.flatWorldAction.{East, North, South, West}
 import rl.core.mdp.FlatWorld.{flatWorldAgent, flatWorldPolicy, flatWorldState}
-import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
 import rl.utils.rounded
 
 
@@ -61,6 +60,11 @@ object dpClient extends App{
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
     override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = ???
     override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = ???
+    override def availableTransactions(state:flatWorldState):Seq[(flatWorldAction, flatWorldState)] = {
+      val actions = availableActions(state)
+      for (action <- actions) yield (action, reward(state, action)._1)
+    }
+    override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
   }
   implicit val policy:flatWorldPolicy = new flatWorldPolicy{
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
@@ -69,7 +73,7 @@ object dpClient extends App{
     }
 //    override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = actionProb(state.id, action.value)
 //    override def updateActionProb(state:flatWorldState, action:flatWorldAction, value:Double):Unit =  actionProb(state.id, action.value) = value
-    override def availableActions(state: flatWorldState): Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
+ //   override def availableActions(state: flatWorldState): Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
   }
   object flatWorldAction {
     sealed

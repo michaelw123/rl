@@ -23,6 +23,7 @@ package test.mdp
 import breeze.linalg.DenseMatrix
 import rl.core.mdp.Environment
 import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldState}
+import rl.core.mdp.GridWorld.gridWorldAction.{East, North, South, West}
 import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldPolicy, gridWorldState}
 import rl.utils._
 
@@ -75,6 +76,11 @@ object carRentalClient extends App {
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
     override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
     override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
+    override def availableTransactions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
+      val actions = availableActions(state)
+      for (action <- actions) yield (action, reward(state, action)._1)
+    }
+    override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
   }
 
 
