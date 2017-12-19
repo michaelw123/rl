@@ -38,7 +38,6 @@ object dpClient extends App{
     val stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseVector[flatWorldState] = currentStates
-    var currentStates = stateSpace
     override def reward(state: flatWorldState, action: flatWorldAction): (flatWorldState, Double) = {
       val r = (action, state.id) match {
         case (_, 0 | 15) => (state.id, 0)
@@ -52,7 +51,7 @@ object dpClient extends App{
         case (a:West, _) => (state.id - 1, -1)
         case (_, _) => (state.id, 0) //shall not be here
       }
-      (flatWorldEnv.getStates(r._1), r._2)
+      (flatWorldEnv.currentStates(r._1), r._2)
     }
     override def transactionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0

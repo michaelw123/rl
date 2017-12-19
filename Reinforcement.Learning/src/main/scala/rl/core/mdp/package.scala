@@ -51,7 +51,7 @@ package object mdp {
 
   trait Environment [CS[_], S, A]{
     def stateSpace:CS[S]
-    var currentStates:CS[S]
+    var currentStates:CS[S] = stateSpace
     def actionSpace:Seq[A]
     def update(value :CS[S]) = currentStates = value
     def reward(state:S, action:A):(S, Double) // an action takes S to S' deterministically
@@ -61,6 +61,7 @@ package object mdp {
     def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
     def availableTransactions(state:S):Seq[(A, S)]
     def availableActions(state:S):Seq[A]
+    def getCurrentStates:CS[S] = currentStates
   }
   trait Agent[A, CS[_], S] {
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](implicit vf: VF, policy:P, env:E):CS[S]

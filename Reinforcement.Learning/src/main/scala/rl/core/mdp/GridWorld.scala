@@ -50,7 +50,7 @@ object GridWorld {
       @tailrec
       def iterating:Unit = {
         val newStates = observeOnce
-        val x: Double = sum(abs(env.currentStates.map(a => a.value) - newStates.map(b => b.value)))
+        val x: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
         env.update(newStates)
         if (x > exitDelta) {
           iterating
@@ -73,16 +73,13 @@ object GridWorld {
       }
       def observeOnce:DenseMatrix[gridWorldState] = {
         val newStates = env.stateSpace
-
         newStates.map(state => {
-          val actions = env.availableActions(state)
+          val actionState = env.availableTransactions(state)
           var vrp = Seq[(Double, Double, Double)]()
-          for (action <- actions) {
-            for (nextState <- env.currentStates.toArray) {
-              val actionProb = env.transactionProb(state, action, nextState)
-              val reward = env.reward(state, action, nextState)
-              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-            }
+          for ((action, nextState) <- actionState) {
+            val actionProb = env.transactionProb(state, action, nextState)
+            val reward = env.reward(state, action, nextState)
+            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
           }
           state.value = vf.value(state, vrp)
         })
@@ -92,7 +89,7 @@ object GridWorld {
         case 0.0 => looping
         case _ => iterating
       }
-      env.currentStates
+      env.getCurrentStates
     }
 
     private var epoch = 1

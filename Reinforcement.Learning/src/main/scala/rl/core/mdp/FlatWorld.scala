@@ -67,16 +67,13 @@ object FlatWorld {
       }
       def observeOnce:DenseVector[flatWorldState] = {
         val newStates = env.stateSpace
-
         newStates.map(state => {
-          val actions = env.availableActions(state)
+          val actionState = env.availableTransactions(state)
           var vrp = Seq[(Double, Double, Double)]()
-          for (action <- actions) {
-            for (nextState <- env.currentStates.toArray) {
-              val actionProb = env.transactionProb(state, action, nextState)
-              val reward = env.reward(state, action, nextState)
-              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-            }
+          for ((action, nextState) <- actionState) {
+            val actionProb = env.transactionProb(state, action, nextState)
+            val reward = env.reward(state, action, nextState)
+            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
           }
           state.value = vf.value(state, vrp)
         })

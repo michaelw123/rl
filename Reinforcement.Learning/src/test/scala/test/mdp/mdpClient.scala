@@ -34,12 +34,12 @@ object mdpClient extends App {
   val Y = 5
 
   implicit object gridWorldEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
-    def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
+    val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState((i,j), 0.0)
     }
     def actionSpace:Seq[gridWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseMatrix[gridWorldState] = currentStates
-    var currentStates = stateSpace
+    //var currentStates = stateSpace
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
       val A = (0, 1)
       val PRIMEA = (4, 1)
@@ -73,17 +73,17 @@ object mdpClient extends App {
     override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
   }
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
-  //import rl.core.mdp.ValueFunctions.Bellman
-  //Bellman.setDiscount(0.9)
+  import rl.core.mdp.ValueFunctions.Bellman
+  Bellman.setDiscount(0.9)
 
   //  import rl.core.mdp.ValueFunctions.optimalValueIteration
   //  optimalValueIteration.setDiscount(0.9)
 
- import rl.core.mdp.ValueFunctions.qlearning
-  qlearning.setDiscount(0.9)
-      .setLearningRate(.5)
+ //import rl.core.mdp.ValueFunctions.qlearning
+ // qlearning.setDiscount(0.9)
+ //     .setLearningRate(.5)
   gridWorldEnv.update(gridWorldEnv.stateSpace)
-  val result = gridWorldAgent.setEpoch(100)
+  val result = gridWorldAgent.setEpoch(1000)
     //.setExitDelta(0.001)
     .observe
 
