@@ -59,6 +59,8 @@ object dpClient extends App{
     }
     override def transactionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
+    override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = ???
+    override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = ???
   }
   implicit val policy:flatWorldPolicy = new flatWorldPolicy{
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )

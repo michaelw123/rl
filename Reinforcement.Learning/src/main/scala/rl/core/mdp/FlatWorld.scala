@@ -59,7 +59,7 @@ object FlatWorld {
             val actions = policy.availableActions(state)
             val vrp = for (action <- actions;
                            (nextState, reward) = env.reward(state, action);
-                           actionProb = policy.getActionProb(state, action)
+                           actionProb = env.transactionProb(state, action, nextState)
             ) yield (nextState.value, reward - env.cost(state, action), actionProb)
             state.value = vf.value(state, vrp)
           })
@@ -73,7 +73,7 @@ object FlatWorld {
           val actions = policy.availableActions(state)
           val vrp = for (action <- actions;
                          (nextState, reward) = env.reward(state, action);
-                         actionProb = policy.getActionProb(state, action)
+                         actionProb = env.transactionProb(state, action, nextState)
           ) yield (nextState.value, reward - env.cost(state, action), actionProb)
           state.value = vf.value(state, vrp)
         })

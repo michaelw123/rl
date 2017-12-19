@@ -73,7 +73,8 @@ object carRentalClient extends App {
     }
     override def transactionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = 0.25
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
-
+    override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
+    override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
   }
 
 
