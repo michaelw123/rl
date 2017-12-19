@@ -54,7 +54,6 @@ object FlatWorld {
       def looping = {
         for (i <- 0 until epoch) {
           val newStates = env.stateSpace
-
           newStates.map(state => {
             val actions = env.availableActions(state)
             val vrp = for (action <- actions;
@@ -71,13 +70,28 @@ object FlatWorld {
 
         newStates.map(state => {
           val actions = env.availableActions(state)
-          val vrp = for (action <- actions;
-                         (nextState, reward) = env.reward(state, action);
-                         actionProb = env.transactionProb(state, action, nextState)
-          ) yield (nextState.value, reward - env.cost(state, action), actionProb)
+          var vrp = Seq[(Double, Double, Double)]()
+          for (action <- actions) {
+            for (nextState <- env.currentStates.toArray) {
+              val actionProb = env.transactionProb(state, action, nextState)
+              val reward = env.reward(state, action, nextState)
+              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+            }
+          }
           state.value = vf.value(state, vrp)
         })
         newStates
+//        val newStates = env.stateSpace
+//
+//        newStates.map(state => {
+//          val actions = env.availableActions(state)
+//          val vrp = for (action <- actions;
+//                         (nextState, reward) = env.reward(state, action);
+//                         actionProb = env.transactionProb(state, action, nextState)
+//          ) yield (nextState.value, reward - env.cost(state, action), actionProb)
+//          state.value = vf.value(state, vrp)
+//        })
+//        newStates
       }
       exitDelta match {
         case 0.0 => looping

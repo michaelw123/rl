@@ -35,7 +35,6 @@ import rl.utils.rounded
 object dpClient extends App{
   implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
     val SIZE = 16
-    val Y = 4
     val stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseVector[flatWorldState] = currentStates
@@ -57,8 +56,8 @@ object dpClient extends App{
     }
     override def transactionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
-    override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = ???
-    override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = ???
+    override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  =  reward(state, action)._2
+    override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.0
     override def availableTransactions(state:flatWorldState):Seq[(flatWorldAction, flatWorldState)] = {
       val actions = availableActions(state)
       for (action <- actions) yield (action, reward(state, action)._1)
@@ -67,9 +66,9 @@ object dpClient extends App{
   }
   implicit val policy:flatWorldPolicy = new flatWorldPolicy{
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
-    val actionProb : DenseMatrix[Double] = DenseMatrix.tabulate[Double] (flatWorldEnv.stateSpace.length, flatWorldEnv.actionSpace.length){
-      (i,j) =>0.25
-    }
+//     val actionProb : DenseMatrix[Double] = DenseMatrix.tabulate[Double] (flatWorldEnv.stateSpace.length, flatWorldEnv.actionSpace.length){
+//      (i,j) =>0.25
+//    }
 //    override def getActionProb(state:flatWorldState,  action:flatWorldAction):Double = actionProb(state.id, action.value)
 //    override def updateActionProb(state:flatWorldState, action:flatWorldAction, value:Double):Unit =  actionProb(state.id, action.value) = value
  //   override def availableActions(state: flatWorldState): Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
@@ -83,10 +82,10 @@ object dpClient extends App{
   }
 
   import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(1.0)
+  Bellman.setDiscount(0.1)
 
-  val result = flatWorldAgent.setEpoch(1000)
-   // .setExitDelta(0.001)
+  val result = flatWorldAgent//.setEpoch(1000)
+    .setExitDelta(0.001)
     .observe
 
   println(result.map(a => rounded(3, a.value)))
