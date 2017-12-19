@@ -64,8 +64,13 @@ object mdpClient extends App {
     }
     override def transactionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = 0.25
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
-    override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
-    override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
+    override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = reward(state, action)._2
+    override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = cost(state, action)
+    override def availableTransactions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
+      val actions = availableActions(state)
+      for (action <- actions) yield (action, reward(state, action)._1)
+    }
+    override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
   }
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
   //import rl.core.mdp.ValueFunctions.Bellman

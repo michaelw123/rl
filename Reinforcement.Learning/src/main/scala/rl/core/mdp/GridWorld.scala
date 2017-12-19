@@ -39,7 +39,7 @@ object GridWorld {
 
   class gridWorldPolicy extends Policy[gridWorldState, gridWorldAction] {
     import gridWorldAction._
-    override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
+    //override def availableActions(state: gridWorldState): Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
 
   }
 
@@ -61,7 +61,7 @@ object GridWorld {
           val newStates = env.stateSpace
 
           newStates.map(state => {
-            val actions = policy.availableActions(state)
+            val actions = env.availableActions(state)
             val vrp = for (action <- actions;
                            (nextState, reward) = env.reward(state, action);
                            actionProb = env.transactionProb(state, action, nextState)
@@ -75,7 +75,7 @@ object GridWorld {
         val newStates = env.stateSpace
 
         newStates.map(state => {
-          val actions = policy.availableActions(state)
+          val actions = env.availableActions(state)
 //          val vrp = for (action <- actions;
 //                         (nextState, reward) = env.reward(state, action);
 //                         actionProb = env.transactionProb(state, action, nextState)

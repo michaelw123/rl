@@ -46,9 +46,9 @@ package object mdp {
     val id:ID
     var value:Double
   }
-  trait Policy[S, A]{
-    def availableActions(state:S):Seq[A]
-  }
+  trait Policy[S, A]
+
+
   trait Environment [CS[_], S, A]{
     def stateSpace:CS[S]
     var currentStates:CS[S]
@@ -59,6 +59,8 @@ package object mdp {
     def transactionProb(state:S, action:A, nextState:S):Double //transaction probability
     def cost(state:S, action:A):Double  //if the destination state is deterministic by an action
     def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
+    def availableTransactions(state:S):Seq[(A, S)]
+    def availableActions(state:S):Seq[A]
   }
   trait Agent[A, CS[_], S] {
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](implicit vf: VF, policy:P, env:E):CS[S]
