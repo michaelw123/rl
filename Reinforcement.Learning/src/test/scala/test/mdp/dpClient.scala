@@ -84,7 +84,6 @@ object dpClient extends App{
   //Bellman.setDiscount(0.9)
 
   import rl.core.mdp.ValueFunctions.optimalValueIteration
-  optimalValueIteration.setDiscount(0.9)
 
   flatWorldEnv.update(flatWorldEnv.stateSpace)
 

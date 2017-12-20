@@ -61,7 +61,7 @@ object carRentalClient extends App {
                       new gridWorldAction{override val value:Int= 5})
     def getStates = currentStates
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
-      val cost = scala.math.abs(action.value) * MOVINGCOST
+      val theCost = cost(state, action)
       val firstLocationRequest = state.id._1
       val secondLocationRequest = state.id._2
       var reward = 0.0
@@ -69,23 +69,30 @@ object carRentalClient extends App {
          val probRequest = poisson(RENTAL_REQUEST_FIRST_LOC, firstLocationRequest) * poisson(RENTAL_REQUEST_SECOND_LOC, secondLocationRequest)
          reward += (firstLocationRequest+RENTAL_REQUEST_SECOND_LOC) *RENTINCOME * probRequest
       }
-      (new gridWorldState(state.id,0), reward - cost)
+      (new gridWorldState(state.id,0), reward - theCost)
     }
-    override def transactionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = 0.25
-    override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
-    override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
-    override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = ???
+    override def transactionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  =0.1
+    override def cost(state:gridWorldState, action:gridWorldAction):Double = action.value * MOVINGCOST
+    override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = action.value * RENTINCOME
+    override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = action.value * MOVINGCOST
     override def availableTransactions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
       val actions = availableActions(state)
-      for (action <- actions) yield (action, reward(state, action)._1)
+      for (action <- actions) {
+        for (request1 <- 0 until state.id._1) {
+          val prob1 = poisson(RENTAL_REQUEST_FIRST_LOC, request1)
+        }
+
+      (action, reward(state, action)._1)
     }
-    override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
+    override def availableActions(state:gridWorldState):Seq[gridWorldAction] = {
+        for (i <- 0 until scala.math.min(state.value, 5)) yield  new gridWorldAction{override val value:Int = i}
+
   }
 
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
-  val result = gridWorldAgent.setEpoch(1000)
+  val result = gridWorldAgent.setEpoch(10)
     //.setExitDelta(0.001)
     .observe
 
