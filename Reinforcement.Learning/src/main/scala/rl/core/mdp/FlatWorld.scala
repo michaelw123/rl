@@ -90,11 +90,12 @@ object FlatWorld {
 //        })
 //        newStates
       }
+
       exitDelta match {
         case 0.0 => looping
         case _ => iterating
       }
-      env.currentStates
+      env.getCurrentStates
     }
 
     private var epoch = 1

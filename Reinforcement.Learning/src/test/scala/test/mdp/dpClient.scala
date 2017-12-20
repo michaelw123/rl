@@ -51,7 +51,7 @@ object dpClient extends App{
         case (a:West, _) => (state.id - 1, -1)
         case (_, _) => (state.id, 0) //shall not be here
       }
-      (flatWorldEnv.currentStates(r._1), r._2)
+      (flatWorldEnv.getCurrentStates(r._1), r._2)
     }
     override def transactionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
@@ -82,9 +82,9 @@ object dpClient extends App{
 
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.1)
-
-  val result = flatWorldAgent//.setEpoch(1000)
-    .setExitDelta(0.001)
+  flatWorldEnv.update(flatWorldEnv.stateSpace)
+  val result = flatWorldAgent.setEpoch(1000)
+    //.setExitDelta(0.001)
     .observe
 
   println(result.map(a => rounded(3, a.value)))

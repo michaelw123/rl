@@ -34,7 +34,7 @@ object mdpClient extends App {
   val Y = 5
 
   implicit object gridWorldEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
-    val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
+    def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState((i,j), 0.0)
     }
     def actionSpace:Seq[gridWorldAction]= Seq(new North, new East, new South, new West)
