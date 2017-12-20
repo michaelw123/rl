@@ -35,7 +35,7 @@ import rl.utils.rounded
 object dpClient extends App{
   implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
     val SIZE = 16
-    val stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
+    def stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
     def getStates:DenseVector[flatWorldState] = currentStates
     override def reward(state: flatWorldState, action: flatWorldAction): (flatWorldState, Double) = {
@@ -80,9 +80,14 @@ object dpClient extends App{
     case class West(override val value:Int = 3) extends flatWorldAction
   }
 
-  import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(0.1)
+  //import rl.core.mdp.ValueFunctions.Bellman
+  //Bellman.setDiscount(0.9)
+
+  import rl.core.mdp.ValueFunctions.optimalValueIteration
+  optimalValueIteration.setDiscount(0.9)
+
   flatWorldEnv.update(flatWorldEnv.stateSpace)
+
   val result = flatWorldAgent.setEpoch(1000)
     //.setExitDelta(0.001)
     .observe

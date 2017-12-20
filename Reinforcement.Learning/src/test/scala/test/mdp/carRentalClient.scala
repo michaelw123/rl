@@ -59,8 +59,7 @@ object carRentalClient extends App {
                       new gridWorldAction{override val value:Int= 1}, new gridWorldAction{override val value:Int= 2},
                       new gridWorldAction{override val value:Int= 3}, new gridWorldAction{override val value:Int= 4},
                       new gridWorldAction{override val value:Int= 5})
-    def getStates:DenseMatrix[gridWorldState] = currentStates
-    var currentStates = stateSpace
+    def getStates = currentStates
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
       val cost = scala.math.abs(action.value) * MOVINGCOST
       val firstLocationRequest = state.id._1
@@ -83,5 +82,12 @@ object carRentalClient extends App {
     override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
   }
 
+  implicit val policy:gridWorldPolicy = new gridWorldPolicy
+  import rl.core.mdp.ValueFunctions.Bellman
+  Bellman.setDiscount(0.9)
+  val result = gridWorldAgent.setEpoch(1000)
+    //.setExitDelta(0.001)
+    .observe
 
+  println(result.map(a => rounded(3, a.value)))
 }
