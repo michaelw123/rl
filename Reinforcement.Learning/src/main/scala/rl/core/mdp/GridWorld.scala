@@ -22,6 +22,7 @@ package rl.core.mdp
 
 import breeze.linalg.{DenseMatrix, ImmutableNumericOps, sum}
 import breeze.numerics.abs
+import rl.utils.rounded
 
 import scala.annotation.tailrec
 /**
@@ -71,7 +72,8 @@ object GridWorld {
             state.value = vf.value(state, vrp)
           })
           env.update(newStates)
-          println(s"Epoch $epoch: $newStates")
+          val r = newStates.map(a => rounded(3, a.value))
+          println(s"Epoch $epoch: $r")
         }
       }
       def observeOnce:DenseMatrix[gridWorldState] = {
