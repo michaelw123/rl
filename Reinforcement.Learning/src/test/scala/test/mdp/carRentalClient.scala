@@ -50,44 +50,85 @@ object carRentalClient extends App {
   val   RETURNS_FIRST_LOC = 3
   // expectation for # of cars returned in second location
   val   RETURNS_SECOND_LOC = 2
+  val MAXMOVE = 5
 
-  implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
-    val stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X, Y) { (i,j) => new gridWorldState((i,j), 0)}
-    val actionSpace:Seq[gridWorldAction]= Seq(new gridWorldAction{override val value:Int= -5}, new gridWorldAction{override val value:Int= -4},
-                      new gridWorldAction{override val value:Int= -3}, new gridWorldAction{override val value:Int= -2},
-                      new gridWorldAction{override val value:Int= -2}, new gridWorldAction{override val value:Int= 0},
-                      new gridWorldAction{override val value:Int= 1}, new gridWorldAction{override val value:Int= 2},
-                      new gridWorldAction{override val value:Int= 3}, new gridWorldAction{override val value:Int= 4},
-                      new gridWorldAction{override val value:Int= 5})
+  implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction] {
+    val stateSpace: DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X, Y) { (i, j) => new gridWorldState((i, j), 0) }
+    val actionSpace: Seq[gridWorldAction] = Seq(new gridWorldAction {
+      override val value: Int = -5
+    }, new gridWorldAction {
+      override val value: Int = -4
+    },
+      new gridWorldAction {
+        override val value: Int = -3
+      }, new gridWorldAction {
+        override val value: Int = -2
+      },
+      new gridWorldAction {
+        override val value: Int = -2
+      }, new gridWorldAction {
+        override val value: Int = 0
+      },
+      new gridWorldAction {
+        override val value: Int = 1
+      }, new gridWorldAction {
+        override val value: Int = 2
+      },
+      new gridWorldAction {
+        override val value: Int = 3
+      }, new gridWorldAction {
+        override val value: Int = 4
+      },
+      new gridWorldAction {
+        override val value: Int = 5
+      })
+
     def getStates = currentStates
+
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
       val theCost = cost(state, action)
-      val firstLocationRequest = state.id._1
-      val secondLocationRequest = state.id._2
       var reward = 0.0
-      for (firstLocationRequest <- 0 until state.id._1 - action.value; secondLocationRequest <- 0 until state.id._2+action.value) {
-         val probRequest = poisson(RENTAL_REQUEST_FIRST_LOC, firstLocationRequest) * poisson(RENTAL_REQUEST_SECOND_LOC, secondLocationRequest)
-         reward += (firstLocationRequest+RENTAL_REQUEST_SECOND_LOC) *RENTINCOME * probRequest
+      for (firstLocationRequest <- 0 until scala.math.min(state.id._1,RENTAL_REQUEST_FIRST_LOC)  - action.value; secondLocationRequest <- 0 until scala.math.min(state.id._2 + action.value, RENTAL_REQUEST_SECOND_LOC)) {
+        val probRequest = poisson(RENTAL_REQUEST_FIRST_LOC, firstLocationRequest) * poisson(RENTAL_REQUEST_SECOND_LOC, secondLocationRequest)
+        reward += (firstLocationRequest + RENTAL_REQUEST_SECOND_LOC) * RENTINCOME * probRequest
       }
-      (new gridWorldState(state.id,0), reward - theCost)
+      (new gridWorldState(state.id, 0), reward - theCost)
     }
-    override def transactionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  =0.1
-    override def cost(state:gridWorldState, action:gridWorldAction):Double = action.value * MOVINGCOST
-    override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = action.value * RENTINCOME
-    override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = action.value * MOVINGCOST
-    override def availableTransactions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
-      val actions = availableActions(state)
-      for (action <- actions) {
-        for (request1 <- 0 until state.id._1) {
-          val prob1 = poisson(RENTAL_REQUEST_FIRST_LOC, request1)
-        }
 
-      (action, reward(state, action)._1)
+    override def transactionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
+      val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
+      val diff2 = scala.math.abs(state.id._2 + action.value - nextState.id._2)
+      var prob = 0.0
+      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
+        prob += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, diff1 -i)
+      }
+      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
+        prob += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, diff1 -i)
+      }
+      println("prob = "+prob)
+      prob
     }
-    override def availableActions(state:gridWorldState):Seq[gridWorldAction] = {
-        for (i <- 0 until scala.math.min(state.value, 5)) yield  new gridWorldAction{override val value:Int = i}
 
+    override def cost(state: gridWorldState, action: gridWorldAction): Double = action.value * MOVINGCOST
+
+    override def reward(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = action.value * RENTINCOME
+
+    override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = action.value * MOVINGCOST
+
+    override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] =
+      for (action <- availableActions(state); nextState <- getStates.toArray) yield (action, nextState)
+
+    override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
+      val first2second = for (i <- 0 until scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
+        override val value: Int = i
+      }
+      val second2first = for (i <- 0 until scala.math.min(state.id._2, MAXMOVE)) yield new gridWorldAction {
+        override val value: Int = (-1) * i
+      }
+      first2second ++ second2first
+    }
   }
+
 
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
