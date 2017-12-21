@@ -98,17 +98,17 @@ object carRentalClient extends App {
     override def transactionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
       val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
-      var prob:Double = 0.0
+      var reward:Double = 0.0
  //     println (state.id + " "+ action.value + " " + nextState.id)
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
-        prob += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))
+        reward += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i)) +i
       }
 //      println("prob1="+prob)
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
-        prob += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
+        reward += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
       }
      // println("prob = "+prob)
-      prob
+      reward
     }
 
     override def cost(state: gridWorldState, action: gridWorldAction): Double = action.value * MOVINGCOST
