@@ -61,12 +61,22 @@ object GridWorld {
           val newStates = env.stateSpace
 
           newStates.map(state => {
-            val actions = env.availableActions(state)
-            val vrp = for (action <- actions;
-                           (nextState, reward) = env.reward(state, action);
-                           actionProb = env.transactionProb(state, action, nextState)
-            ) yield (nextState.value, reward - env.cost(state, action), actionProb)
+            val actionState = env.availableTransactions(state)
+            var vrp = Seq[(Double, Double, Double)]()
+            for ((action, nextState) <- actionState) {
+              val actionProb = env.transactionProb(state, action, nextState)
+              val reward = env.reward(state, action, nextState)
+              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+            }
             state.value = vf.value(state, vrp)
+//
+//
+//            val actions = env.availableActions(state)
+//            val vrp = for (action <- actions;
+//                           (nextState, reward) = env.reward(state, action);
+//                           actionProb = env.transactionProb(state, action, nextState)
+//            ) yield (nextState.value, reward - env.cost(state, action), actionProb)
+//            state.value = vf.value(state, vrp)
           })
           env.update(newStates)
         }

@@ -107,18 +107,21 @@ object carRentalClient extends App {
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
         prob += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
       }
- //     println("prob = "+prob)
+     // println("prob = "+prob)
       prob
     }
 
     override def cost(state: gridWorldState, action: gridWorldAction): Double = action.value * MOVINGCOST
 
-    override def reward(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = action.value * RENTINCOME
+    override def reward(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
+
+      action.value * RENTINCOME
+    }
 
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = action.value * MOVINGCOST
 
     override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] =
-      for (action <- availableActions(state); nextState <- getStates.toArray) yield (action, nextState)
+      for (action <- availableActions(state); nextState <- stateSpace.toArray) yield (action, nextState)
 
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
       val first2second = for (i <- 0 until scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
