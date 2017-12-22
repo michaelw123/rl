@@ -62,7 +62,10 @@ package object mdp {
     def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
     def availableTransactions(state:S):Seq[(A, S)]
     def availableActions(state:S):Seq[A]
-    def getCurrentStates:CS[S] = currentStates
+    def getCurrentStates:CS[S] = {
+      if (currentStates == null) currentStates = stateSpace
+      currentStates
+    }
   }
   trait Agent[A, CS[_], S] {
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](implicit vf: VF, policy:P, env:E):CS[S]

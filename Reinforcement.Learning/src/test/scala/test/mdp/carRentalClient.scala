@@ -22,8 +22,7 @@
 package test.mdp
 import breeze.linalg.DenseMatrix
 import rl.core.mdp.Environment
-import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldState}
-import rl.core.mdp.GridWorld.gridWorldAction.{East, North, South, West}
+import rl.core.mdp.GridWorld._
 import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldPolicy, gridWorldState}
 import rl.utils._
 
@@ -83,8 +82,6 @@ object carRentalClient extends App {
         override val value: Int = 5
       })
 
-    def getStates = currentStates
-
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
       val theCost = cost(state, action)
       var reward = 0.0
@@ -92,6 +89,7 @@ object carRentalClient extends App {
         val probRequest = poisson(RENTAL_REQUEST_FIRST_LOC, firstLocationRequest) * poisson(RENTAL_REQUEST_SECOND_LOC, secondLocationRequest)
         reward += (firstLocationRequest + RENTAL_REQUEST_SECOND_LOC) * RENTINCOME * probRequest
       }
+      //(getStates(r._1),  reward - theCost)
       (new gridWorldState(state.id, 0), reward - theCost)
     }
 
@@ -131,7 +129,7 @@ object carRentalClient extends App {
     override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
       val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
-      var reward:Double = 0.0
+      var reward = 0.0
       var prob = 0.0
       //     println (state.id + " "+ action.value + " " + nextState.id)
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
@@ -146,13 +144,13 @@ object carRentalClient extends App {
         reward += tmp*i*RENTINCOME
 
       }
-      // println("prob = "+prob)
+      //println(s"(prob, reward)=($prob, $reward)")
       (prob, reward)
     }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = action.value * MOVINGCOST
 
     override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] =
-      for (action <- availableActions(state); nextState <- stateSpace.toArray) yield (action, nextState)
+      for (action <- availableActions(state); nextState <- getCurrentStates.toArray) yield (action, nextState)
 
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
       val first2second = for (i <- 0 until scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
