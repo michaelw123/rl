@@ -65,7 +65,7 @@ object carRentalClient extends App {
         override val value: Int = -2
       },
       new gridWorldAction {
-        override val value: Int = -2
+        override val value: Int = -1
       }, new gridWorldAction {
         override val value: Int = 0
       },
@@ -98,26 +98,57 @@ object carRentalClient extends App {
     override def transactionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
       val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
-      var reward:Double = 0.0
+      var prob:Double = 0.0
  //     println (state.id + " "+ action.value + " " + nextState.id)
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
-        reward += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i)) +i
+        prob += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))
       }
 //      println("prob1="+prob)
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
-        reward += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
+        prob += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
       }
      // println("prob = "+prob)
-      reward
+      prob
     }
 
     override def cost(state: gridWorldState, action: gridWorldAction): Double = action.value * MOVINGCOST
 
     override def reward(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
-
-      action.value * RENTINCOME
+      val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
+      val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
+      var reward:Double = 0.0
+      //     println (state.id + " "+ action.value + " " + nextState.id)
+      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
+        reward += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))*i*RENTINCOME
+      }
+      //      println("prob1="+prob)
+      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
+        reward += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))*i*RENTINCOME
+      }
+      // println("prob = "+prob)
+      reward
     }
+    override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
+      val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
+      val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
+      var reward:Double = 0.0
+      var prob = 0.0
+      //     println (state.id + " "+ action.value + " " + nextState.id)
+      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
+        val tmp = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))
+        prob += tmp
+        reward += tmp*i*RENTINCOME
+      }
+      //      println("prob1="+prob)
+      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
+        val tmp =  poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
+        prob += tmp
+        reward += tmp*i*RENTINCOME
 
+      }
+      // println("prob = "+prob)
+      (prob, reward)
+    }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = action.value * MOVINGCOST
 
     override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] =
@@ -127,7 +158,7 @@ object carRentalClient extends App {
       val first2second = for (i <- 0 until scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
         override val value: Int = i
       }
-      val second2first = for (i <- 0 until scala.math.min(state.id._2, MAXMOVE)) yield new gridWorldAction {
+      val second2first = for (i <- 1 until scala.math.min(state.id._2, MAXMOVE)) yield new gridWorldAction {
         override val value: Int = (-1) * i
       }
       first2second ++ second2first
@@ -137,7 +168,7 @@ object carRentalClient extends App {
 
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(0.9)
+  Bellman.setDiscount(0.4)
   val result = gridWorldAgent.setEpoch(10)
     //.setExitDelta(0.001)
     .observe

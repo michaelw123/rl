@@ -71,7 +71,11 @@ object mdpClient extends App {
       for (action <- actions) yield (action, reward(state, action)._1)
     }
     override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
+    override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
+      (0.25, reward(state, action, nextState))
+    }
   }
+
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)

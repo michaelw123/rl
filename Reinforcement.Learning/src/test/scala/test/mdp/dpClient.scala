@@ -28,6 +28,7 @@ import rl.core.mdp.FlatWorld.{flatWorldAgent, flatWorldPolicy, flatWorldState}
 import rl.utils.rounded
 
 
+
 /**
   * Created by Michael Wang on 2017-12-17.
   * To test Dynamic Programming for MDP
@@ -80,15 +81,16 @@ object dpClient extends App{
     case class West(override val value:Int = 3) extends flatWorldAction
   }
 
-  //import rl.core.mdp.ValueFunctions.Bellman
-  //Bellman.setDiscount(0.9)
+//  import rl.core.mdp.ValueFunctions.Bellman
+//  Bellman.setDiscount(0.9)
 
   import rl.core.mdp.ValueFunctions.optimalValueIteration
+  optimalValueIteration.setDiscount(0.9)
 
   flatWorldEnv.update(flatWorldEnv.stateSpace)
 
-  val result = flatWorldAgent.setEpoch(1000)
-    //.setExitDelta(0.001)
+  val result = flatWorldAgent//.setEpoch(1000)
+    .setExitDelta(0.001)
     .observe
 
   println(result.map(a => rounded(3, a.value)))
