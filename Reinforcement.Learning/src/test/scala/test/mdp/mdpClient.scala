@@ -38,7 +38,7 @@ object mdpClient extends App {
       (i,j) => new gridWorldState((i,j), 0.0)
     }
     def actionSpace:Seq[gridWorldAction]= Seq(new North, new East, new South, new West)
-    def getStates:DenseMatrix[gridWorldState] = currentStates
+    def getStates:DenseMatrix[gridWorldState] = getCurrentStates
     //var currentStates = stateSpace
     override def reward(state: gridWorldState, action: gridWorldAction): (gridWorldState, Double) = {
       val A = (0, 1)

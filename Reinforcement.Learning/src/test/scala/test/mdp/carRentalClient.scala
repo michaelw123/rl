@@ -152,8 +152,11 @@ object carRentalClient extends App {
     }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
-    override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] =
-      for (action <- availableActions(state); nextState <- getCurrentStates.toArray) yield (action, nextState)
+    override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
+      val actions = availableActions(state)
+      val transactions = getCurrentStates.toArray
+      for (action <- actions; nextState <- transactions) yield (action, nextState)
+    }
 
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
       val first2second = for (i <- 0 until scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
@@ -164,12 +167,18 @@ object carRentalClient extends App {
       }
       first2second ++ second2first
     }
+    override def getCurrentStates:DenseMatrix[gridWorldState] = {
+      if (!currentStates.isDefined) currentStates=Option(stateSpace)
+      currentStates.get
+    }
   }
 
 
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
-  import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(0.0001)
+//  import rl.core.mdp.ValueFunctions.Bellman
+//  Bellman.setDiscount(0.0001)
+  import rl.core.mdp.ValueFunctions.qlearning
+  qlearning.setDiscount(0.9).setLearningRate(0.1)
   val result = gridWorldAgent.setEpoch(2)
     //.setExitDelta(0.001)
     .observe

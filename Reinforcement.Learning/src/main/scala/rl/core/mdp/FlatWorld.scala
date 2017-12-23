@@ -45,7 +45,7 @@ object FlatWorld {
       @tailrec
       def iterating:Unit = {
         val newStates = observeOnce
-        val x: Double = sum(abs(env.currentStates.map(a => a.value) - newStates.map(b => b.value)))
+        val x: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
         env.update(newStates)
         if (x > exitDelta) {
           iterating

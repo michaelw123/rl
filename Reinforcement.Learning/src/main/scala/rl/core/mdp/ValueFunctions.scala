@@ -81,8 +81,13 @@ object ValueFunctions {
       reward + discount * nextStateValue
     }
     def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
-      val nextValueMax = vrp.map(a => a._1).max
-      vrp.map( x =>  state.value * (1 - learningRate) + learningRate *( x._2 + discount*nextValueMax)).max
+      vrp.isEmpty match {
+        case true => 0
+        case _ => {
+          val nextValueMax = vrp.map(a => a._1).max
+          vrp.map( x =>  state.value * (1 - learningRate) + learningRate *( x._2 + discount*nextValueMax)).max
+        }
+      }
     }
   }
 }

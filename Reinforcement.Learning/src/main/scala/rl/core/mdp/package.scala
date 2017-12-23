@@ -51,9 +51,9 @@ package object mdp {
 
   trait Environment [CS[_], S, A]{
     def stateSpace:CS[S]
-    var currentStates:CS[S] = stateSpace
+    var currentStates = None: Option[CS[S]]
     def actionSpace:Seq[A]
-    def update(value :CS[S]) = currentStates = value
+    def update(value :CS[S]) = currentStates = Option(value)
     def reward(state:S, action:A):(S, Double) // an action takes S to S' deterministically
     def reward(state:S, action:A, nextState:S):Double // an action may take S to multiple S', propability is given by transactionProb, this reward function calculates the transaction R(S, A, S')
     def transactionProb(state:S, action:A, nextState:S):Double //transaction probability
@@ -63,8 +63,8 @@ package object mdp {
     def availableTransactions(state:S):Seq[(A, S)]
     def availableActions(state:S):Seq[A]
     def getCurrentStates:CS[S] = {
-      if (currentStates == null) currentStates = stateSpace
-      currentStates
+      if (!currentStates.isDefined) currentStates=Option(stateSpace)
+      currentStates.get
     }
   }
   trait Agent[A, CS[_], S] {

@@ -38,7 +38,7 @@ object dpClient extends App{
     val SIZE = 16
     def stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
-    def getStates:DenseVector[flatWorldState] = currentStates
+    def getStates:DenseVector[flatWorldState] = getCurrentStates
     override def reward(state: flatWorldState, action: flatWorldAction): (flatWorldState, Double) = {
       val r = (action, state.id) match {
         case (_, 0 | 15) => (state.id, 0)
