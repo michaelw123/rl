@@ -134,21 +134,44 @@ object carRentalClient extends App {
       var prob1 = 0.0
       var prob2 = 0.0
       //     println (state.id + " "+ action.value + " " + nextState.id)
-      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
-        val tmp = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))
+      val r1 = {
+        if (action.value >0) state.id._1 - action.value
+        else state.id._1
+      }
+      for (i <- 0 until scala.math.min(MAXREQUEST, r1)) {
+        val tmp = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(i-diff1))
         prob1 += tmp
-        reward += tmp*i*RENTINCOME
+        reward += tmp*i
+      }
+      val r2 = {
+        if (action.value <0) state.id._2 + action.value
+        else state.id._2
       }
       //      println("prob1="+prob)
-      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
+      for (i <- 0 until scala.math.min(MAXREQUEST, r2)) {
         val tmp =  poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
         prob2 += tmp
-        reward += tmp*i*RENTINCOME
+        reward += tmp*i
 
       }
-      val prob = prob1*prob2
+      val v = action.value
+      val s1=state.id._1
+      val s2=state.id._2
+      val ns1=nextState.id._1
+      val ns2=nextState.id._2
+      println(s"diff1=$diff1, diff2=$diff2, state.id._1=$s1, state.id._2=$s2, nextState.id._1=$ns1, nextState.id._2=$ns2, action=$v, r1=$r1, r2=$r2")
+//      var prob = 0.0
+//      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1-action.value)) {
+//        for (j <- 0 until scala.math.min(MAXREQUEST, state.id._2+action.value)) {
+//          val tmp1 = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 - i))
+//          val tmp2 = poisson(RENTAL_REQUEST_SECOND_LOC, j) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 - j))
+//          prob += tmp1 * tmp2
+//          reward += (i + j)*tmp1*tmp2
+//        }
+//      }
+      val prob = prob1 * prob2
       //println(s"(prob, reward)=($prob, $reward)")
-      (prob1*prob2, reward)
+      (prob, reward*RENTINCOME)
     }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
@@ -175,11 +198,11 @@ object carRentalClient extends App {
 
 
   implicit val policy:gridWorldPolicy = new gridWorldPolicy
-//  import rl.core.mdp.ValueFunctions.Bellman
-//  Bellman.setDiscount(0.0001)
-  import rl.core.mdp.ValueFunctions.qlearning
-  qlearning.setDiscount(0.9).setLearningRate(0.1)
-  val result = gridWorldAgent.setEpoch(2)
+  import rl.core.mdp.ValueFunctions.Bellman
+  Bellman.setDiscount(0.9)
+//  import rl.core.mdp.ValueFunctions.qlearning
+//  qlearning.setDiscount(0.9).setLearningRate(0.5)
+  val result = gridWorldAgent.setEpoch(20)
     //.setExitDelta(0.001)
     .observe
 
