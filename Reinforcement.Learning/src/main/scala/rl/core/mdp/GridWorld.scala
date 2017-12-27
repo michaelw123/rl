@@ -84,11 +84,16 @@ object GridWorld {
           val actionState = env.availableTransactions(state)
           var vrp = Seq[(Double, Double, Double)]()
           for ((action, nextState) <- actionState) {
+//            if (state.id == (18, 17)) {
+//              println("here")
+//            }
             val (actionProb, reward ) = env.transactionRewardProb(state, action, nextState)
-            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+            if (reward!=0 && actionProb!=0) {
+              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+            }
           }
           state.value = vf.value(state, vrp)
-          println(state.value)
+          //println(state.value)
         })
         newStates
       }

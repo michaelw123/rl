@@ -114,7 +114,7 @@ object carRentalClient extends App {
 
     override def reward(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
-      val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
+      val diff2 = scala.math.abs(state.id._2 + action.value - nextState.id._2)
       var reward:Double = 0.0
       //     println (state.id + " "+ action.value + " " + nextState.id)
       for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
@@ -128,8 +128,14 @@ object carRentalClient extends App {
       reward
     }
     override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
-      val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
-      val diff2 = scala.math.abs(state.id._2 + action.value - nextState.id._2)
+      val diff1 = {
+        if (action.value >0) state.id._1 - action.value - nextState.id._1
+        else  state.id._1  - nextState.id._1
+      }
+      val diff2 = {
+        if (action.value<0) state.id._2 + action.value - nextState.id._2
+        else  state.id._2  - nextState.id._2
+      }
       var reward = 0.0
       var prob1 = 0.0
       var prob2 = 0.0
@@ -139,7 +145,7 @@ object carRentalClient extends App {
         else state.id._1
       }
       for (i <- 0 until scala.math.min(MAXREQUEST, r1)) {
-        val tmp = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(i-diff1))
+        val tmp = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1+i))
         prob1 += tmp
         reward += tmp*i
       }
@@ -149,7 +155,7 @@ object carRentalClient extends App {
       }
       //      println("prob1="+prob)
       for (i <- 0 until scala.math.min(MAXREQUEST, r2)) {
-        val tmp =  poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
+        val tmp =  poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2+i))
         prob2 += tmp
         reward += tmp*i
 
@@ -159,7 +165,9 @@ object carRentalClient extends App {
       val s2=state.id._2
       val ns1=nextState.id._1
       val ns2=nextState.id._2
-      println(s"diff1=$diff1, diff2=$diff2, state.id._1=$s1, state.id._2=$s2, nextState.id._1=$ns1, nextState.id._2=$ns2, action=$v, r1=$r1, r2=$r2")
+      if (state.id == (18, 17) && action.value==3) {
+        println(s"diff1=$diff1, diff2=$diff2, state.id._1=$s1, state.id._2=$s2, nextState.id._1=$ns1, nextState.id._2=$ns2, action=$v, r1=$r1, r2=$r2, reward=$reward")
+      }
 //      var prob = 0.0
 //      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1-action.value)) {
 //        for (j <- 0 until scala.math.min(MAXREQUEST, state.id._2+action.value)) {
@@ -207,4 +215,6 @@ object carRentalClient extends App {
     .observe
 
   println(result.map(a => rounded(3, a.value)))
+
+
 }

@@ -29,5 +29,8 @@ package object utils {
     (n * w).toLong.toDouble / w
   }
   import breeze.stats.distributions.Poisson
-  def poisson(mean:Int, k:Int): Double = new Poisson(mean).probabilityOf(k)
+  def poisson(mean:Int, k:Int): Double = {
+    if (k<0) 0.0
+    else new Poisson(mean).probabilityOf(k)
+  }
 }
