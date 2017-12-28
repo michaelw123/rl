@@ -204,6 +204,7 @@ object carRentalClient extends App {
       }
       val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)
       val reward = (req1+req2)*RENTINCOME
+      //println(prob, reward)
       (prob, (req1+req2)*RENTINCOME)
 
     }

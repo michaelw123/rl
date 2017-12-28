@@ -85,10 +85,11 @@ object GridWorld {
           var vrp = Seq[(Double, Double, Double)]()
           for ((action, nextState) <- actionState) {
             val (actionProb, reward ) = env.transactionRewardProb(state, action, nextState)
-              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+            //vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+            state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
           }
-          state.value = vf.value(state, vrp)
-          //println(state.value)
+          //state.value = vf.value(state, vrp)
+          println(newStates.map(a => (a.id._1, a.id._2, a.value)))
         })
         newStates
       }
