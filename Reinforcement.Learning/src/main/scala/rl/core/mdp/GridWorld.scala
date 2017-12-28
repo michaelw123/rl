@@ -25,6 +25,7 @@ import breeze.numerics.abs
 import rl.utils.rounded
 
 import scala.annotation.tailrec
+import rl.utils._
 /**
   * Created by Michael Wang on 2017-12-09.
   */
@@ -81,23 +82,46 @@ object GridWorld {
       def observeOnce:DenseMatrix[gridWorldState] = {
         val newStates = env.stateSpace
         newStates.map(state => {
-          val actionState = env.availableTransactions(state)
-          var vrp = Seq[(Double, Double, Double)]()
-          for ((action, nextState) <- actionState) {
-            val (actionProb, reward ) = env.transactionRewardProb(state, action, nextState)
-            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-            //state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
-          }
-          state.value = vf.value(state, vrp)
-          println(newStates.map(a => (a.id._1, a.id._2, a.value)))
+//          val actionState = env.availableTransactions(state)
+//          var vrp = Seq[(Double, Double, Double)]()
+//          for ((action, nextState) <- actionState) {
+//            val (actionProb, reward ) = env.transactionRewardProb(state, action, nextState)
+//            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+//            //state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
+//          }
+//          state.value = vf.value(state, vrp)
+//          println(newStates.map(a => (a.id._1, a.id._2, a.value)))
+          state.value = tmpFindValue(state)
         })
         newStates
       }
-      def tmpFindValue(state:gridWorldState, action:gridWorldAction) = {
+      def tmpFindValue(state:gridWorldState) = {
         val actions = env.availableActions(state)
+        val ccStates = env.getCurrentStates
+        var returns = 0.0
         for (action <- actions) {
-          
+          for (rentalRequestFirstLoc <- 0 until 11) {
+            for (rentalRequestSecondLoc <- 0 until 11) {
+              var numOfCarsFirstLoc = scala.math.min(state.id._1 - action.value, 20)
+              var numOfCarsSecondLoc = scala.math.min(state.id._2 + action.value, 20)
+              val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
+              val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
+
+              val reward = (realRentalFirstLoc + realRentalSecondLoc) * 10
+              numOfCarsFirstLoc -= realRentalFirstLoc
+              numOfCarsSecondLoc -= realRentalSecondLoc
+
+              val prob = poisson(rentalRequestFirstLoc, 3) * poisson(rentalRequestSecondLoc, 4)
+              val returnedCarsFirstLoc = 3
+              val returnedCarsSecondLoc = 3
+              numOfCarsFirstLoc = scala.math.min(numOfCarsFirstLoc + returnedCarsFirstLoc, 20)
+              numOfCarsSecondLoc = scala.math.min(numOfCarsSecondLoc + returnedCarsSecondLoc, 20)
+
+              returns += vf.value(state.value, ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
+            }
+          }
         }
+        returns
       }
 
       exitDelta match {

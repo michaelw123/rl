@@ -54,7 +54,7 @@ object carRentalClient extends App {
   val MAX_CARS=20
 
   implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction] {
-    val stateSpace: DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X, Y) { (i, j) => new gridWorldState((i, j), 0) }
+    val stateSpace: DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X+1, Y+1) { (i, j) => new gridWorldState((i, j), 0) }
     val actionSpace: Seq[gridWorldAction] = Seq(new gridWorldAction {
       override val value: Int = -5
     }, new gridWorldAction {
