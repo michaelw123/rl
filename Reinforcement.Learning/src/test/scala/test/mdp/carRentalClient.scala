@@ -51,6 +51,7 @@ object carRentalClient extends App {
   val   RETURNS_SECOND_LOC = 2
   val MAXMOVE = 5
   val POISSONUPBOUND=11
+  val MAX_CARS=20
 
   implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction] {
     val stateSpace: DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X, Y) { (i, j) => new gridWorldState((i, j), 0) }
@@ -66,6 +67,9 @@ object carRentalClient extends App {
       },
       new gridWorldAction {
         override val value: Int = -1
+      },
+      new gridWorldAction {
+        override val value: Int = 0
       },
       new gridWorldAction {
         override val value: Int = 1
@@ -126,7 +130,7 @@ object carRentalClient extends App {
       // println("prob = "+prob)
       reward
     }
-    override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
+     def transactionRewardProb1(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
       val diff1 = {
         if (action.value >0) state.id._1 - action.value - nextState.id._1
         else  state.id._1  - nextState.id._1
@@ -186,12 +190,29 @@ object carRentalClient extends App {
       //println(s"(prob, reward)=($prob, $reward)")
       (prob, reward*RENTINCOME)
     }
+    override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
+      val numberOfReq1 = scala.math.min(scala.math.min(state.id._1-action.value,MAX_CARS), POISSONUPBOUND)
+      val numberOfReq2 = scala.math.min(scala.math.min(state.id._2+action.value, MAX_CARS),POISSONUPBOUND)
+
+      var req1 = state.id._1 -action.value -nextState.id._1 + RETURNS_FIRST_LOC
+      var req2 = state.id._2 +action.value -nextState.id._2 + RETURNS_SECOND_LOC
+      if (req1<0 || req1 > numberOfReq1) {
+        req1=0
+      }
+      if (req2<0 || req2 > numberOfReq2) {
+        req2=0
+      }
+      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)
+      val reward = (req1+req2)*RENTINCOME
+      (prob, (req1+req2)*RENTINCOME)
+
+    }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
     override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
       val actions = availableActions(state)
       val transactions = getCurrentStates.toArray
-      for (action <- actions; nextState <- transactions if ((action.value <= state.id._1) && (state.id._2 >= -action.value))) yield (action, nextState)
+      for (action <- actions; nextState <- transactions) yield (action, nextState)
     }
 
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
