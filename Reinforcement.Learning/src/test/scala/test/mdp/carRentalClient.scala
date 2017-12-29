@@ -95,7 +95,10 @@ object carRentalClient extends App {
       //(getStates(r._1),  reward - theCost)
       (new gridWorldState(state.id, 0), reward - theCost)
     }
-
+    implicit object gridWorldPolicy{
+      val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
+      def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
+    }
     override def transactionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
       val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
@@ -217,10 +220,10 @@ object carRentalClient extends App {
     }
 
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
-      val first2second = for (i <- 0 until scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
+      val first2second = for (i <- 0 to scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
         override val value: Int = i
       }
-      val second2first = for (i <- 1 until scala.math.min(state.id._2, MAXMOVE)) yield new gridWorldAction {
+      val second2first = for (i <- 1 to scala.math.min(state.id._2, MAXMOVE)) yield new gridWorldAction {
         override val value: Int = (-1) * i
       }
       first2second ++ second2first
@@ -232,7 +235,7 @@ object carRentalClient extends App {
   }
 
 
-  implicit val policy:gridWorldPolicy = new gridWorldPolicy
+  import rl.core.mdp.GridWorld.gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
 //  import rl.core.mdp.ValueFunctions.qlearning

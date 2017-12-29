@@ -46,7 +46,9 @@ package object mdp {
     val id:ID
     var value:Double
   }
-  trait Policy[S, A]
+  trait Policy[S, A] {
+    def bestAction(state:S):A
+  }
 
 
   trait Environment [CS[_], S, A]{

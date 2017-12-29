@@ -34,9 +34,7 @@ object FlatWorld {
   trait flatWorldAction extends Action
 
 
-  class flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
-    //override def availableActions(state: flatWorldState): Seq[flatWorldAction] = ???
-  }
+  trait flatWorldPolicy extends Policy[flatWorldState, flatWorldAction]
 
   class flatWorldState(val id:Int, var value:Double) extends State[Int]
 
