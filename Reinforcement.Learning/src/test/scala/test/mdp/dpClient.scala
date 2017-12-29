@@ -65,6 +65,7 @@ object dpClient extends App{
     override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
   }
   implicit val policy:flatWorldPolicy = new flatWorldPolicy{
+    def bestAction(state:flatWorldState) = ???
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
 //     val actionProb : DenseMatrix[Double] = DenseMatrix.tabulate[Double] (flatWorldEnv.stateSpace.length, flatWorldEnv.actionSpace.length){
 //      (i,j) =>0.25

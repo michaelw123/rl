@@ -39,15 +39,16 @@ object GridWorld {
     case class West(override val value:Int=3) extends gridWorldAction
   }
 
-  trait gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]
+  //trait gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]
   implicit object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
     val policy = DenseMatrix.tabulate[gridWorldAction] (21, 21){ (i, j) => new gridWorldAction { override val value: Int = 0} }
     def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
+    def updatePolicy(state:gridWorldState, action:gridWorldAction) = policy.update(state.id._1, state.id._2, action)
   }
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
-    def observe[VF <: ValueFunction, gridWorldPolicy, E <: Environment[DenseMatrix,gridWorldState, gridWorldAction]](implicit vf:VF, policy:gridWorldPolicy, env:E): DenseMatrix[gridWorldState] = {
+    def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix,gridWorldState, gridWorldAction]](implicit vf:VF, policy:P, env:E): DenseMatrix[gridWorldState] = {
       @tailrec
       def iterating:Unit = {
         val newStates = observeOnce

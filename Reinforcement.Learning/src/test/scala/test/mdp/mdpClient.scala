@@ -76,7 +76,7 @@ object mdpClient extends App {
     }
   }
 
-  implicit val policy:gridWorldPolicy = new gridWorldPolicy
+  import rl.core.mdp.GridWorld.gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
 
