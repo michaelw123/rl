@@ -61,19 +61,6 @@ object GridWorld {
       def looping = {
         for (i <- 0 until epoch) {
           val newStates = observeOnce
-          //          val newStates = env.stateSpace
-          //
-          //          newStates.map(state => {
-          //            val actionState = env.availableTransactions(state)
-          //            var vrp = Seq[(Double, Double, Double)]()
-          //            for ((action, nextState) <- actionState) {
-          ////              val actionProb = env.transactionProb(state, action, nextState)
-          ////              val reward = env.reward(state, action, nextState)
-          //              val (actionProb, reward ) = env.transactionRewardProb(state, action, nextState)
-          //              vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-          //            }
-          //            state.value = vf.value(state, vrp)
-          //          })
           env.update(newStates)
           val r = newStates.map(a => rounded(3, a.value))
           println(s"Epoch $i: $r")
@@ -82,16 +69,16 @@ object GridWorld {
         def observeOnce: DenseMatrix[gridWorldState] = {
           val newStates = env.stateSpace
           newStates.map(state => {
-            //          val actionState = env.availableTransactions(state)
-            //          var vrp = Seq[(Double, Double, Double)]()
-            //          for ((action, nextState) <- actionState) {
-            //            val (actionProb, reward ) = env.transactionRewardProb(state, action, nextState)
-            //            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-            //            //state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
-            //          }
-            //          state.value = vf.value(state, vrp)
-            //          println(newStates.map(a => (a.id._1, a.id._2, a.value)))
-            state.value = tmpFindValueByState(state)
+                      val actionState = env.availableTransitions(state)
+                      var vrp = Seq[(Double, Double, Double)]()
+                      for ((action, nextState) <- actionState) {
+                        val (actionProb, reward ) = env.transitionRewardProb(state, action, nextState)
+                        vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+                        //state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
+                      }
+                      state.value = vf.value(state, vrp)
+                      //println(newStates.map(a => (a.id._1, a.id._2, a.value)))
+   //         state.value = tmpFindValueByState(state)
           })
           newStates
         }

@@ -3,8 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="49bb649b-27e9-4ec5-bff2-2218ba531b32" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/FlatWorld.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/FlatWorld.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/package.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/package.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala" afterPath="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/connect5/target/" />
@@ -59,8 +63,8 @@
       <file leaf-file-name="GridWorld.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="139" column="0" lean-forward="false" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+            <state relative-caret-position="-990">
+              <caret line="71" column="64" lean-forward="false" selection-start-line="71" selection-start-column="44" selection-end-line="71" selection-end-column="64" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#1135#1216#0" expanded="true" />
@@ -72,8 +76,8 @@
       <file leaf-file-name="FlatWorld.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/FlatWorld.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="36" column="71" lean-forward="false" selection-start-line="36" selection-start-column="71" selection-end-line="36" selection-end-column="71" />
+            <state relative-caret-position="722">
+              <caret line="67" column="32" lean-forward="true" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -82,8 +86,8 @@
       <file leaf-file-name="dpClient.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="68" column="60" lean-forward="true" selection-start-line="68" selection-start-column="60" selection-end-line="68" selection-end-column="60" />
+            <state relative-caret-position="765">
+              <caret line="69" column="33" lean-forward="true" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -126,10 +130,10 @@
       <file leaf-file-name="mdpClient.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="80" column="26" lean-forward="true" selection-start-line="80" selection-start-column="26" selection-end-line="80" selection-end-column="26" />
+            <state relative-caret-position="-131">
+              <caret line="64" column="23" lean-forward="false" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
               <folding>
-                <element signature="e#3703#3747#0" expanded="true" />
+                <element signature="e#3700#3744#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -150,8 +154,8 @@
       <file leaf-file-name="package.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/package.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="54" column="8" lean-forward="false" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="8" />
+            <state relative-caret-position="234">
+              <caret line="64" column="23" lean-forward="false" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -162,12 +166,12 @@
       <file leaf-file-name="carRentalClient.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="137" column="73" lean-forward="true" selection-start-line="137" selection-start-column="73" selection-end-line="137" selection-end-column="73" />
+            <state relative-caret-position="246">
+              <caret line="101" column="35" lean-forward="true" selection-start-line="101" selection-start-column="35" selection-end-line="101" selection-end-column="35" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#1132#1164#0" expanded="true" />
-                <element signature="e#10380#10424#0" expanded="true" />
+                <element signature="e#10377#10421#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -265,12 +269,12 @@
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/ValueFunctions.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/test1.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/utils/package.scala" />
+        <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/package.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/FlatWorld.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala" />
         <option value="$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala" />
-        <option value="$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala" />
       </list>
     </option>
   </component>
@@ -463,7 +467,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.carRentalClient">
+  <component name="RunManager" selected="Application.dptest">
     <configuration default="false" name="mdpTest" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -977,11 +981,11 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.carRentalClient" />
+        <item index="0" class="java.lang.String" itemvalue="Application.dptest" />
         <item index="1" class="java.lang.String" itemvalue="Application.mdpTest" />
-        <item index="2" class="java.lang.String" itemvalue="Application.test (1)" />
-        <item index="3" class="java.lang.String" itemvalue="Scala Console.Scala Console" />
-        <item index="4" class="java.lang.String" itemvalue="Application.dptest" />
+        <item index="2" class="java.lang.String" itemvalue="Application.carRentalClient" />
+        <item index="3" class="java.lang.String" itemvalue="Application.test (1)" />
+        <item index="4" class="java.lang.String" itemvalue="Scala Console.Scala Console" />
       </list>
     </recent_temporary>
   </component>
@@ -1033,13 +1037,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505572429394</updated>
-    </task>
-    <task id="LOCAL-00214" summary="mdp core">
-      <created>1513369884678</created>
-      <option name="number" value="00214" />
-      <option name="presentableId" value="LOCAL-00214" />
-      <option name="project" value="LOCAL" />
-      <updated>1513369884678</updated>
     </task>
     <task id="LOCAL-00215" summary="mdp core">
       <created>1513370712773</created>
@@ -1377,7 +1374,14 @@
       <option name="project" value="LOCAL" />
       <updated>1514575024249</updated>
     </task>
-    <option name="localTasksCounter" value="263" />
+    <task id="LOCAL-00263" summary="dynamic programming">
+      <created>1514576133772</created>
+      <option name="number" value="00263" />
+      <option name="presentableId" value="LOCAL-00263" />
+      <option name="project" value="LOCAL" />
+      <updated>1514576133772</updated>
+    </task>
+    <option name="localTasksCounter" value="264" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1395,7 +1399,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36325237" sideWeight="0.409375" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36325237" sideWeight="0.590625" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36325237" sideWeight="0.590625" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24287222" sideWeight="0.24583334" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1512,7 +1516,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="scala-line">
           <url>file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala</url>
-          <line>78</line>
+          <line>65</line>
           <properties />
           <option name="timeStamp" value="180" />
         </line-breakpoint>
@@ -1774,14 +1778,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/utils/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="32" column="11" lean-forward="false" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalanlp/breeze_2.12/srcs/breeze_2.12-0.13.2-sources.jar!/breeze/linalg/NumericOps.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
@@ -1802,36 +1798,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala">
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/utils/package.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="80" column="26" lean-forward="true" selection-start-line="80" selection-start-column="26" selection-end-line="80" selection-end-column="26" />
-          <folding>
-            <element signature="e#3703#3747#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/FlatWorld.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="36" column="71" lean-forward="false" selection-start-line="36" selection-start-column="71" selection-end-line="36" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="68" column="60" lean-forward="true" selection-start-line="68" selection-start-column="60" selection-end-line="68" selection-end-column="60" />
+        <state relative-caret-position="221">
+          <caret line="32" column="11" lean-forward="false" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/package.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="54" column="8" lean-forward="false" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="8" />
+        <state relative-caret-position="234">
+          <caret line="64" column="23" lean-forward="false" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -1840,8 +1818,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/GridWorld.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="139" column="0" lean-forward="false" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+        <state relative-caret-position="-990">
+          <caret line="71" column="64" lean-forward="false" selection-start-line="71" selection-start-column="44" selection-end-line="71" selection-end-column="64" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#1135#1216#0" expanded="true" />
@@ -1849,14 +1827,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/main/scala/rl/core/mdp/FlatWorld.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="722">
+          <caret line="67" column="32" lean-forward="true" selection-start-line="67" selection-start-column="32" selection-end-line="67" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/dpClient.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="69" column="33" lean-forward="true" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/mdpClient.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-131">
+          <caret line="64" column="23" lean-forward="false" selection-start-line="64" selection-start-column="23" selection-end-line="64" selection-end-column="23" />
+          <folding>
+            <element signature="e#3700#3744#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Reinforcement.Learning/src/test/scala/test/mdp/carRentalClient.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="137" column="73" lean-forward="true" selection-start-line="137" selection-start-column="73" selection-end-line="137" selection-end-column="73" />
+        <state relative-caret-position="246">
+          <caret line="101" column="35" lean-forward="true" selection-start-line="101" selection-start-column="35" selection-end-line="101" selection-end-column="35" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#1132#1164#0" expanded="true" />
-            <element signature="e#10380#10424#0" expanded="true" />
+            <element signature="e#10377#10421#0" expanded="true" />
           </folding>
         </state>
       </provider>

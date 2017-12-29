@@ -54,11 +54,11 @@ object dpClient extends App{
       }
       (flatWorldEnv.getCurrentStates(r._1), r._2)
     }
-    override def transactionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
+    override def transitionProb(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.25
     override def cost(state:flatWorldState, action:flatWorldAction):Double = 0.0
     override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  =  reward(state, action)._2
     override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.0
-    override def availableTransactions(state:flatWorldState):Seq[(flatWorldAction, flatWorldState)] = {
+    override def availableTransitions(state:flatWorldState):Seq[(flatWorldAction, flatWorldState)] = {
       val actions = availableActions(state)
       for (action <- actions) yield (action, reward(state, action)._1)
     }

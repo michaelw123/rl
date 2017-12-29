@@ -99,7 +99,7 @@ object carRentalClient extends App {
       val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
       def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
     }
-    override def transactionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
+    override def transitionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
       val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
       var prob1 = 0.0
@@ -193,7 +193,7 @@ object carRentalClient extends App {
       //println(s"(prob, reward)=($prob, $reward)")
       (prob, reward*RENTINCOME)
     }
-    override def transactionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
+    override def transitionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
       val numberOfReq1 = scala.math.min(scala.math.min(state.id._1-action.value,MAX_CARS), POISSONUPBOUND)
       val numberOfReq2 = scala.math.min(scala.math.min(state.id._2+action.value, MAX_CARS),POISSONUPBOUND)
 
@@ -213,7 +213,7 @@ object carRentalClient extends App {
     }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
-    override def availableTransactions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
+    override def availableTransitions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
       val actions = availableActions(state)
       val transactions = getCurrentStates.toArray
       for (action <- actions; nextState <- transactions) yield (action, nextState)
