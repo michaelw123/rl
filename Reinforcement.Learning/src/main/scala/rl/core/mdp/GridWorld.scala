@@ -118,7 +118,7 @@ object GridWorld {
         }
 
         def tmpFindValueByStateAction(state: gridWorldState, action: gridWorldAction) = {
-          var returns = 0.0
+          var returns:Double = - action.value * 2
           val ccStates = env.getCurrentStates
           for (rentalRequestFirstLoc <- 0 until 11) {
             for (rentalRequestSecondLoc <- 0 until 11) {
@@ -127,7 +127,7 @@ object GridWorld {
               val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
               val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
 
-              val reward = (realRentalFirstLoc + realRentalSecondLoc) * 10 - action.value * 2
+              val reward = (realRentalFirstLoc + realRentalSecondLoc) * 10
               numOfCarsFirstLoc -= realRentalFirstLoc
               numOfCarsSecondLoc -= realRentalSecondLoc
 
