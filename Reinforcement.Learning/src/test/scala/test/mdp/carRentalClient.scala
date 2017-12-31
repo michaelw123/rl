@@ -205,11 +205,15 @@ object carRentalClient extends App {
       if (req2<0 || req2 > numberOfReq2) {
         req2=0
       }
-      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)
+
+      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)/actionProb(state, action)
       val reward = (req1+req2)*RENTINCOME
       //println(prob, reward)
       (prob, (req1+req2)*RENTINCOME)
 
+    }
+    def actionProb(state:gridWorldState, action:gridWorldAction) = {
+      availableActions(state).size
     }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
@@ -217,6 +221,9 @@ object carRentalClient extends App {
       val actions = availableActions(state)
       val transactions = getCurrentStates.toArray
       for (action <- actions; nextState <- transactions) yield (action, nextState)
+
+
+
     }
 
     override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
@@ -244,7 +251,7 @@ object carRentalClient extends App {
     //.setExitDelta(0.001)
     .observe
 
-  println(result.map(a => rounded(3, a.value)))
+  println(result.map(a => rounded(1, a.value)))
 
 
 }
