@@ -73,16 +73,28 @@ object mdpClient extends App {
     }
     override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = cost(state, action)
     override def availableTransitions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
-      val actions = availableActions(state)
+      val actions = gridWorldPolicy.availableActions(state)
       for (action <- actions) yield (action, reward(state, action)._1)
     }
-    override def availableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
+    //override def gridWorldPolicyavailableActions(state:gridWorldState):Seq[gridWorldAction] = Seq(new North, new East, new South, new West)
     override def transitionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
       (0.25, reward(state, action, nextState))
     }
   }
 
-  import rl.core.mdp.GridWorld.gridWorldPolicy
+  implicit object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
+    val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
+    def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
+
+    override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
+      Seq(new North, new East, new West, new South)
+    }
+
+    override def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
+      1.0/availableActions(state).size
+    }
+  }
+
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
 

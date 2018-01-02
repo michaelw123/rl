@@ -48,6 +48,8 @@ package object mdp {
   }
   trait Policy[S, A] {
     def bestAction(state:S):A
+    def availableActions(state:S):Seq[A]
+    def actionProb(state:S, action:A):Double
   }
 
 
@@ -64,7 +66,6 @@ package object mdp {
     def cost(state:S, action:A):Double  //if the destination state is deterministic by an action
     def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
     def availableTransitions(state:S):Seq[(A, S)]
-    def availableActions(state:S):Seq[A]
     def getCurrentStates:CS[S] = {
       if (!currentStates.isDefined) currentStates=Option(stateSpace)
       currentStates.get

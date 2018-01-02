@@ -40,11 +40,11 @@ object GridWorld {
   }
 
   //trait gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]
-  implicit object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
-    val policy = DenseMatrix.tabulate[gridWorldAction] (21, 21){ (i, j) => new gridWorldAction { override val value: Int = 0} }
-    def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
-    def updatePolicy(state:gridWorldState, action:gridWorldAction) = policy.update(state.id._1, state.id._2, action)
-  }
+//  trait gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
+//    val policy = DenseMatrix.tabulate[gridWorldAction] (21, 21){ (i, j) => new gridWorldAction { override val value: Int = 0} }
+//    def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
+//    def updatePolicy(state:gridWorldState, action:gridWorldAction) = policy.update(state.id._1, state.id._2, action)
+//  }
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
@@ -73,10 +73,10 @@ object GridWorld {
             var values1 = Seq[Double]()
             var values = Map[gridWorldAction, Double]()
            var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
-            val numberOfAction = env.availableActions(state).length
-            for (action <- env.availableActions(state)) {
+            val numberOfAction = policy.availableActions(state).length
+            for (action <- policy.availableActions(state)) {
              //values += (action -> tmpFindValueByStateAction(state, action))
-               vrp ++= env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3 * env.transitionProb(state, action, state)))
+               vrp ++= env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3 * policy.actionProb(state, action)))
 
  //             values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
  //             values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)

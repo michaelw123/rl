@@ -21,10 +21,11 @@
 
 package test.mdp
 import breeze.linalg.DenseMatrix
-import rl.core.mdp.Environment
+import rl.core.mdp.{Environment, Policy}
 import rl.core.mdp.GridWorld._
-import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldPolicy, gridWorldState}
+import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldState}
 import rl.utils._
+
 
 
 /**
@@ -115,10 +116,7 @@ object carRentalClient extends App {
       }
       vrp
     }
-    implicit object gridWorldPolicy{
-      val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
-      def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
-    }
+
     override def transitionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
       val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
       val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
@@ -232,28 +230,33 @@ object carRentalClient extends App {
         req2=0
       }
 
-      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)*actionProb(state, action)
+      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)*gridWorldPolicy.actionProb(state, action)
       val reward = (req1+req2)*RENTINCOME
       //println(prob, reward)
       (prob, (req1+req2)*RENTINCOME)
 
     }
 
-    def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
-      1.0/availableActions(state).size
-    }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
     override def availableTransitions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
-      val actions = availableActions(state)
+      val actions = gridWorldPolicy.availableActions(state)
       val transactions = getCurrentStates.toArray
       for (action <- actions; nextState <- transactions) yield (action, nextState)
 
 
 
     }
+    override def getCurrentStates:DenseMatrix[gridWorldState] = {
+      if (!currentStates.isDefined) currentStates=Option(stateSpace)
+      currentStates.get
+    }
+  }
+  implicit object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
+    val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
+    override  def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
 
-    override def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
+    override  def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
       val first2second = for (i <- 0 to scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
         override val value: Int = i
       }
@@ -262,14 +265,12 @@ object carRentalClient extends App {
       }
       first2second ++ second2first
     }
-    override def getCurrentStates:DenseMatrix[gridWorldState] = {
-      if (!currentStates.isDefined) currentStates=Option(stateSpace)
-      currentStates.get
+
+    override   def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
+      1.0/availableActions(state).size
     }
   }
 
-
-  import rl.core.mdp.GridWorld.gridWorldPolicy
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
 //  import rl.core.mdp.ValueFunctions.qlearning

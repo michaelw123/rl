@@ -59,13 +59,16 @@ object dpClient extends App{
     override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  =  reward(state, action)._2
     override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.0
     override def availableTransitions(state:flatWorldState):Seq[(flatWorldAction, flatWorldState)] = {
-      val actions = availableActions(state)
+      val actions = policy.availableActions(state)
       for (action <- actions) yield (action, reward(state, action)._1)
     }
-    override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
   }
   implicit val policy:flatWorldPolicy = new flatWorldPolicy{
     def bestAction(state:flatWorldState) = ???
+    override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
+    override   def actionProb(state:flatWorldState, action:flatWorldAction):Double = {
+      1.0/availableActions(state).size
+    }
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
 //     val actionProb : DenseMatrix[Double] = DenseMatrix.tabulate[Double] (flatWorldEnv.stateSpace.length, flatWorldEnv.actionSpace.length){
 //      (i,j) =>0.25
