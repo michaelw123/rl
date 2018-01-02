@@ -38,13 +38,7 @@ object GridWorld {
     case class South(override val value:Int=2) extends gridWorldAction
     case class West(override val value:Int=3) extends gridWorldAction
   }
-
-  //trait gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]
-//  trait gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
-//    val policy = DenseMatrix.tabulate[gridWorldAction] (21, 21){ (i, j) => new gridWorldAction { override val value: Int = 0} }
-//    def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
-//    def updatePolicy(state:gridWorldState, action:gridWorldAction) = policy.update(state.id._1, state.id._2, action)
-//  }
+  
   class gridWorldState(val id:(Int, Int), var value:Double) extends State[(Int, Int)]
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
