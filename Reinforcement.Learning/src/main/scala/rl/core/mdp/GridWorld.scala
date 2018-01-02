@@ -76,7 +76,7 @@ object GridWorld {
             val numberOfAction = env.availableActions(state).length
             for (action <- env.availableActions(state)) {
              //values += (action -> tmpFindValueByStateAction(state, action))
-               vrp ++= env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3/numberOfAction))
+               vrp ++= env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3 * env.transitionProb(state, action, state)))
 
  //             values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
  //             values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)
