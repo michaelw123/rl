@@ -72,15 +72,16 @@ object GridWorld {
           newStates.map(state => {
             var values1 = Seq[Double]()
             var values = Map[gridWorldAction, Double]()
- //           var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
+           var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
+            val numberOfAction = env.availableActions(state).length
             for (action <- env.availableActions(state)) {
              //values += (action -> tmpFindValueByStateAction(state, action))
-              val vrp = env.rewards(state, action)
+               vrp ++= env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3/numberOfAction))
 
-//             // values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
-              values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)
+ //             values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
+ //             values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)
             }
-            state.value=values1.max
+            state.value=vf.value(state, vrp)
             //state.value =values1.sum/values1.length
             // val vrp:Seq[(Double, Double, Double)] = values.map(x => x.)
 
