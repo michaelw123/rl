@@ -65,6 +65,12 @@ object mdpClient extends App {
     override def transitionProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = 0.25
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
     override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = reward(state, action)._2
+
+    override def rewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
+      val stateReward = reward(state, action)
+      val vrp = (stateReward._1.value, stateReward._2, 0.25)
+      Seq[(Double, Double, Double)](vrp)
+    }
     override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = cost(state, action)
     override def availableTransitions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
       val actions = availableActions(state)
@@ -80,12 +86,12 @@ object mdpClient extends App {
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
 
-  //  import rl.core.mdp.ValueFunctions.optimalValueIteration
-  //  optimalValueIteration.setDiscount(0.9)
+//    import rl.core.mdp.ValueFunctions.optimalValueIteration
+//    optimalValueIteration.setDiscount(0.9)
 
- //import rl.core.mdp.ValueFunctions.qlearning
- // qlearning.setDiscount(0.9)
- //     .setLearningRate(.5)
+// import rl.core.mdp.ValueFunctions.qlearning
+//  qlearning.setDiscount(0.9)
+//      .setLearningRate(.5)
   gridWorldEnv.update(gridWorldEnv.stateSpace)
   val result = gridWorldAgent.setEpoch(1000)
     //.setExitDelta(0.001)

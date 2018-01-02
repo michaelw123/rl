@@ -70,20 +70,26 @@ object GridWorld {
 
           val newStates = env.stateSpace
           newStates.map(state => {
-
+            var values1 = Seq[Double]()
             var values = Map[gridWorldAction, Double]()
+ //           var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
             for (action <- env.availableActions(state)) {
-//              values += (action -> tmpFindValueByStateAction(state, action))
-              val vrp:Seq[(Double, Double, Double)] = env.rewards(state, action)
-              values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
+             //values += (action -> tmpFindValueByStateAction(state, action))
+              val vrp = env.rewards(state, action)
+
+//             // values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
+              values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)
             }
-            //state.value(values.max)
-            state.value = values.maxBy(_._2)._2
-            gridWorldPolicy.updatePolicy(state, values.maxBy(_._2)._1)
+            state.value=values1.max
+            //state.value =values1.sum/values1.length
+            // val vrp:Seq[(Double, Double, Double)] = values.map(x => x.)
+
+
+            //state.value = values.maxBy(_._2)._2
+            //gridWorldPolicy.updatePolicy(state, values.maxBy(_._2)._1)
           })
           newStates
         }
-
 
         def tmpFindValueByStateAction(state: gridWorldState, action: gridWorldAction) = {
           var returns:Double = - action.value * 2

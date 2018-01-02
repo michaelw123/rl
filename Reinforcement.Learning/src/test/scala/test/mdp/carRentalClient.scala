@@ -96,7 +96,6 @@ object carRentalClient extends App {
       (new gridWorldState(state.id, 0), reward - theCost)
     }
     override def rewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
-      var returns: Double = - action.value * 2
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
       for (rentalRequestFirstLoc <- 0 until POISSONUPBOUND) {
@@ -108,11 +107,9 @@ object carRentalClient extends App {
           val prob = poisson(RENTAL_REQUEST_FIRST_LOC, rentalRequestFirstLoc) * poisson(RENTAL_REQUEST_SECOND_LOC, rentalRequestSecondLoc)
           val returnedCarsFirstLoc = RETURNS_FIRST_LOC
           val returnedCarsSecondLoc = RETURNS_SECOND_LOC
-
           val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * RENTINCOME
           numOfCarsFirstLoc = scala.math.min(numOfCarsFirstLoc + returnedCarsFirstLoc, MAX_CARS)
           numOfCarsSecondLoc = scala.math.min(numOfCarsSecondLoc + returnedCarsSecondLoc, MAX_CARS)
-
           vrp = vrp :+ (ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
         }
       }
