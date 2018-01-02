@@ -83,9 +83,9 @@ object GridWorld {
 //                      //println(newStates.map(a => (a.id._1, a.id._2, a.value)))
             var values = Map[gridWorldAction, Double]()
             for (action <- env.availableActions(state)) {
-              values += (action -> tmpFindValueByStateAction(state, action))
-//              val vrp:Seq[(Double, Double, Double)] = env.rewards(state, action)
-//              values += (action -> vf.value(state, vrp))
+//              values += (action -> tmpFindValueByStateAction(state, action))
+              val vrp:Seq[(Double, Double, Double)] = env.rewards(state, action)
+              values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
             }
             //state.value(values.max)
             state.value = values.maxBy(_._2)._2
