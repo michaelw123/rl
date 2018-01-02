@@ -62,11 +62,12 @@ object GridWorld {
         for (i <- 0 until epoch) {
           val newStates = observeOnce
           env.update(newStates)
-          val r = newStates.map(a => rounded(3, a.value))
+          val r = newStates.map(a => rounded(1, a.value))
           println(s"Epoch $i: $r")
         }
       }
         def observeOnce: DenseMatrix[gridWorldState] = {
+
           val newStates = env.stateSpace
           newStates.map(state => {
                       val actionState = env.availableTransitions(state)
@@ -78,7 +79,7 @@ object GridWorld {
                       }
                       state.value = vf.value(state, vrp)
                       //println(newStates.map(a => (a.id._1, a.id._2, a.value)))
-   //         state.value = tmpFindValueByState(state)
+//           state.value = tmpFindValueByState(state)
           })
           newStates
         }
@@ -107,6 +108,7 @@ object GridWorld {
         def tmpFindValueByStateAction(state: gridWorldState, action: gridWorldAction) = {
           var returns:Double = - action.value * 2
           val ccStates = env.getCurrentStates
+          var vrp = Seq[(Double, Double, Double)]()
           for (rentalRequestFirstLoc <- 0 until 11) {
             for (rentalRequestSecondLoc <- 0 until 11) {
               var numOfCarsFirstLoc = scala.math.min(state.id._1 - action.value, 20)
@@ -114,7 +116,7 @@ object GridWorld {
               val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
               val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
 
-              val reward = (realRentalFirstLoc + realRentalSecondLoc) * 10
+              val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * 10
               numOfCarsFirstLoc -= realRentalFirstLoc
               numOfCarsSecondLoc -= realRentalSecondLoc
 
@@ -124,10 +126,12 @@ object GridWorld {
 
               numOfCarsFirstLoc = scala.math.min(numOfCarsFirstLoc + returnedCarsFirstLoc, 20)
               numOfCarsSecondLoc = scala.math.min(numOfCarsSecondLoc + returnedCarsSecondLoc, 20)
+              vrp = vrp :+ (ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
 
-              returns += vf.value(state.value, ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
+//              returns += vf.value(state.value, ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
             }
           }
+          returns += vf.value(state, vrp)
           returns
         }
 

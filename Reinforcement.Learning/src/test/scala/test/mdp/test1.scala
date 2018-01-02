@@ -20,10 +20,10 @@ object test1 extends App {
 
   val  state:gridWorldState=new gridWorldState((18, 17), 0)
 
-  val actionState = carRentalClient.carRentalEnv.availableTransactions(state)
+  val actionState = carRentalClient.carRentalEnv.availableTransitions(state)
   var vrp = Seq[(Double, Double, Double)]()
   for ((action, nextState) <- actionState) {
-    val (actionProb, reward ) = carRentalClient.carRentalEnv.transactionRewardProb(state, action, nextState)
+    val (actionProb, reward ) = carRentalClient.carRentalEnv.transitionRewardProb(state, action, nextState)
     if (reward!=0 && actionProb!=0) {
       vrp = vrp :+ (nextState.value, reward - carRentalClient.carRentalEnv.cost(state, action, nextState), actionProb)
     }
