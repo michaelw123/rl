@@ -72,7 +72,7 @@ object GridWorld {
           newStates.map(state => {
             var values1 = Seq[Double]()
             var values = Map[gridWorldAction, Double]()
-           var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
+            var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
             val numberOfAction = policy.availableActions(state).length
             for (action <- policy.availableActions(state)) {
              //values += (action -> tmpFindValueByStateAction(state, action))
@@ -82,11 +82,6 @@ object GridWorld {
  //             values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)
             }
             state.value=vf.value(state, vrp)
-            //state.value =values1.sum/values1.length
-            // val vrp:Seq[(Double, Double, Double)] = values.map(x => x.)
-
-
-            //state.value = values.maxBy(_._2)._2
             //gridWorldPolicy.updatePolicy(state, values.maxBy(_._2)._1)
           })
           newStates
@@ -102,7 +97,6 @@ object GridWorld {
               var numOfCarsSecondLoc = scala.math.min(state.id._2 + action.value, 20)
               val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
               val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
-
               val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * 10
               numOfCarsFirstLoc -= realRentalFirstLoc
               numOfCarsSecondLoc -= realRentalSecondLoc
@@ -119,8 +113,6 @@ object GridWorld {
           returns += vf.value(state, vrp)
           returns
         }
-
-
       exitDelta match {
         case 0.0 => looping
         case _ => iterating
