@@ -70,16 +70,26 @@ object GridWorld {
 
           val newStates = env.stateSpace
           newStates.map(state => {
-                      val actionState = env.availableTransitions(state)
-                      var vrp = Seq[(Double, Double, Double)]()
-                      for ((action, nextState) <- actionState) {
-                        val (actionProb, reward ) = env.transitionRewardProb(state, action, nextState)
-                        vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-                        //state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
-                      }
-                      state.value = vf.value(state, vrp)
-                      //println(newStates.map(a => (a.id._1, a.id._2, a.value)))
-//           state.value = tmpFindValueByState(state)
+//                      val actionNextState = env.availableTransitions(state)
+//                      var vrp = Seq[(Double, Double, Double)]()
+//                      for ((action, nextState) <- actionNextState) {
+//                        val (actionProb, reward ) = env.transitionRewardProb(state, action, nextState)
+//                        if (actionProb != 0) {
+//                          vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
+//                        }
+//                        //state.value = vf.value(state.value, nextState.value, reward - env.cost(state, action, nextState),actionProb)
+//                      }
+//                      state.value = vf.value(state, vrp)
+//                      //println(newStates.map(a => (a.id._1, a.id._2, a.value)))
+            var values = Map[gridWorldAction, Double]()
+            for (action <- env.availableActions(state)) {
+              values += (action -> tmpFindValueByStateAction(state, action))
+//              val vrp:Seq[(Double, Double, Double)] = env.rewards(state, action)
+//              values += (action -> vf.value(state, vrp))
+            }
+            //state.value(values.max)
+            state.value = values.maxBy(_._2)._2
+            gridWorldPolicy.updatePolicy(state, values.maxBy(_._2)._1)
           })
           newStates
         }

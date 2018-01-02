@@ -95,6 +95,29 @@ object carRentalClient extends App {
       //(getStates(r._1),  reward - theCost)
       (new gridWorldState(state.id, 0), reward - theCost)
     }
+    override def rewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
+      var returns: Double = - action.value * 2
+      val ccStates = getCurrentStates
+      var vrp = Seq[(Double, Double, Double)] ()
+      for (rentalRequestFirstLoc <- 0 until POISSONUPBOUND) {
+        for (rentalRequestSecondLoc <- 0 until POISSONUPBOUND) {
+          var numOfCarsFirstLoc = scala.math.min(state.id._1 - action.value, MAX_CARS)
+          var numOfCarsSecondLoc = scala.math.min(state.id._2 + action.value, MAX_CARS)
+          val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
+          val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
+          val prob = poisson(RENTAL_REQUEST_FIRST_LOC, rentalRequestFirstLoc) * poisson(RENTAL_REQUEST_SECOND_LOC, rentalRequestSecondLoc)
+          val returnedCarsFirstLoc = RETURNS_FIRST_LOC
+          val returnedCarsSecondLoc = RETURNS_SECOND_LOC
+
+          val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * RENTINCOME
+          numOfCarsFirstLoc = scala.math.min(numOfCarsFirstLoc + returnedCarsFirstLoc, MAX_CARS)
+          numOfCarsSecondLoc = scala.math.min(numOfCarsSecondLoc + returnedCarsSecondLoc, MAX_CARS)
+
+          vrp = vrp :+ (ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
+        }
+      }
+      vrp
+    }
     implicit object gridWorldPolicy{
       val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
       def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
@@ -186,7 +209,6 @@ object carRentalClient extends App {
 //          val tmp1 = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 - i))
 //          val tmp2 = poisson(RENTAL_REQUEST_SECOND_LOC, j) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 - j))
 //          prob += tmp1 * tmp2
-//          reward += (i + j)*tmp1*tmp2
 //        }
 //      }
       val prob = prob1 * prob2
@@ -194,6 +216,13 @@ object carRentalClient extends App {
       (prob, reward*RENTINCOME)
     }
     override def transitionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
+
+//      var numOfCarsFirstLoc = scala.math.min(state.id._1 - action.value, 20)
+//      var numOfCarsSecondLoc = scala.math.min(state.id._2 + action.value, 20)
+//
+//      val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
+//      val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
+
       val numberOfReq1 = scala.math.min(scala.math.min(state.id._1-action.value,MAX_CARS), POISSONUPBOUND)
       val numberOfReq2 = scala.math.min(scala.math.min(state.id._2+action.value, MAX_CARS),POISSONUPBOUND)
 
@@ -206,14 +235,15 @@ object carRentalClient extends App {
         req2=0
       }
 
-      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)/actionProb(state, action)
+      val prob = poisson(RENTAL_REQUEST_FIRST_LOC, req1) * poisson(RENTAL_REQUEST_SECOND_LOC, req2)*actionProb(state, action)
       val reward = (req1+req2)*RENTINCOME
       //println(prob, reward)
       (prob, (req1+req2)*RENTINCOME)
 
     }
-    def actionProb(state:gridWorldState, action:gridWorldAction) = {
-      availableActions(state).size
+
+    def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
+      1.0/availableActions(state).size
     }
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 

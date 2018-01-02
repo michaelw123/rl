@@ -18,16 +18,18 @@ object test1 extends App {
 //  println(poisson(3,5))
 //  (state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double)
 
-  val  state:gridWorldState=new gridWorldState((18, 17), 0)
-
-  val actionState = carRentalClient.carRentalEnv.availableTransitions(state)
-  var vrp = Seq[(Double, Double, Double)]()
-  for ((action, nextState) <- actionState) {
-    val (actionProb, reward ) = carRentalClient.carRentalEnv.transitionRewardProb(state, action, nextState)
-    if (reward!=0 && actionProb!=0) {
-      vrp = vrp :+ (nextState.value, reward - carRentalClient.carRentalEnv.cost(state, action, nextState), actionProb)
-    }
-  }
-  println("aaa")
+//  val  state:gridWorldState=new gridWorldState((18, 17), 0)
+//
+//  val actionState = carRentalClient.carRentalEnv.availableTransitions(state)
+//  var vrp = Seq[(Double, Double, Double)]()
+//  for ((action, nextState) <- actionState) {
+//    val (actionProb, reward ) = carRentalClient.carRentalEnv.transitionRewardProb(state, action, nextState)
+//    if (reward!=0 && actionProb!=0) {
+//      vrp = vrp :+ (nextState.value, reward - carRentalClient.carRentalEnv.cost(state, action, nextState), actionProb)
+//    }
+//  }
+//  println("aaa")
 //  /state.value = vf.value(state, vrp)
+
+  println(poisson(3, 5))
 }
