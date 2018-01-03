@@ -46,9 +46,10 @@ object GridWorld {
       @tailrec
       def iterating:Unit = {
         val newStates = observeOnce
-        val x: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        println(s"delta=$delta")
         env.update(newStates)
-        if (x > exitDelta) {
+        if (delta > exitDelta) {
           iterating
         }
       }

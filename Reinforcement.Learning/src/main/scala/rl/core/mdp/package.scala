@@ -59,9 +59,9 @@ package object mdp {
     def actionSpace:Seq[A]
     def update(value :CS[S]) = currentStates = Option(value)
     def reward(state:S, action:A):(S, Double) // an action takes S to S' deterministically
-    def reward(state:S, action:A, nextState:S):Double // an action may take S to multiple S', propability is given by transactionProb, this reward function calculates the transaction R(S, A, S')
-    def rewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Probability
-    def transitionProb(state:S, action:A, nextState:S):Double //transaction probability
+    def reward(state:S, action:A, nextState:S):Double // an action may take S to multiple S', propability is given by transitionProb, this reward function calculates the transition R(S, A, S')
+    def rewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Action Probability
+    def transitionProb(state:S, action:A, nextState:S):Double //transition probability
     def transitionRewardProb(state:S, action:A, nextState:S):(Double, Double) = ??? // return (prob, reward) pair
     def cost(state:S, action:A):Double  //if the destination state is deterministic by an action
     def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')

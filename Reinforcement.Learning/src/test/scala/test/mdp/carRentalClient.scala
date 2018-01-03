@@ -271,12 +271,15 @@ object carRentalClient extends App {
     }
   }
 
-  import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(0.9)
+  //import rl.core.mdp.ValueFunctions.Bellman
+  //Bellman.setDiscount(0.9)
 //  import rl.core.mdp.ValueFunctions.qlearning
 //  qlearning.setDiscount(0.9).setLearningRate(0.5)
-  val result = gridWorldAgent.setEpoch(20)
-    //.setExitDelta(0.001)
+
+  import rl.core.mdp.ValueFunctions.optimalValueIteration
+  optimalValueIteration.setDiscount(0.9)
+  val result = gridWorldAgent.setEpoch(100)
+    .setExitDelta(1.0)
     .observe
 
   println(result.map(a => rounded(1, a.value)))
