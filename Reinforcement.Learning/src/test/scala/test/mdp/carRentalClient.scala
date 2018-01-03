@@ -150,65 +150,7 @@ object carRentalClient extends App {
       // println("prob = "+prob)
       reward
     }
-     def transactionRewardProb1(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
-      val diff1 = {
-        if (action.value >0) state.id._1 - action.value - nextState.id._1
-        else  state.id._1  - nextState.id._1
-      }
-      val diff2 = {
-        if (action.value<0) state.id._2 + action.value - nextState.id._2
-        else  state.id._2  - nextState.id._2
-      }
-      var reward = 0.0
-      var prob1 = 0.0
-      var prob2 = 0.0
-      //     println (state.id + " "+ action.value + " " + nextState.id)
-      val r1 = {
-        if (action.value >0) state.id._1 - action.value
-        else state.id._1
-      }
-      for (i <- 1 until scala.math.min(MAXREQUEST, r1)) {
-        val k = scala.math.abs(i-diff1)
-        if (k<POISSONUPBOUND) {
-          val tmp = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, k)
-          prob1 += tmp
-          reward += tmp * i
-        }
-      }
-      val r2 = {
-        if (action.value <0) state.id._2 + action.value
-        else state.id._2
-      }
-      //      println("prob1="+prob)
-      for (i <- 1 until scala.math.min(MAXREQUEST, r2)) {
-        val k = scala.math.abs(i-diff2)
-        if (k<POISSONUPBOUND) {
-          val tmp = poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, k)
-          prob2 += tmp
-          reward += tmp * i
-        }
 
-      }
-      val v = action.value
-      val s1=state.id._1
-      val s2=state.id._2
-      val ns1=nextState.id._1
-      val ns2=nextState.id._2
-//      if (state.id == (18, 17) && action.value == -3) {
-//        println(s"diff1=$diff1, diff2=$diff2, state.id._1=$s1, state.id._2=$s2, nextState.id._1=$ns1, nextState.id._2=$ns2, action=$v, r1=$r1, r2=$r2, reward=$reward")
-//      }
-//      var prob = 0.0
-//      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1-action.value)) {
-//        for (j <- 0 until scala.math.min(MAXREQUEST, state.id._2+action.value)) {
-//          val tmp1 = poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 - i))
-//          val tmp2 = poisson(RENTAL_REQUEST_SECOND_LOC, j) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 - j))
-//          prob += tmp1 * tmp2
-//        }
-//      }
-      val prob = prob1 * prob2
-      //println(s"(prob, reward)=($prob, $reward)")
-      (prob, reward*RENTINCOME)
-    }
     override def transitionRewardProb(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):(Double, Double) = {
 
 //      var numOfCarsFirstLoc = scala.math.min(state.id._1 - action.value, 20)
