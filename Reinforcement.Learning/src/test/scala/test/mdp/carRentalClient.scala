@@ -213,10 +213,7 @@ object carRentalClient extends App {
        policy(state.id)=action
      }
      override def isChanged:Boolean = {
-       println(policyCopy.map(a => a.value))
-       println(policy.map(a => a.value))
-       val ss = !(policy.toArray.sameElements(policyCopy.toArray))
-       ss
+       !(policy.toArray.sameElements(policyCopy.toArray))
      }
   }
 
