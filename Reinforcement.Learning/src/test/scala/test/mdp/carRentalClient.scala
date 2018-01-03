@@ -22,7 +22,6 @@
 package test.mdp
 import breeze.linalg.DenseMatrix
 import rl.core.mdp.{Environment, Policy}
-import rl.core.mdp.GridWorld._
 import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldState}
 import rl.utils._
 
@@ -54,7 +53,7 @@ object carRentalClient extends App {
   val POISSONUPBOUND=11
   val MAX_CARS=20
 
-  implicit object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction] {
+   object carRentalEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction] {
     def stateSpace: DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X+1, Y+1) { (i, j) => new gridWorldState((i, j), 0) }
     val actionSpace: Seq[gridWorldAction] = Seq(new gridWorldAction {
       override val value: Int = -5
@@ -252,7 +251,7 @@ object carRentalClient extends App {
       currentStates.get
     }
   }
-  implicit object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
+   object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
     val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
     override  def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
 
@@ -280,7 +279,8 @@ object carRentalClient extends App {
   optimalValueIteration.setDiscount(0.9)
   val result = gridWorldAgent.setEpoch(100)
     .setExitDelta(1.0)
-    .observe
+    .setPolicyIteration(true)
+    .observe(carRentalEnv, gridWorldPolicy)
 
   println(result.map(a => rounded(1, a.value)))
 

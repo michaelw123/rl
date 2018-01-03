@@ -27,21 +27,14 @@ package rl.core.mdp
 object ValueFunctions {
 
   implicit object Bellman extends ValueFunction {
-    private var discount = 0.0
 
-    override def setDiscount(value: Double): this.type = {
-      discount = value
-      this
-    }
-
-    override def getDiscount = discount
 
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
-      (statevalue + prob * (reward + discount * nextStateValue))
+      (statevalue + prob * (reward + getDiscount * nextStateValue))
     }
 
     def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
-      vrp.foldLeft(state.value)((a,b) => a + b._3 * (b._2 + discount * b._1))
+      vrp.foldLeft(state.value)((a,b) => a + b._3 * (b._2 + getDiscount * b._1))
     }
   }
 

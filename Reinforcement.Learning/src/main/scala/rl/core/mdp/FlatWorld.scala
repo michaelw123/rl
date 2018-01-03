@@ -32,14 +32,17 @@ import scala.annotation.tailrec
   */
 object FlatWorld {
   trait flatWorldAction extends Action
-
-
-  trait flatWorldPolicy extends Policy[flatWorldState, flatWorldAction]
-
+  object flatWorldAction {
+    sealed
+    case class North(override val value:Int=0) extends flatWorldAction
+    case class East(override val value:Int=1) extends flatWorldAction
+    case class South(override val value:Int=2) extends flatWorldAction
+    case class West(override val value:Int=3) extends flatWorldAction
+  }
   class flatWorldState(val id:Int, var value:Double) extends State[Int]
 
   object flatWorldAgent extends Agent[flatWorldAction, DenseVector, flatWorldState]{
-    def observe[VF <: ValueFunction, P <: Policy[flatWorldState, flatWorldAction], E <: Environment[DenseVector, flatWorldState, flatWorldAction]](implicit vf:VF, policy:P, env:E): DenseVector[flatWorldState] = {
+    def observe[VF <: ValueFunction, P <: Policy[flatWorldState, flatWorldAction], E <: Environment[DenseVector, flatWorldState, flatWorldAction]](env:E, policy:P)(implicit vf:VF): DenseVector[flatWorldState] = {
       @tailrec
       def iterating:Unit = {
         val newStates = observeOnce

@@ -20,13 +20,11 @@
  */
 package test.mdp
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import rl.core.mdp.Environment
-import rl.core.mdp.FlatWorld.flatWorldAction
-import test.mdp.dpClient.flatWorldAction.{East, North, South, West}
-import rl.core.mdp.FlatWorld.{flatWorldAgent, flatWorldPolicy, flatWorldState}
-import rl.utils.rounded
-
+import breeze.linalg.DenseVector
+import rl.core.mdp.{Environment, Policy}
+import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldState, flatWorldAgent}
+import rl.core.mdp.FlatWorld.flatWorldAction._
+import rl.utils._
 
 
 /**
@@ -34,7 +32,7 @@ import rl.utils.rounded
   * To test Dynamic Programming for MDP
   */
 object dpClient extends App{
-  implicit object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
+   object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
     val SIZE = 16
     def stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
     val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
@@ -59,14 +57,14 @@ object dpClient extends App{
     override def reward(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  =  reward(state, action)._2
     override def cost(state:flatWorldState, action:flatWorldAction, nextState:flatWorldState):Double  = 0.0
     override def availableTransitions(state:flatWorldState):Seq[(flatWorldAction, flatWorldState)] = {
-      val actions = policy.availableActions(state)
+      val actions = flatWorldPolicy.availableActions(state)
       for (action <- actions) yield (action, reward(state, action)._1)
     }
   }
-  implicit val policy:flatWorldPolicy = new flatWorldPolicy{
-    def bestAction(state:flatWorldState) = ???
+  object flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
+  override def bestAction(state:flatWorldState) = ???
     override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
-    override   def actionProb(state:flatWorldState, action:flatWorldAction):Double = {
+    override def actionProb(state:flatWorldState, action:flatWorldAction):Double = {
       1.0/availableActions(state).size
     }
     //var actionProb : Seq[(Int, flatWorldAction, Double)] = Seq.tabulate(flatWorldEnv.stateSpace.length * flatWorldEnv.actionSpace.length)(i => (i, new North, 0.25) )
@@ -95,7 +93,7 @@ object dpClient extends App{
 
   val result = flatWorldAgent//.setEpoch(1000)
     .setExitDelta(0.001)
-    .observe
+    .observe(flatWorldEnv, flatWorldPolicy)
 
   println(result.map(a => rounded(3, a.value)))
 

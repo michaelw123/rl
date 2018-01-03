@@ -72,12 +72,26 @@ package object mdp {
     }
   }
   trait Agent[A, CS[_], S] {
-   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](implicit vf: VF, policy:P, env:E):CS[S]
+    private var policyIteration = false
+    def getPolicyIteration = policyIteration
+    def setPolicyIteration(value:Boolean):this.type = {
+      policyIteration = value
+      this
+    }
+   def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](env:E,policy:P) (implicit vf: VF):CS[S]
   }
 
   trait ValueFunction{
-    def setDiscount(value:Double): this.type
-    def getDiscount:Double
+
+    private var discount = 0.0
+
+    def setDiscount(value: Double): this.type = {
+      discount = value
+      this
+    }
+
+    def getDiscount = discount
+
     def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
     def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double // next state value, reward, action probability
   }

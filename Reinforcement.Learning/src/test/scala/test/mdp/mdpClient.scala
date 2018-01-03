@@ -33,7 +33,7 @@ object mdpClient extends App {
   val X = 5
   val Y = 5
 
-  implicit object gridWorldEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
+   object gridWorldEnv extends Environment[DenseMatrix, gridWorldState, gridWorldAction]{
     def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X,Y){
       (i,j) => new gridWorldState((i,j), 0.0)
     }
@@ -82,7 +82,7 @@ object mdpClient extends App {
     }
   }
 
-  implicit object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
+   object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
     val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
     def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
 
@@ -107,7 +107,7 @@ object mdpClient extends App {
   gridWorldEnv.update(gridWorldEnv.stateSpace)
   val result = gridWorldAgent.setEpoch(1000)
     //.setExitDelta(0.001)
-    .observe
+    .observe(gridWorldEnv, gridWorldPolicy)
 
 
   println(result.map(a => rounded(3, a.value)))
