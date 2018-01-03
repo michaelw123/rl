@@ -35,19 +35,15 @@ object dpClient extends App{
    object flatWorldEnv extends Environment[DenseVector, flatWorldState, flatWorldAction]{
     val SIZE = 16
     def stateSpace:DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](SIZE) { i => new flatWorldState(i, 0)}
-    val actionSpace:Seq[flatWorldAction]= Seq(new North, new East, new South, new West)
+    val actionSpace:Seq[flatWorldAction]= Seq(new Left, new Right)
     def getStates:DenseVector[flatWorldState] = getCurrentStates
     override def reward(state: flatWorldState, action: flatWorldAction): (flatWorldState, Double) = {
       val r = (action, state.id) match {
         case (_, 0 | 15) => (state.id, 0)
-        case (a:North, 1 | 2 | 3) => (state.id, -1)
-        case (a:North, _) => (state.id - 4, -1)
-        case (a:East, 3 | 7 | 11) => (state.id, -1)
-        case (a:East, _) => (state.id + 1, -1)
-        case (a:South, 12 | 13 | 14) => (state.id, -1)
-        case (a:South, _) => (state.id + 4, -1)
-        case (a:West, 4 | 8 | 12) => (state.id, -1)
-        case (a:West, _) => (state.id - 1, -1)
+        case (a:Left, 1 | 2 | 3) => (state.id, -1)
+        case (a:Left, _) => (state.id - 4, -1)
+        case (a:Right, 3 | 7 | 11) => (state.id, -1)
+        case (a:Right, _) => (state.id + 1, -1)
         case (_, _) => (state.id, 0) //shall not be here
       }
       (flatWorldEnv.getCurrentStates(r._1), r._2)
@@ -63,7 +59,7 @@ object dpClient extends App{
   }
   object flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
   override def bestAction(state:flatWorldState) = ???
-    override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new North, new East, new South, new West)
+    override def availableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new Left, new Right)
     override def actionProb(state:flatWorldState, action:flatWorldAction):Double = {
       1.0/availableActions(state).size
     }
