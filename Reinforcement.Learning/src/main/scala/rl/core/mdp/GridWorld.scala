@@ -51,6 +51,11 @@ object GridWorld {
         env.update(newStates)
         if (delta > exitDelta) {
           iterating
+        } else {
+          observeAndUpdatePolicy
+          if (policy.isChanged) {
+            iterating
+          }
         }
       }
       def looping = {
@@ -65,22 +70,23 @@ object GridWorld {
 
           val newStates = env.stateSpace
           newStates.map(state => {
-            var values1 = Seq[Double]()
-            var values = Map[gridWorldAction, Double]()
-            var vrp:Seq[(Double, Double, Double)] = Seq[(Double, Double, Double)]()
-            val numberOfAction = policy.availableActions(state).length
-            for (action <- policy.availableActions(state)) {
-             //values += (action -> tmpFindValueByStateAction(state, action))
-               vrp ++= env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3 * policy.actionProb(state, action)))
-
- //             values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
- //             values1 = values1 :+ vf.value(state, vrp)- env.cost(state, action)
-            }
+            val action = policy.bestAction(state)
+            val vrp = env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3 * policy.actionProb(state, action)))
             state.value=vf.value(state, vrp)
-            //gridWorldPolicy.updatePolicy(state, values.maxBy(_._2)._1)
           })
           newStates
         }
+      def observeAndUpdatePolicy = {
+        val newStates = env.stateSpace
+        newStates.map(state => {
+          var values = Map[gridWorldAction, Double]()
+          for (action <- policy.availableActions(state)) {
+            val vrp = env.rewards(state, action).map(x => (x._1, x._2 - env.cost(state, action), x._3 * policy.actionProb(state, action)))
+            values += (action -> vf.value(state, vrp))
+          }
+          policy.update(state, values.maxBy(_._2)._1)
+        })
+      }
 
         def tmpFindValueByStateAction(state: gridWorldState, action: gridWorldAction) = {
           var returns:Double = - action.value * 2

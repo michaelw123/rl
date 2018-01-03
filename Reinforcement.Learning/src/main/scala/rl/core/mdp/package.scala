@@ -50,6 +50,8 @@ package object mdp {
     def bestAction(state:S):A
     def availableActions(state:S):Seq[A]
     def actionProb(state:S, action:A):Double
+    def update(state:S, action:A):Unit = ???
+    def isChanged:Boolean = false
   }
 
 

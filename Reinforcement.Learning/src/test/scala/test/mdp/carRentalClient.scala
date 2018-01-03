@@ -242,17 +242,15 @@ object carRentalClient extends App {
       val actions = gridWorldPolicy.availableActions(state)
       val transactions = getCurrentStates.toArray
       for (action <- actions; nextState <- transactions) yield (action, nextState)
-
-
-
-    }
+  }
     override def getCurrentStates:DenseMatrix[gridWorldState] = {
       if (!currentStates.isDefined) currentStates=Option(stateSpace)
       currentStates.get
     }
   }
    object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
-    val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
+     var policyCopy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
+    var policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
     override  def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
 
     override  def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
@@ -268,15 +266,25 @@ object carRentalClient extends App {
     override   def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
       1.0/availableActions(state).size
     }
+     override def update(state:gridWorldState, action:gridWorldAction):Unit = {
+       policyCopy(state.id) = policy(state.id) //make a copy
+       policy(state.id)=action
+     }
+     override def isChanged:Boolean = {
+       println(policyCopy.map(a => a.value))
+       println(policy.map(a => a.value))
+       val ss = !(policy.toArray.sameElements(policyCopy.toArray))
+       ss
+     }
   }
 
-  //import rl.core.mdp.ValueFunctions.Bellman
-  //Bellman.setDiscount(0.9)
+  import rl.core.mdp.ValueFunctions.Bellman
+  Bellman.setDiscount(0.9)
 //  import rl.core.mdp.ValueFunctions.qlearning
 //  qlearning.setDiscount(0.9).setLearningRate(0.5)
 
-  import rl.core.mdp.ValueFunctions.optimalValueIteration
-  optimalValueIteration.setDiscount(0.9)
+//  import rl.core.mdp.ValueFunctions.optimalValueIteration
+//  optimalValueIteration.setDiscount(0.9)
   val result = gridWorldAgent.setEpoch(100)
     .setExitDelta(1.0)
     .setPolicyIteration(true)
