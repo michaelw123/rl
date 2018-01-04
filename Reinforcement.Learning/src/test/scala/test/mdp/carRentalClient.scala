@@ -213,14 +213,14 @@ object carRentalClient extends App {
        policyCopy(state.id) = policy(state.id) //make a copy
        policy(state.id)=action
      }
-     override def isChanged:Boolean = {
+     override def isStable:Boolean = {
        val same = policy.size == policyCopy.size  &&  {
          var i = 0
          while (i < policy.size && policy.toArray(i).value == policyCopy.toArray(i).value) i += 1
          i == policy.size
        }
        println(s"same=$same")
-       !same
+       same
      }
   }
 

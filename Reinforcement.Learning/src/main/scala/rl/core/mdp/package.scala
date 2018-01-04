@@ -57,7 +57,7 @@ package object mdp {
     def applicableActions(state:S):Seq[A]
     def actionProb(state:S, action:A):Double
     def update(state:S, action:A):Unit = ??? //policy iteration
-    def isChanged:Boolean = false //check if the policy has changed between each iteration
+    def isStable:Boolean = false //check if the policy has changed between each iteration
   }
 
 

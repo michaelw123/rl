@@ -53,7 +53,7 @@ object GridWorld {
           iterating
         } else {
           observeAndUpdatePolicy
-          if (policy.isChanged) {
+          if (!policy.isStable) {
             iterating
           }
         }
