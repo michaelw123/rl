@@ -72,7 +72,7 @@ object mdpClient extends App {
       Seq[(Double, Double, Double)](vrp)
     }
     override def cost(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = cost(state, action)
-    override def availableTransitions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
+    override def applicableTransitions(state:gridWorldState):Seq[(gridWorldAction, gridWorldState)] = {
       val actions = gridWorldPolicy.applicableActions(state)
       for (action <- actions) yield (action, reward(state, action)._1)
     }

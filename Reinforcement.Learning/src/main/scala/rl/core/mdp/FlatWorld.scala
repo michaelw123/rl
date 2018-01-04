@@ -67,7 +67,7 @@ object FlatWorld {
       def observeOnce:DenseVector[flatWorldState] = {
         val newStates = env.stateSpace
         newStates.map(state => {
-          val actionState = env.availableTransitions(state)
+          val actionState = env.applicableTransitions(state)
           var vrp = Seq[(Double, Double, Double)]()
           for ((action, nextState) <- actionState) {
             val actionProb = env.transitionProb(state, action, nextState)

@@ -180,7 +180,7 @@ object carRentalClient extends App {
 
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
-    override def availableTransitions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
+    override def applicableTransitions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
       val actions = gridWorldPolicy.applicableActions(state)
       val transactions = getCurrentStates.toArray
       for (action <- actions; nextState <- transactions) yield (action, nextState)
