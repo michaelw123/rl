@@ -47,7 +47,7 @@ package object mdp {
     var value:Double
   }
   trait Policy[S, A] {
-    var stochastic=false
+    var stochastic=false // deterministic by default
     def setIsStochastic(value:Boolean):this.type = {
       stochastic = value
       this
@@ -81,7 +81,7 @@ package object mdp {
     }
   }
   trait Agent[A, CS[_], S] {
-    private var policyIteration = false
+    private var policyIteration = false  //policy iteration only applies to stochastic policy
     def getPolicyIteration = policyIteration
     def setPolicyIteration(value:Boolean):this.type = {
       policyIteration = value
