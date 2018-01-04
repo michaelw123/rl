@@ -47,6 +47,12 @@ package object mdp {
     var value:Double
   }
   trait Policy[S, A] {
+    var stochastic=false
+    def setIsStochastic(value:Boolean):this.type = {
+      stochastic = value
+      this
+    }
+    def isStochastic = stochastic
     def bestAction(state:S):A
     def applicableActions(state:S):Seq[A]
     def actionProb(state:S, action:A):Double
