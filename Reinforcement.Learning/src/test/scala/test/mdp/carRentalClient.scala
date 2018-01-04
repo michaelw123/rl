@@ -181,7 +181,7 @@ object carRentalClient extends App {
     override def cost(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = scala.math.abs(action.value * MOVINGCOST)
 
     override def availableTransitions(state: gridWorldState): Seq[(gridWorldAction, gridWorldState)] = {
-      val actions = gridWorldPolicy.availableActions(state)
+      val actions = gridWorldPolicy.applicableActions(state)
       val transactions = getCurrentStates.toArray
       for (action <- actions; nextState <- transactions) yield (action, nextState)
   }
@@ -195,7 +195,7 @@ object carRentalClient extends App {
     var policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
     override  def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
 
-    override  def availableActions(state: gridWorldState): Seq[gridWorldAction] = {
+    override  def applicableActions(state: gridWorldState): Seq[gridWorldAction] = {
       val first2second = for (i <- 0 to scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
         override val value: Int = i
       }
@@ -206,7 +206,7 @@ object carRentalClient extends App {
     }
 
     override   def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
-      1.0/availableActions(state).size
+      1.0/applicableActions(state).size
     }
      override def update(state:gridWorldState, action:gridWorldAction):Unit = {
        policyCopy(state.id) = policy(state.id) //make a copy

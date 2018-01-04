@@ -80,7 +80,7 @@ object GridWorld {
         val newStates = env.stateSpace
         newStates.map(state => {
           var values = Map[gridWorldAction, Double]()
-          for (action <- policy.availableActions(state)) {
+          for (action <- policy.applicableActions(state)) {
             val vrp = env.rewards(state, action).map(x => (x._1, x._2 - env.cost(state, action), x._3 * policy.actionProb(state, action)))
             values += (action -> vf.value(state, vrp))
           }

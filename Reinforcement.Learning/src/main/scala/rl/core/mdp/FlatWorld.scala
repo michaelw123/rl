@@ -54,7 +54,7 @@ object FlatWorld {
         for (i <- 0 until epoch) {
           val newStates = env.stateSpace
           newStates.map(state => {
-            val actions = policy.availableActions(state)
+            val actions = policy.applicableActions(state)
             val vrp = for (action <- actions;
                            (nextState, reward) = env.reward(state, action);
                            actionProb = env.transitionProb(state, action, nextState)
