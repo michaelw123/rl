@@ -206,18 +206,21 @@ object carRentalClient extends App {
     }
 
     override   def actionProb(state:gridWorldState, action:gridWorldAction):Double = {
-      1.0/applicableActions(state).size
+      //1.0/applicableActions(state).size
+      1.0
     }
      override def update(state:gridWorldState, action:gridWorldAction):Unit = {
        policyCopy(state.id) = policy(state.id) //make a copy
        policy(state.id)=action
      }
      override def isChanged:Boolean = {
-       policy.size == policyCopy.size  &&  {
+       val same = policy.size == policyCopy.size  &&  {
          var i = 0
          while (i < policy.size && policy.toArray(i).value == policyCopy.toArray(i).value) i += 1
          i == policy.size
        }
+       println(s"same=$same")
+       !same
      }
   }
 
@@ -234,6 +237,7 @@ object carRentalClient extends App {
     .observe(carRentalEnv, gridWorldPolicy)
 
   println(result.map(a => rounded(1, a.value)))
+  println(gridWorldPolicy.policy.map(a => a.value))
 
 
 }

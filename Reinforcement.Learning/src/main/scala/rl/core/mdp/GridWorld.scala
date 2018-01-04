@@ -63,7 +63,7 @@ object GridWorld {
           val newStates = observeOnce
           env.update(newStates)
           val r = newStates.map(a => rounded(1, a.value))
-          println(s"Epoch $i: $r")
+          //println(s"Epoch $i: $r")
         }
       }
         def observeOnce: DenseMatrix[gridWorldState] = {
