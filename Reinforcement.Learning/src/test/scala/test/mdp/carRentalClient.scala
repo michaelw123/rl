@@ -214,13 +214,11 @@ object carRentalClient extends App {
        policy(state.id)=action
      }
      override def isStable:Boolean = {
-       val same = policy.size == policyCopy.size  &&  {
+       policy.size == policyCopy.size  &&  {
          var i = 0
          while (i < policy.size && policy.toArray(i).value == policyCopy.toArray(i).value) i += 1
          i == policy.size
        }
-       println(s"same=$same")
-       same
      }
   }
 
