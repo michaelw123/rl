@@ -50,8 +50,8 @@ package object mdp {
     def bestAction(state:S):A
     def applicableActions(state:S):Seq[A]
     def actionProb(state:S, action:A):Double
-    def update(state:S, action:A):Unit = ???
-    def isChanged:Boolean = false
+    def update(state:S, action:A):Unit = ??? //policy iteration
+    def isChanged:Boolean = false //check if the policy has changed between each iteration
   }
 
 
@@ -65,7 +65,7 @@ package object mdp {
     def rewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Action Probability,
           // which is applied to Value Functions such as Bellman equation
     def transitionProb(state:S, action:A, nextState:S):Double //transition probability
-    def transitionRewardProb(state:S, action:A, nextState:S):(Double, Double) = ??? // return (prob, reward) pair
+    def transitionRewardProb(state:S, action:A, nextState:S):(Double, Double) = ??? // return (prob, reward) pair, the reward is sum(prob * reward)
     def cost(state:S, action:A):Double  //if the destination state is deterministic by an action
     def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
     def applicableTransitions(state:S):Seq[(A, S)]
