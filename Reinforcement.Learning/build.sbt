@@ -1,4 +1,4 @@
-name := "connect5"
+name := "Reinforcement Learning"
 
 version := "1.0"
 
