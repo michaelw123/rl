@@ -21,9 +21,12 @@
 
 package test.mdp
 import breeze.linalg.DenseMatrix
+import net.ericaro.surfaceplotter.{JSurfacePanel, Mapper, ProgressiveSurfaceModel}
 import rl.core.mdp.{Environment, Policy}
 import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldState}
 import rl.utils._
+
+import scala.swing.{Component, MainFrame}
 
 
 
@@ -236,6 +239,32 @@ object carRentalClient extends App {
 
   println(result.map(a => rounded(1, a.value)))
   println(gridWorldPolicy.policy.map(a => a.value))
+  val policyCopy = gridWorldPolicy.policy
+  drawSurface(policyCopy.map(a => rounded(1, a.value)))
+  //drawSurface(gridWorldPolicy.policy.map(a => a.value))
 
 
+
+  def drawSurface(m:DenseMatrix[Double]) = {
+    val model = new ProgressiveSurfaceModel
+    val surfacePanel = new JSurfacePanel
+    surfacePanel.setModel(model)
+    model.setMapper(new Mapper {
+      def f1(x:Float, y:Float) = {
+        m(x.toInt,y.toInt).toFloat
+      }
+      def f2(x:Float, y:Float) = {
+        (Math.sin(x*y)).toFloat
+      }
+    })
+    model.plot.execute
+
+    new MainFrame {
+      contents = new Component {
+        override lazy val peer = surfacePanel
+      }
+      visible = true
+    }
+  }
 }
+
