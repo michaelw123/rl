@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5.iml" filepath="$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" filepath="$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/connect5-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/reinforcement-learning.iml" filepath="$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/reinforcement-learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/reinforcement-learning-build.iml" filepath="$PROJECT_DIR$/Reinforcement.Learning/.idea/modules/reinforcement-learning-build.iml" />
     </modules>
   </component>
 </project>

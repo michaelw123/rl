@@ -3,12 +3,12 @@
   <component name="ScalaSbtSettings">
     <option name="linkedExternalProjectsSettings">
       <SbtProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/connect5" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Reinforcement.Learning" />
         <option name="jdk" value="1.8" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/connect5" />
-            <option value="$PROJECT_DIR$/connect5/project" />
+            <option value="$PROJECT_DIR$/Reinforcement.Learning" />
+            <option value="$PROJECT_DIR$/Reinforcement.Learning/project" />
           </set>
         </option>
         <option name="sbtVersion" value="0.13.16" />
