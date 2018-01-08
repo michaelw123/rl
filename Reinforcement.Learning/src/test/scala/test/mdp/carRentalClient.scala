@@ -107,10 +107,12 @@ object carRentalClient extends App {
           var numOfCarsSecondLoc = scala.math.min(state.id._2 + action.value, MAX_CARS)
           val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
           val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
+          val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * RENTINCOME
+          numOfCarsFirstLoc -= realRentalFirstLoc
+          numOfCarsSecondLoc -= realRentalSecondLoc
           val prob = poisson(RENTAL_REQUEST_FIRST_LOC, rentalRequestFirstLoc) * poisson(RENTAL_REQUEST_SECOND_LOC, rentalRequestSecondLoc)
           val returnedCarsFirstLoc = RETURNS_FIRST_LOC
           val returnedCarsSecondLoc = RETURNS_SECOND_LOC
-          val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * RENTINCOME
           numOfCarsFirstLoc = scala.math.min(numOfCarsFirstLoc + returnedCarsFirstLoc, MAX_CARS)
           numOfCarsSecondLoc = scala.math.min(numOfCarsSecondLoc + returnedCarsSecondLoc, MAX_CARS)
           vrp = vrp :+ (ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
@@ -203,7 +205,7 @@ object carRentalClient extends App {
         override val value: Int = i
       }
       val second2first = for (i <- 1 to scala.math.min(state.id._2, MAXMOVE)) yield new gridWorldAction {
-        override val value: Int = (-1) * i
+        override val value: Int = -i
       }
       first2second ++ second2first
     }
@@ -232,15 +234,17 @@ object carRentalClient extends App {
 
 //  import rl.core.mdp.ValueFunctions.optimalValueIteration
 //  optimalValueIteration.setDiscount(0.9)
-  val result = gridWorldAgent.setEpoch(100)
-    .setExitDelta(1.0)
+  val result = gridWorldAgent.setEpoch(10)
+    .setExitDelta(0.1)
     .setPolicyIteration(true)
+    .setValueIteration(true)
     .observe(carRentalEnv, gridWorldPolicy)
 
   println(result.map(a => rounded(1, a.value)))
   println(gridWorldPolicy.policy.map(a => a.value))
   val policyCopy = gridWorldPolicy.policy
-  drawSurface(policyCopy.map(a => rounded(1, a.value)))
+  println(result.map(a => rounded(1, a.value)).max)
+  //drawSurface(policyCopy.map(a => rounded(1, a.value)))
   //drawSurface(gridWorldPolicy.policy.map(a => a.value))
 
 

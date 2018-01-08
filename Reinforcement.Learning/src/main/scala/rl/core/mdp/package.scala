@@ -81,10 +81,26 @@ package object mdp {
     }
   }
   trait Agent[A, CS[_], S] {
-    private var policyIteration = false  //policy iteration only applies to stochastic policy
+     var policyIteration = false  //policy iteration only applies to stochastic policy
+     var valueIteration = false
+     var epoch = 1
+     var exitDelta=0.0
+    def setExitDelta(value:Double) = {
+      exitDelta = value
+      this
+    }
+    def setEpoch(value:Int) : this.type ={
+      epoch = value
+      this
+    }
     def getPolicyIteration = policyIteration
     def setPolicyIteration(value:Boolean):this.type = {
       policyIteration = value
+      this
+    }
+    def getValueIteration = valueIteration
+    def setValueIteration(value:Boolean):this.type = {
+      valueIteration = value
       this
     }
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](env:E,policy:P) (implicit vf: VF):CS[S]

@@ -47,7 +47,9 @@ object GridWorld {
       def iterating:Unit = {
         val newStates = observeOnce
         val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
-        println(s"delta=$delta")
+        val max=newStates.map(b => b.value).max
+        println(s"delta=$delta, max=$max")
+        //println(newStates.map(a => a.value))
         env.update(newStates)
         if (delta > exitDelta) {
           iterating
@@ -58,78 +60,56 @@ object GridWorld {
           }
         }
       }
-      def looping = {
-        for (i <- 0 until epoch) {
-          val newStates = observeOnce
+      //value iteration
+      @tailrec
+      def looping:Unit = {
+        val backupStates = env.getCurrentStates
+        val newStates = observeOnce
+        //for (i <- 0 until 1) {
+          //val newStates = observeOnce
           env.update(newStates)
           val r = newStates.map(a => rounded(1, a.value))
           //println(s"Epoch $i: $r")
+        //}
+        observeAndUpdatePolicy
+        val delta: Double = sum(abs(backupStates.map(a => a.value) - newStates.map(b => b.value)))
+        if (!policy.isStable || delta > 0.1) {
+          looping
         }
+
       }
         def observeOnce: DenseMatrix[gridWorldState] = {
-
           val newStates = env.stateSpace
           newStates.map(state => {
             val action = policy.bestAction(state)
-            val vrp = env.rewards(state, action).map(x => (x._1, x._2- env.cost(state, action), x._3 * policy.actionProb(state, action)))
-            state.value=vf.value(state, vrp)
+            val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+            state.value=vf.value(state, vrp) - env.cost(state, action)
           })
           newStates
         }
-      def observeAndUpdatePolicy = {
+        def observeAndUpdatePolicy = {
         val newStates = env.stateSpace
         newStates.map(state => {
           var values = Map[gridWorldAction, Double]()
-          for (action <- policy.applicableActions(state)) {
-            val vrp = env.rewards(state, action).map(x => (x._1, x._2 - env.cost(state, action), x._3 * policy.actionProb(state, action)))
-            values += (action -> vf.value(state, vrp))
+          val actions = policy.applicableActions(state)
+          for (action <- actions) {
+            val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+            values += (action -> (vf.value(state, vrp)- env.cost(state, action)))
           }
           policy.update(state, values.maxBy(_._2)._1)
         })
       }
-
-        def tmpFindValueByStateAction(state: gridWorldState, action: gridWorldAction) = {
-          var returns:Double = - action.value * 2
-          val ccStates = env.getCurrentStates
-          var vrp = Seq[(Double, Double, Double)]()
-          for (rentalRequestFirstLoc <- 0 until 11) {
-            for (rentalRequestSecondLoc <- 0 until 11) {
-              var numOfCarsFirstLoc = scala.math.min(state.id._1 - action.value, 20)
-              var numOfCarsSecondLoc = scala.math.min(state.id._2 + action.value, 20)
-              val realRentalFirstLoc = scala.math.min(numOfCarsFirstLoc, rentalRequestFirstLoc)
-              val realRentalSecondLoc = scala.math.min(numOfCarsSecondLoc, rentalRequestSecondLoc)
-              val reward:Double = (realRentalFirstLoc + realRentalSecondLoc) * 10
-              numOfCarsFirstLoc -= realRentalFirstLoc
-              numOfCarsSecondLoc -= realRentalSecondLoc
-
-              val prob = poisson(3, rentalRequestFirstLoc) * poisson(4, rentalRequestSecondLoc)
-              val returnedCarsFirstLoc = 3
-              val returnedCarsSecondLoc = 2
-
-              numOfCarsFirstLoc = scala.math.min(numOfCarsFirstLoc + returnedCarsFirstLoc, 20)
-              numOfCarsSecondLoc = scala.math.min(numOfCarsSecondLoc + returnedCarsSecondLoc, 20)
-              vrp = vrp :+ (ccStates(numOfCarsFirstLoc, numOfCarsSecondLoc).value, reward, prob)
-            }
-          }
-          returns += vf.value(state, vrp)
-          returns
-        }
-      exitDelta match {
-        case 0.0 => looping
-        case _ => iterating
+      (valueIteration, policyIteration, exitDelta, epoch) match {
+        case (false, false, 0.0, _) => looping
+        case (false, false, _ , _) => loopingWithExitDelta
+        case (false, true, _ , _) => policyIteration
+        case (true, _, _, _) => valueIteration
       }
+//      exitDelta match {
+//        case 0.0 => looping
+//        case _ => iterating
+//      }
       env.getCurrentStates
-    }
-
-    private var epoch = 1
-    def setEpoch(value:Int) : this.type ={
-      epoch = value
-      this
-    }
-    private var exitDelta=0.0
-    def setExitDelta(value:Double) = {
-      exitDelta = value
-      this
     }
   }
 }
