@@ -46,9 +46,11 @@
 
 
 <h5>Car Rental - Policy Iteration</h5>
+
 ![Alt text](Reinforcement.Learning/CarRental_policy.png?raw=true "Policy")
 
 <h5>Car Rental - Value Iteration</h5>
+
 ![Alt text](Reinforcement.Learning/CarRental_values.png?raw=true "Values")
 
 
