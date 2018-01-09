@@ -99,11 +99,35 @@ object GridWorld {
           policy.update(state, values.maxBy(_._2)._1)
         })
       }
+      def loopingWithEpoch: Unit = {
+        for (i <- 0 until epoch) {
+          val newStates = observeOnce
+          env.update(newStates)
+          val r = newStates.map(a => rounded(1, a.value))
+          println(s"Epoch $i: $r")
+        }
+      }
+      @tailrec
+      def loopingWithExitDelta:Unit = {
+         val newStates = observeOnce
+          val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+          env.update(newStates)
+          if (delta > exitDelta) {
+            loopingWithExitDelta
+          }
+      }
+      def policyIterate = {
+
+      }
+      def valueIterate = {
+
+      }
       (valueIteration, policyIteration, exitDelta, epoch) match {
-        case (false, false, 0.0, _) => looping
+        case (false, false, 0.0, _) => loopingWithEpoch
         case (false, false, _ , _) => loopingWithExitDelta
-        case (false, true, _ , _) => policyIteration
-        case (true, _, _, _) => valueIteration
+        case (false, true, _ , _) => policyIterate
+        case (true, _, _, _) => valueIterate
+
       }
 //      exitDelta match {
 //        case 0.0 => looping
