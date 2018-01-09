@@ -43,41 +43,6 @@ object GridWorld {
 
   object gridWorldAgent extends Agent[gridWorldAction, DenseMatrix, gridWorldState]{
     def observe[VF <: ValueFunction, P <: Policy[gridWorldState, gridWorldAction], E <: Environment[DenseMatrix,gridWorldState, gridWorldAction]](env:E, policy:P)(implicit vf:VF): DenseMatrix[gridWorldState] = {
-      @tailrec
-      def iterating:Unit = {
-        val newStates = observeOnce
-        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
-        val max=newStates.map(b => b.value).max
-        println(s"delta=$delta, max=$max")
-        //println(newStates.map(a => a.value))
-        env.update(newStates)
-        if (delta > exitDelta) {
-          iterating
-        } else {
-          observeAndUpdatePolicy
-          if (!policy.isStable) {
-            iterating
-          }
-        }
-      }
-      //value iteration
-      @tailrec
-      def looping:Unit = {
-        val backupStates = env.getCurrentStates
-        val newStates = observeOnce
-        //for (i <- 0 until 1) {
-          //val newStates = observeOnce
-          env.update(newStates)
-          val r = newStates.map(a => rounded(1, a.value))
-          //println(s"Epoch $i: $r")
-        //}
-        observeAndUpdatePolicy
-        val delta: Double = sum(abs(backupStates.map(a => a.value) - newStates.map(b => b.value)))
-        if (!policy.isStable || delta > 0.1) {
-          looping
-        }
-
-      }
         def observeOnce: DenseMatrix[gridWorldState] = {
           val newStates = env.stateSpace
           newStates.map(state => {
@@ -116,10 +81,29 @@ object GridWorld {
             loopingWithExitDelta
           }
       }
-      def policyIterate = {
-
+      @tailrec
+      def policyIterate:Unit = {
+        val newStates = observeOnce
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        env.update(newStates)
+        if (delta > exitDelta) {
+          policyIterate
+        } else {
+          observeAndUpdatePolicy
+          if (!policy.isStable) {
+            policyIterate
+          }
+        }
       }
-      def valueIterate = {
+      @tailrec
+      def valueIterate:Unit = {
+        val newStates = observeOnce
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        env.update(newStates)
+        observeAndUpdatePolicy
+        if (delta > exitDelta) {
+          valueIterate
+        }
 
       }
       (valueIteration, policyIteration, exitDelta, epoch) match {
@@ -129,10 +113,6 @@ object GridWorld {
         case (true, _, _, _) => valueIterate
 
       }
-//      exitDelta match {
-//        case 0.0 => looping
-//        case _ => iterating
-//      }
       env.getCurrentStates
     }
   }

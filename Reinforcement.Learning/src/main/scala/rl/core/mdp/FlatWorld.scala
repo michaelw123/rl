@@ -96,16 +96,5 @@ object FlatWorld {
       }
       env.getCurrentStates
     }
-
-    private var epoch = 1
-    def setEpoch(value:Int) : this.type ={
-      epoch = value
-      this
-    }
-    private var exitDelta=0.0
-    def setExitDelta(value:Double) = {
-      exitDelta = value
-      this
-    }
   }
 }
