@@ -241,18 +241,20 @@ object carRentalClient extends App {
     .observe(carRentalEnv, gridWorldPolicy)
 
   println(result.map(a => rounded(1, a.value)))
+  drawSurface(result.map(a => rounded(3, a.value)), "Values")
   println(gridWorldPolicy.policy.map(a => a.value))
   val policyCopy = gridWorldPolicy.policy
   println(result.map(a => rounded(1, a.value)).max)
-  //drawSurface(policyCopy.map(a => rounded(1, a.value)))
-  //drawSurface(gridWorldPolicy.policy.map(a => a.value))
+  drawSurface(policyCopy.map(a => rounded(1, a.value)), "Policy")
+ // drawSurface(gridWorldPolicy.policy.map(a => a.value))
 
 
 
-  def drawSurface(m:DenseMatrix[Double]) = {
+  def drawSurface(m:DenseMatrix[Double], title:String) = {
     val model = new ProgressiveSurfaceModel
     val surfacePanel = new JSurfacePanel
     surfacePanel.setModel(model)
+    surfacePanel.setTitleText(title)
     model.setMapper(new Mapper {
       def f1(x:Float, y:Float) = {
         m(x.toInt,y.toInt).toFloat
@@ -261,7 +263,7 @@ object carRentalClient extends App {
         (Math.sin(x*y)).toFloat
       }
     })
-    model.plot.execute
+      model.plot.execute
 
     new MainFrame {
       contents = new Component {
