@@ -33,7 +33,7 @@ object test1 extends App {
 //  println("aaa")
 //  /state.value = vf.value(state, vrp)
 
-  println(poisson(4, 10))
+  println(poisson(4, 0))
 
 //  val model = new ProgressiveSurfaceModel
 //  val surfacePanel = new JSurfacePanel
