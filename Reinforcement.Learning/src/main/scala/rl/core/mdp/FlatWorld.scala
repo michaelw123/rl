@@ -66,6 +66,7 @@ object FlatWorld {
             policy.update(state, values.maxBy(_._2)._1)
           }
         })
+        env.update(newStates)
       }
 
       def loopingWithEpoch: Unit = {
@@ -104,14 +105,13 @@ object FlatWorld {
 
       @tailrec
       def valueIterate: Unit = {
-        val newStates = observeOnce
-        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
-        env.update(newStates)
+        val oldStates = env.getCurrentStates
         observeAndUpdatePolicy
+        val newState = env.getCurrentStates
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - oldStates.map(b => b.value)))
         if (delta > exitDelta) {
           valueIterate
         }
-
       }
 
       (valueIteration, policyIteration, exitDelta, epoch) match {

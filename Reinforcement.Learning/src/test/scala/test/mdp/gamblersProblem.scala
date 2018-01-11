@@ -40,7 +40,7 @@ object gamblersProblem extends App{
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
       val actions = gamblersProblemPolicy.applicableActions(state)
-      //println(state.id, action.value)
+      println(state.id, action.value)
       vrp = vrp :+ (stateSpace(state.id + action.value).value,action.value.toDouble, headProb)
       vrp = vrp :+ (stateSpace(state.id - action.value).value,-action.value.toDouble, (1-headProb))
       vrp
