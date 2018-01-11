@@ -39,7 +39,7 @@ object gamblersProblem extends App{
     override def rewards(state:flatWorldState, action:flatWorldAction):Seq[(Double, Double, Double)] = {
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
-      val actions = gamblersProblemPolicy.applicableActions(state)
+      //val actions = gamblersProblemPolicy.applicableActions(state)
       println(state.id, action.value)
       vrp = vrp :+ (stateSpace(state.id + action.value).value,action.value.toDouble, headProb)
       vrp = vrp :+ (stateSpace(state.id - action.value).value,-action.value.toDouble, (1-headProb))
@@ -60,7 +60,7 @@ object gamblersProblem extends App{
       policyCopy(state.id) = policy(state.id) //make a copy
       policy(state.id)=action
     }
-    override def actionProb(state: flatWorldState, action: flatWorldAction): Double = 0.4
+    override def actionProb(state: flatWorldState, action: flatWorldAction): Double = 1.0
 
     override def bestAction(state: flatWorldState): flatWorldAction = policy(state.id)
 
