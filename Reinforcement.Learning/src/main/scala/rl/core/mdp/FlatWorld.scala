@@ -64,6 +64,7 @@ object FlatWorld {
               values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
             }
             policy.update(state, values.maxBy(_._2)._1)
+            state.value = values.maxBy(_._2)._2
           }
         })
         env.update(newStates)

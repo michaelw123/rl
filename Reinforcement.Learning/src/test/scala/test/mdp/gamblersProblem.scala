@@ -32,25 +32,23 @@ import rl.utils.rounded
   */
 object gamblersProblem extends App{
   val GOAL=100
-  val headProb = 0.4
+  val headProb = 0.7
   object gamblersProblemEnv extends Environment[DenseVector, flatWorldState, flatWorldAction] {
     def stateSpace: DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](GOAL+1) { x => new flatWorldState((x), 0) }
     val actionSpace: Seq[flatWorldAction] = Seq.tabulate[flatWorldAction](GOAL+1)(x => new flatWorldAction {override val value: Int = x})
     override def rewards(state:flatWorldState, action:flatWorldAction):Seq[(Double, Double, Double)] = {
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
-      //val actions = gamblersProblemPolicy.applicableActions(state)
       println(state.id, action.value)
       vrp = vrp :+ (stateSpace(state.id + action.value).value,action.value.toDouble, headProb)
       vrp = vrp :+ (stateSpace(state.id - action.value).value,-action.value.toDouble, (1-headProb))
       vrp
-
     }
   }
   object gamblersProblemPolicy extends Policy[flatWorldState, flatWorldAction] {
     var policyCopy = DenseVector.tabulate[flatWorldAction](GOAL + 1) { x => new flatWorldAction {
-      override val value: Int = 0
-    }
+        override val value: Int = 0
+      }
     }
     var policy = DenseVector.tabulate[flatWorldAction](GOAL + 1) { x => new flatWorldAction {
       override val value: Int = 0
