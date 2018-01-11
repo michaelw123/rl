@@ -121,22 +121,22 @@ object carRentalClient extends App {
       vrp
     }
 
-    override def transitionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
-      val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
-      val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
-      var prob1 = 0.0
-      var prob2 = 0.0
- //     println (state.id + " "+ action.value + " " + nextState.id)
-      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
-        prob1 += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))
-      }
-//      println("prob1="+prob)
-      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
-        prob2 += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
-      }
-     // println("prob = "+prob)
-      prob1 * prob2
-    }
+//    override def transitionProb(state: gridWorldState, action: gridWorldAction, nextState: gridWorldState): Double = {
+//      val diff1 = scala.math.abs(state.id._1 - action.value - nextState.id._1)
+//      val diff2 = scala.math.abs(nextState.id._2 + action.value - state.id._2)
+//      var prob1 = 0.0
+//      var prob2 = 0.0
+// //     println (state.id + " "+ action.value + " " + nextState.id)
+//      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._1)) {
+//        prob1 += poisson(RENTAL_REQUEST_FIRST_LOC, i) * poisson(RETURNS_FIRST_LOC, scala.math.abs(diff1 -i))
+//      }
+////      println("prob1="+prob)
+//      for (i <- 0 until scala.math.min(MAXREQUEST, state.id._2)) {
+//        prob2 += poisson(RENTAL_REQUEST_SECOND_LOC, i) * poisson(RETURNS_SECOND_LOC, scala.math.abs(diff2 -i))
+//      }
+//     // println("prob = "+prob)
+//      prob1 * prob2
+//    }
 
     override def cost(state: gridWorldState, action: gridWorldAction): Double = scala.math.abs(action.value * MOVINGCOST)
 

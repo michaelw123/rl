@@ -33,7 +33,7 @@ object test1 extends App {
 //  println("aaa")
 //  /state.value = vf.value(state, vrp)
 
-  println(poisson(4, 0))
+  //println(poisson(4, 0))
 
 //  val model = new ProgressiveSurfaceModel
 //  val surfacePanel = new JSurfacePanel
@@ -59,4 +59,10 @@ object test1 extends App {
 //    }
 //    visible = true
 //  }
+
+  //class Storage[DocType](name: String)
+//  trait Document1
+//
+//  class Storage[DocType = Document1](name: String)
+
 }
