@@ -24,6 +24,8 @@ import breeze.linalg.{DenseMatrix, DenseVector}
 import rl.core.mdp.{Environment, Policy}
 import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldState}
 import rl.core.mdp.FlatWorld.flatWorldAgent
+import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
+import rl.utils.rounded
 
 /**
   * Created by wangmich on 01/11/2018.
@@ -53,7 +55,10 @@ object gamblersProblem extends App{
       override val value: Int = x
     }
     }
-
+    override def update(state:flatWorldState, action:flatWorldAction):Unit = {
+      policyCopy(state.id) = policy(state.id) //make a copy
+      policy(state.id)=action
+    }
     override def actionProb(state: flatWorldState, action: flatWorldAction): Double = 0.4
 
     override def bestAction(state: flatWorldState): flatWorldAction = policy(state.id)
@@ -73,4 +78,5 @@ object gamblersProblem extends App{
     .setPolicyIteration(true)
     .setValueIteration(true)
     .observe(gamblersProblemEnv, gamblersProblemPolicy)
+  println(result.map(a => a.value))
 }

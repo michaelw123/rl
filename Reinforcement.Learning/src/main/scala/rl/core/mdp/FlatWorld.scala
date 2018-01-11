@@ -20,8 +20,10 @@
  */
 package rl.core.mdp
 
-import breeze.linalg.{DenseVector, sum}
+import breeze.linalg.{DenseMatrix, DenseVector, sum}
 import breeze.numerics.abs
+import rl.core.mdp.GridWorld.gridWorldAgent.{epoch, exitDelta, policyIteration, valueIteration}
+import rl.utils.rounded
 
 import scala.annotation.tailrec
 
@@ -39,60 +41,83 @@ object FlatWorld {
   }
   class flatWorldState(val id:Int, var value:Double) extends State[Int]
 
-  object flatWorldAgent extends Agent[flatWorldAction, DenseVector, flatWorldState]{
-    def observe[VF <: ValueFunction, P <: Policy[flatWorldState, flatWorldAction], E <: Environment[DenseVector, flatWorldState, flatWorldAction]](env:E, policy:P)(implicit vf:VF): DenseVector[flatWorldState] = {
-      @tailrec
-      def iterating:Unit = {
-        val newStates = observeOnce
-        val x: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
-        env.update(newStates)
-        if (x > exitDelta) {
-          iterating
-        }
-      }
-      def looping = {
-        for (i <- 0 until epoch) {
-          val newStates = env.stateSpace
-          newStates.map(state => {
-            val actions = policy.applicableActions(state)
-            val vrp = for (action <- actions;
-                           (nextState, reward) = env.reward(state, action);
-                           actionProb = env.transitionProb(state, action, nextState)
-            ) yield (nextState.value, reward - env.cost(state, action), actionProb)
-            state.value = vf.value(state, vrp)
-          })
-          env.update(newStates)
-        }
-      }
-      def observeOnce:DenseVector[flatWorldState] = {
+  object flatWorldAgent extends Agent[flatWorldAction, DenseVector, flatWorldState] {
+    def observe[VF <: ValueFunction, P <: Policy[flatWorldState, flatWorldAction], E <: Environment[DenseVector, flatWorldState, flatWorldAction]](env: E, policy: P)(implicit vf: VF): DenseVector[flatWorldState] = {
+      def observeOnce: DenseVector[flatWorldState] = {
         val newStates = env.stateSpace
         newStates.map(state => {
-          val actionState = env.applicableTransitions(state)
-          var vrp = Seq[(Double, Double, Double)]()
-          for ((action, nextState) <- actionState) {
-            val actionProb = env.transitionProb(state, action, nextState)
-            val reward = env.reward(state, action, nextState)
-            vrp = vrp :+ (nextState.value, reward - env.cost(state, action, nextState), actionProb)
-          }
-          state.value = vf.value(state, vrp)
+          val action = policy.bestAction(state)
+          val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+          state.value = vf.value(state, vrp) - env.cost(state, action)
         })
         newStates
-//        val newStates = env.stateSpace
-//
-//        newStates.map(state => {
-//          val actions = env.availableActions(state)
-//          val vrp = for (action <- actions;
-//                         (nextState, reward) = env.reward(state, action);
-//                         actionProb = env.transactionProb(state, action, nextState)
-//          ) yield (nextState.value, reward - env.cost(state, action), actionProb)
-//          state.value = vf.value(state, vrp)
-//        })
-//        newStates
       }
 
-      exitDelta match {
-        case 0.0 => looping
-        case _ => iterating
+      def observeAndUpdatePolicy = {
+        val newStates = env.stateSpace
+        newStates.map(state => {
+          var values = Map[flatWorldAction, Double]()
+          val actions = policy.applicableActions(state)
+          for (action <- actions) {
+            val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+            values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
+          }
+          policy.update(state, values.maxBy(_._2)._1)
+        })
+      }
+
+      def loopingWithEpoch: Unit = {
+        for (i <- 0 until epoch) {
+          val newStates = observeOnce
+          env.update(newStates)
+          val r = newStates.map(a => rounded(1, a.value))
+          println(s"Epoch $i: $r")
+        }
+      }
+
+      @tailrec
+      def loopingWithExitDelta: Unit = {
+        val newStates = observeOnce
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        env.update(newStates)
+        if (delta > exitDelta) {
+          loopingWithExitDelta
+        }
+      }
+
+      @tailrec
+      def policyIterate: Unit = {
+        val newStates = observeOnce
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        env.update(newStates)
+        if (delta > exitDelta) {
+          policyIterate
+        } else {
+          observeAndUpdatePolicy
+          if (!policy.isStable) {
+            policyIterate
+          }
+        }
+      }
+
+      @tailrec
+      def valueIterate: Unit = {
+        val newStates = observeOnce
+        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - newStates.map(b => b.value)))
+        env.update(newStates)
+        observeAndUpdatePolicy
+        if (delta > exitDelta) {
+          valueIterate
+        }
+
+      }
+
+      (valueIteration, policyIteration, exitDelta, epoch) match {
+        case (false, false, 0.0, _) => loopingWithEpoch
+        case (false, false, _, _) => loopingWithExitDelta
+        case (false, true, _, _) => policyIterate
+        case (true, _, _, _) => valueIterate
+
       }
       env.getCurrentStates
     }
