@@ -58,11 +58,13 @@ object FlatWorld {
         newStates.map(state => {
           var values = Map[flatWorldAction, Double]()
           val actions = policy.applicableActions(state)
-          for (action <- actions) {
-            val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
-            values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
+          if (!actions.isEmpty) {
+            for (action <- actions) {
+              val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+              values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
+            }
+            policy.update(state, values.maxBy(_._2)._1)
           }
-          policy.update(state, values.maxBy(_._2)._1)
         })
       }
 

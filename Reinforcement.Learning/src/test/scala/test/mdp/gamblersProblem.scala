@@ -40,19 +40,20 @@ object gamblersProblem extends App{
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
       val actions = gamblersProblemPolicy.applicableActions(state)
-      vrp :+ (state.id + action.value,action.value, headProb)
-      vrp :+ (state.id - action.value,-action.value, (1-headProb))
+      //println(state.id, action.value)
+      vrp = vrp :+ (stateSpace(state.id + action.value).value,action.value.toDouble, headProb)
+      vrp = vrp :+ (stateSpace(state.id - action.value).value,-action.value.toDouble, (1-headProb))
       vrp
 
     }
   }
   object gamblersProblemPolicy extends Policy[flatWorldState, flatWorldAction] {
     var policyCopy = DenseVector.tabulate[flatWorldAction](GOAL + 1) { x => new flatWorldAction {
-      override val value: Int = x
+      override val value: Int = 0
     }
     }
     var policy = DenseVector.tabulate[flatWorldAction](GOAL + 1) { x => new flatWorldAction {
-      override val value: Int = x
+      override val value: Int = 0
     }
     }
     override def update(state:flatWorldState, action:flatWorldAction):Unit = {
@@ -64,7 +65,7 @@ object gamblersProblem extends App{
     override def bestAction(state: flatWorldState): flatWorldAction = policy(state.id)
 
     override def applicableActions(state: flatWorldState): Seq[flatWorldAction] = {
-      val actions = Seq.tabulate[flatWorldAction](state.id + 1)(x => new flatWorldAction {
+      val actions = Seq.tabulate[flatWorldAction](scala.math.min(state.id, GOAL - state.id))(x => new flatWorldAction {
         override val value: Int = x
       })
       actions
@@ -79,4 +80,5 @@ object gamblersProblem extends App{
     .setValueIteration(true)
     .observe(gamblersProblemEnv, gamblersProblemPolicy)
   println(result.map(a => a.value))
+  println(gamblersProblemPolicy.policy.map(a => a.value))
 }
