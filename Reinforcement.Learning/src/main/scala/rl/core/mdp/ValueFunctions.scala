@@ -39,15 +39,6 @@ object ValueFunctions {
   }
 
   implicit object optimalValueIteration extends ValueFunction {
-    private var discount = 0.0
-
-    override def setDiscount(value: Double): this.type = {
-      discount = value
-      this
-    }
-
-    override def getDiscount = discount
-
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       reward + discount * nextStateValue
     }
@@ -56,20 +47,11 @@ object ValueFunctions {
     }
  }
   implicit object qlearning extends ValueFunction {
-    private var discount = 0.0
     private var learningRate = 0.5
-
     def setLearningRate(value:Double):this.type = {
       learningRate = value
       this
     }
-    override def setDiscount(value: Double): this.type = {
-      discount = value
-      this
-    }
-
-    override def getDiscount = discount
-
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       reward + discount * nextStateValue
     }

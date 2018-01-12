@@ -113,16 +113,12 @@ package object mdp {
   }
 
   trait ValueFunction{
-
-    private var discount = 0.0
-
+    private[mdp] var discount = 0.0
     def setDiscount(value: Double): this.type = {
       discount = value
       this
     }
-
     def getDiscount = discount
-
     def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double // this is a V function
     def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double // next state value, reward, action probability.
     def qValue[ID](state:State[ID], action:Action):Double = ??? //Q Function
