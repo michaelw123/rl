@@ -123,7 +123,8 @@ package object mdp {
 
     def getDiscount = discount
 
-    def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double
-    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double // next state value, reward, action probability
+    def value(statevalue:Double, nextStateValue:Double, reward:Double, prob:Double):Double // this is a V function
+    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double // next state value, reward, action probability.
+    def qValue[ID](state:State[ID], action:Action):Double = ??? //Q Function
   }
 }
