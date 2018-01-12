@@ -66,7 +66,7 @@ object mdpClient extends App {
     override def cost(state:gridWorldState, action:gridWorldAction):Double = 0.0
     override def reward(state:gridWorldState, action:gridWorldAction, nextState:gridWorldState):Double  = reward(state, action)._2
 
-    override def rewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
+    override def stochasticRewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
       val stateReward = reward(state, action)
       val vrp = (stateReward._1.value, stateReward._2, 1.0)
       Seq[(Double, Double, Double)](vrp)

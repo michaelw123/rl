@@ -98,7 +98,7 @@ object carRentalClient extends App {
       //(getStates(r._1),  reward - theCost)
       (new gridWorldState(state.id, 0), reward - theCost)
     }
-    override def rewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
+    override def stochasticRewards(state:gridWorldState, action:gridWorldAction):Seq[(Double, Double, Double)] = {
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
       for (rentalRequestFirstLoc <- 0 until POISSONUPBOUND) {

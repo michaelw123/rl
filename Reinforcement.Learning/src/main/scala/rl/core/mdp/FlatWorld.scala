@@ -47,7 +47,7 @@ object FlatWorld {
         val newStates = env.stateSpace
         newStates.map(state => {
           val action = policy.bestAction(state)
-          val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+          val vrp = env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
           state.value = vf.value(state, vrp) - env.cost(state, action)
         })
         newStates
@@ -60,7 +60,7 @@ object FlatWorld {
           val actions = policy.applicableActions(state)
           if (!actions.isEmpty) {
             for (action <- actions) {
-              val vrp = env.rewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
+              val vrp = env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
               values += (action -> (vf.value(state, vrp) - env.cost(state, action)))
             }
             policy.update(state, values.maxBy(_._2)._1)
@@ -109,7 +109,7 @@ object FlatWorld {
         val oldStates = env.getCurrentStates
         observeAndUpdatePolicy
         val newState = env.getCurrentStates
-        val delta: Double = sum(abs(env.getCurrentStates.map(a => a.value) - oldStates.map(b => b.value)))
+        val delta: Double = sum(abs(newState.map(a => a.value) - oldStates.map(b => b.value)))
         if (delta > exitDelta) {
           valueIterate
         }

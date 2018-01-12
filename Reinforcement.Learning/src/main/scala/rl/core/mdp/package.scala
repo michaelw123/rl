@@ -68,7 +68,7 @@ package object mdp {
     def update(value :CS[S]) = currentStates = Option(value)
     def reward(state:S, action:A):(S, Double) = ??? // an action takes S to S' deterministically
     def reward(state:S, action:A, nextState:S):Double = ??? // an action may take S to multiple S', propability is given by transitionProb, this reward function calculates the transition R(S, A, S')
-    def rewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Action Probability,
+    def stochasticRewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Action Probability,
           // which is applied to Value Functions such as Bellman equation, stochastic
     def transitionProb(state:S, action:A, nextState:S):Double = ??? //transition probability for each action - deterministic
     def transitionRewardProb(state:S, action:A, nextState:S):(Double, Double) = ??? // return (prob, reward) pair, the reward is sum(prob * reward)

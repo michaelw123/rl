@@ -36,12 +36,14 @@ object gamblersProblem extends App{
   object gamblersProblemEnv extends Environment[DenseVector, flatWorldState, flatWorldAction] {
     def stateSpace: DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](GOAL+1) { x => new flatWorldState((x), 0) }
     val actionSpace: Seq[flatWorldAction] = Seq.tabulate[flatWorldAction](GOAL+1)(x => new flatWorldAction {override val value: Int = x})
-    override def rewards(state:flatWorldState, action:flatWorldAction):Seq[(Double, Double, Double)] = {
+    override def stochasticRewards(state:flatWorldState, action:flatWorldAction):Seq[(Double, Double, Double)] = {
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
-      println(state.id, action.value)
-      vrp = vrp :+ (stateSpace(state.id + action.value).value,action.value.toDouble, headProb)
-      vrp = vrp :+ (stateSpace(state.id - action.value).value,-action.value.toDouble, (1-headProb))
+      //println(state.id, action.value)
+//      vrp = vrp :+ (ccStates(state.id + action.value).value,action.value.toDouble, headProb)
+//      vrp = vrp :+ (ccStates(state.id - action.value).value,-action.value.toDouble, (1-headProb))
+      vrp = vrp :+ (0.0, ccStates(state.id + action.value).value.toDouble, headProb)
+      vrp = vrp :+ (0.0, ccStates(state.id - action.value).value.toDouble, (1-headProb))
       vrp
     }
   }
@@ -71,7 +73,7 @@ object gamblersProblem extends App{
   }
 
   import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(0.9)
+  Bellman.setDiscount(0)
   val result = flatWorldAgent.setEpoch(10)
     .setExitDelta(0.1)
     .setPolicyIteration(true)
