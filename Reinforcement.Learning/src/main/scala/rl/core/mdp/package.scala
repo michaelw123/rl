@@ -53,7 +53,7 @@ package object mdp {
       this
     }
     def isStochastic = stochastic
-    def optimalAction(state:S):A
+    def optimalPolicy(state:S):A
     def applicableActions(state:S):Seq[A]
     def actionProb(state:S, action:A):Double
     def update(state:S, action:A):Unit = ??? //policy iteration

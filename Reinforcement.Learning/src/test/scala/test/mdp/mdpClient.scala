@@ -84,7 +84,7 @@ object mdpClient extends App {
 
    object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
     val policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
-    def optimalAction(state:gridWorldState):gridWorldAction = policy(state.id)
+    def optimalPolicy(state:gridWorldState):gridWorldAction = policy(state.id)
 
     override def applicableActions(state: gridWorldState): Seq[gridWorldAction] = {
       Seq(new North, new East, new West, new South)

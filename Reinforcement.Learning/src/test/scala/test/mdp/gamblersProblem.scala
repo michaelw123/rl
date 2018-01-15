@@ -32,18 +32,22 @@ import rl.utils.rounded
   */
 object gamblersProblem extends App{
   val GOAL=100
-  val headProb = 0.7
+  val headProb = 0.4
   object gamblersProblemEnv extends Environment[DenseVector, flatWorldState, flatWorldAction] {
-    def stateSpace: DenseVector[flatWorldState] = DenseVector.tabulate[flatWorldState](GOAL+1) { x => new flatWorldState((x), 0) }
-    val actionSpace: Seq[flatWorldAction] = Seq.tabulate[flatWorldAction](GOAL+1)(x => new flatWorldAction {override val value: Int = x})
+    def stateSpace: DenseVector[flatWorldState] = {
+      val space = DenseVector.tabulate[flatWorldState](GOAL+1) { x => new flatWorldState((x), 0) }
+      space(GOAL) = new flatWorldState((GOAL), 1)
+      space
+    }
+    val actionSpace: Seq[flatWorldAction] = Seq.tabulate[flatWorldAction](GOAL)(x => new flatWorldAction {override val value: Int = x})
     override def stochasticRewards(state:flatWorldState, action:flatWorldAction):Seq[(Double, Double, Double)] = {
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
-      //println(state.id, action.value)
-//      vrp = vrp :+ (ccStates(state.id + action.value).value,action.value.toDouble, headProb)
-//      vrp = vrp :+ (ccStates(state.id - action.value).value,-action.value.toDouble, (1-headProb))
-      vrp = vrp :+ (0.0, ccStates(state.id + action.value).value.toDouble, headProb)
-      vrp = vrp :+ (0.0, ccStates(state.id - action.value).value.toDouble, (1-headProb))
+      println(state.id, action.value)
+     //vrp = vrp :+ (ccStates(state.id + action.value).value,action.value.toDouble, headProb)
+     // vrp = vrp :+ (ccStates(state.id - action.value).value,-action.value.toDouble, (1-headProb))
+      vrp = vrp :+ (0.0, ccStates(state.id + action.value).value, headProb)
+      vrp = vrp :+ (0.0, ccStates(state.id - action.value).value, (1-headProb))
       vrp
     }
   }
@@ -62,7 +66,7 @@ object gamblersProblem extends App{
     }
     override def actionProb(state: flatWorldState, action: flatWorldAction): Double = 1.0
 
-    override def optimalAction(state: flatWorldState): flatWorldAction = policy(state.id)
+    override def optimalPolicy(state: flatWorldState): flatWorldAction = policy(state.id)
 
     override def applicableActions(state: flatWorldState): Seq[flatWorldAction] = {
       val actions = Seq.tabulate[flatWorldAction](scala.math.min(state.id, GOAL - state.id))(x => new flatWorldAction {
@@ -73,12 +77,12 @@ object gamblersProblem extends App{
   }
 
   import rl.core.mdp.ValueFunctions.Bellman
-  Bellman.setDiscount(0)
+  Bellman.setDiscount(1)
   val result = flatWorldAgent.setEpoch(10)
     .setExitDelta(0.1)
-    .setPolicyIteration(true)
+    .setPolicyIteration(false)
     .setValueIteration(true)
     .observe(gamblersProblemEnv, gamblersProblemPolicy)
-  println(result.map(a => a.value))
-  println(gamblersProblemPolicy.policy.map(a => a.value))
+  println(s"value=${result.map(a => a.value)}")
+  println(s"policy=${gamblersProblemPolicy.policy.map(a => a.value)}")
 }

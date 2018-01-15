@@ -46,24 +46,24 @@ object GridWorld {
         def observeOnce: DenseMatrix[gridWorldState] = {
           val newStates = env.stateSpace
           newStates.map(state => {
-            val action = policy.optimalAction(state)
+            val action = policy.optimalPolicy(state)
             val vrp = env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
             state.value=vf.value(state, vrp) - env.cost(state, action)
           })
           newStates
         }
         def observeAndUpdatePolicy = {
-        val newStates = env.stateSpace
-        newStates.map(state => {
-          var values = Map[gridWorldAction, Double]()
-          val actions = policy.applicableActions(state)
-          for (action <- actions) {
+         val newStates = env.stateSpace
+          newStates.map(state => {
+           var values = Map[gridWorldAction, Double]()
+           val actions = policy.applicableActions(state)
+           for (action <- actions) {
             val vrp = env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
             values += (action -> (vf.value(state, vrp)- env.cost(state, action)))
-          }
-          policy.update(state, values.maxBy(_._2)._1)
-        })
-      }
+           }
+           policy.update(state, values.maxBy(_._2)._1)
+         })
+        }
       def loopingWithEpoch: Unit = {
         for (i <- 0 until epoch) {
           val newStates = observeOnce
