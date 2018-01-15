@@ -33,7 +33,7 @@ import rl.utils.rounded
   */
 object gamblersProblem extends App{
   val GOAL=100
-  val headProb = 0.4
+  val headProb = 0.3
   object gamblersProblemEnv extends Environment[DenseVector, flatWorldState, flatWorldAction] {
     def stateSpace: DenseVector[flatWorldState] = {
       val space = DenseVector.tabulate[flatWorldState](GOAL+1) { x => new flatWorldState((x), 0) }
@@ -71,7 +71,7 @@ object gamblersProblem extends App{
 
     override def applicableActions(state: flatWorldState): Seq[flatWorldAction] = {
       val actions = Seq.tabulate[flatWorldAction](scala.math.min(state.id, GOAL - state.id))(x => new flatWorldAction {
-        override val value: Int = x+1
+        override val value: Int = x +1
       })
       actions
     }
@@ -80,9 +80,9 @@ object gamblersProblem extends App{
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(1)
   val result = flatWorldAgent.setEpoch(10)
-    .setExitDelta(0.1)
-    .setPolicyIteration(false)
-    .setValueIteration(true)
+    //.setExitDelta(0.1)
+    //.setPolicyIteration(true)
+    //.setValueIteration(true)
     .observe(gamblersProblemEnv, gamblersProblemPolicy)
   val f0 = Figure()
   val p0 = f0.subplot(0)
