@@ -58,7 +58,7 @@ object dpClient extends App{
     }
   }
   object flatWorldPolicy extends Policy[flatWorldState, flatWorldAction] {
-  override def bestAction(state:flatWorldState) = ???
+  override def optimalAction(state:flatWorldState) = ???
     override def applicableActions(state:flatWorldState):Seq[flatWorldAction] = Seq(new Left, new Right)
     override def actionProb(state:flatWorldState, action:flatWorldAction):Double = {
       1.0/applicableActions(state).size

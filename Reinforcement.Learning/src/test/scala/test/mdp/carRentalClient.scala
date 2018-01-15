@@ -196,7 +196,7 @@ object carRentalClient extends App {
    object gridWorldPolicy extends Policy[gridWorldState, gridWorldAction]{
      var policyCopy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
     var policy = DenseMatrix.tabulate[gridWorldAction] (X+1, Y+1){ (i, j) => new gridWorldAction { override val value: Int = 0} }
-    override  def bestAction(state:gridWorldState):gridWorldAction = policy(state.id)
+    override  def optimalAction(state:gridWorldState):gridWorldAction = policy(state.id)
 
     override  def applicableActions(state: gridWorldState): Seq[gridWorldAction] = {
       val first2second = for (i <- 0 to scala.math.min(state.id._1, MAXMOVE)) yield new gridWorldAction {
