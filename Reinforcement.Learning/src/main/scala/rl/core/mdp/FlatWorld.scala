@@ -46,7 +46,7 @@ object FlatWorld {
       def observeOnce: DenseVector[flatWorldState] = {
         val newStates = env.stateSpace
         newStates.map(state => {
-          val action = policy.bestAction(state)
+          val action = policy.optimalAction(state)
           val vrp = env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
           state.value = vf.value(state, vrp) - env.cost(state, action)
         })
