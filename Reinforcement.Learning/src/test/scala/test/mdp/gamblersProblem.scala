@@ -20,11 +20,12 @@
  */
 
 package test.mdp
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.{*, DenseMatrix, DenseVector, linspace}
+import breeze.plot.plot
 import rl.core.mdp.{Environment, Policy}
 import rl.core.mdp.FlatWorld.{flatWorldAction, flatWorldState}
 import rl.core.mdp.FlatWorld.flatWorldAgent
-import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
+import breeze.plot._
 import rl.utils.rounded
 
 /**
@@ -43,7 +44,7 @@ object gamblersProblem extends App{
     override def stochasticRewards(state:flatWorldState, action:flatWorldAction):Seq[(Double, Double, Double)] = {
       val ccStates = getCurrentStates
       var vrp = Seq[(Double, Double, Double)] ()
-      println(state.id, action.value)
+     // println(state.id, action.value)
      //vrp = vrp :+ (ccStates(state.id + action.value).value,action.value.toDouble, headProb)
      // vrp = vrp :+ (ccStates(state.id - action.value).value,-action.value.toDouble, (1-headProb))
       vrp = vrp :+ (0.0, ccStates(state.id + action.value).value, headProb)
@@ -70,7 +71,7 @@ object gamblersProblem extends App{
 
     override def applicableActions(state: flatWorldState): Seq[flatWorldAction] = {
       val actions = Seq.tabulate[flatWorldAction](scala.math.min(state.id, GOAL - state.id))(x => new flatWorldAction {
-        override val value: Int = x
+        override val value: Int = x+1
       })
       actions
     }
@@ -83,6 +84,13 @@ object gamblersProblem extends App{
     .setPolicyIteration(false)
     .setValueIteration(true)
     .observe(gamblersProblemEnv, gamblersProblemPolicy)
+  val f0 = Figure()
+  val p0 = f0.subplot(0)
+  p0 += plot(linspace(0, GOAL+1, GOAL+1), result.map(a => a.value),  name="Value")
+  val f1 = Figure()
+  val p1 = f1.subplot(0)
+  p1 += plot(linspace(0, GOAL+1, GOAL+1), gamblersProblemPolicy.policy.map(a => a.value.toDouble),  name="Policy")
+
   println(s"value=${result.map(a => a.value)}")
   println(s"policy=${gamblersProblemPolicy.policy.map(a => a.value)}")
 }
