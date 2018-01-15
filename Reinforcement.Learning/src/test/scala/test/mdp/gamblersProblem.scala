@@ -62,7 +62,7 @@ object gamblersProblem extends App{
     }
     override def actionProb(state: flatWorldState, action: flatWorldAction): Double = 1.0
 
-    override def bestAction(state: flatWorldState): flatWorldAction = policy(state.id)
+    override def optimalAction(state: flatWorldState): flatWorldAction = policy(state.id)
 
     override def applicableActions(state: flatWorldState): Seq[flatWorldAction] = {
       val actions = Seq.tabulate[flatWorldAction](scala.math.min(state.id, GOAL - state.id))(x => new flatWorldAction {
