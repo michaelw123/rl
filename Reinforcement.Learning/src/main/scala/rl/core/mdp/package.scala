@@ -66,25 +66,47 @@ package object mdp {
     var currentStates = None: Option[CS[S]]
     def actionSpace:Seq[A]
     def update(value :CS[S]) = currentStates = Option(value)
-    def reward(state:S, action:A):(S, Double) // an action takes S to S' deterministically
-    def reward(state:S, action:A, nextState:S):Double // an action may take S to multiple S', propability is given by transitionProb, this reward function calculates the transition R(S, A, S')
-    def rewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Action Probability,
-          // which is applied to Value Functions such as Bellman equation
-    def transitionProb(state:S, action:A, nextState:S):Double //transition probability
+    def reward(state:S, action:A):(S, Double) = ??? // an action takes S to S' deterministically
+    def reward(state:S, action:A, nextState:S):Double = ??? // an action may take S to multiple S', propability is given by transitionProb, this reward function calculates the transition R(S, A, S')
+    def stochasticRewards(state:S, action:A):Seq[(Double, Double, Double)] = ??? // given a state and an action, returns a sequence of VRP - value of nextState, Reward, and Action Probability,
+          // which is applied to Value Functions such as Bellman equation, stochastic
+    def transitionProb(state:S, action:A, nextState:S):Double = ??? //transition probability for each action - deterministic
     def transitionRewardProb(state:S, action:A, nextState:S):(Double, Double) = ??? // return (prob, reward) pair, the reward is sum(prob * reward)
-    def cost(state:S, action:A):Double  //if the destination state is deterministic by an action
-    def cost(state:S, action:A, nextState:S):Double //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
-    def applicableTransitions(state:S):Seq[(A, S)]
+    def cost(state:S, action:A):Double = 0  //if the destination state is deterministic by an action
+    def cost(state:S, action:A, nextState:S):Double = 0 //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
+    def applicableTransitions(state:S):Seq[(A, S)] = ???
     def getCurrentStates:CS[S] = {
       if (!currentStates.isDefined) currentStates=Option(stateSpace)
       currentStates.get
     }
   }
   trait Agent[A, CS[_], S] {
-    private var policyIteration = false  //policy iteration only applies to stochastic policy
+     var policyIteration = false  //policy iteration only applies to stochastic policy
+     var valueIteration = false
+     var epoch = 1
+     var exitDelta=0.0
+    var isStochastic = false
+    def setIsStochastic(value:Boolean):this.type = {
+      isStochastic=value
+      this
+    }
+    def getIsStochastic = isStochastic
+    def setExitDelta(value:Double) = {
+      exitDelta = value
+      this
+    }
+    def setEpoch(value:Int) : this.type ={
+      epoch = value
+      this
+    }
     def getPolicyIteration = policyIteration
     def setPolicyIteration(value:Boolean):this.type = {
       policyIteration = value
+      this
+    }
+    def getValueIteration = valueIteration
+    def setValueIteration(value:Boolean):this.type = {
+      valueIteration = value
       this
     }
    def observe[VF <: ValueFunction,  P <:Policy[S, A],  E <: Environment[CS, S, A]](env:E,policy:P) (implicit vf: VF):CS[S]
