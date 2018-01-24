@@ -33,8 +33,14 @@ object ValueFunctions {
       (statevalue + prob * (reward + getDiscount * nextStateValue))
     }
 
-    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
+    override def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
       vrp.foldLeft(state.value)((a,b) => a + b._3 * (b._2 + getDiscount * b._1))
+    }
+    override def qValue[ID](state:State[ID], action:Action):Double = {
+        0.0
+    }
+    def vFunction[ID](state:State[ID]): Double = {
+      0.0
     }
   }
 
