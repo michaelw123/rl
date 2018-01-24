@@ -20,7 +20,8 @@
  */
 package test.mdp
 
-import rl.core.mdp.Environment
+import rl.core.mdp._
+import  rl.core.mdp.MultiDimentionalWorld._
 
 /**
   * Created by wangmich on 01/24/2018.
@@ -28,7 +29,7 @@ import rl.core.mdp.Environment
 object blackJack extends App {
   val a = Array.ofDim[Double](10, 10, 2, 2)
   type e = a.type
-  object blackJackEnv extends Environment[e, S, A] {
+  object blackJackEnv extends Environment[e, multiDimentionalState, Action] {
 
 
   }
