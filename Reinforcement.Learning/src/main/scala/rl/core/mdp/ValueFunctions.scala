@@ -61,7 +61,7 @@ object ValueFunctions {
     override def value(statevalue: Double, nextStateValue: Double, reward: Double, prob: Double): Double = {
       statevalue *(1 -learningRate)+ learningRate *(reward + discount * nextStateValue)
     }
-    def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
+    override def value[ID](state:State[ID], vrp:Seq[(Double, Double, Double)]): Double = {
       vrp.isEmpty match {
         case true => 0
         case _ => {
