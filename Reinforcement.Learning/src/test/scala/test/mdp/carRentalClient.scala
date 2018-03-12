@@ -235,9 +235,9 @@ object carRentalClient extends App {
 //  import rl.core.mdp.ValueFunctions.optimalValueIteration
 //  optimalValueIteration.setDiscount(0.9)
   val result = gridWorldAgent.setEpoch(50)
-    //.setExitDelta(0.1)
-    //.setPolicyIteration(true)
-    //.setValueIteration(true)
+    .setExitDelta(0.1)
+    .setPolicyIteration(true)
+    .setValueIteration(true)
     .observe(carRentalEnv, gridWorldPolicy)
 
   println(result.map(a => rounded(1, a.value)))

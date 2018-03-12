@@ -14,6 +14,11 @@ object test extends App {
     (List.fill(np)(getPoint).sum * 1.0) / np
   }
 
-  var pi = (List.fill(arguments(0))(getRatio(arguments(1))).sum / arguments(0)) * 4.0
-  Console.println("Approximation of Pi: " + pi)
+//  var pi = (List.fill(arguments(0))(getRatio(arguments(1))).sum / arguments(0)) * 4.0
+  //  Console.println("Approximation of Pi: " + pi)
+
+  val aa = Array.ofDim[Double](10,10,2,4,5)
+  type bb = aa.type
+  println("bb")
+
 }

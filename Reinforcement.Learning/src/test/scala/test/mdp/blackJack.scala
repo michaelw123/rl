@@ -20,17 +20,29 @@
  */
 package test.mdp
 
-import rl.core.mdp._
-import  rl.core.mdp.MultiDimentionalWorld._
+import breeze.linalg.DenseMatrix
+import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
+import rl.core.mdp.{State, _}
+import rl.core.mdp.MultiDimentionalWorld._
 
 /**
   * Created by wangmich on 01/24/2018.
   */
 object blackJack extends App {
-  val a = Array.ofDim[Double](10, 10, 2, 2)
-  type e = a.type
-  object blackJackEnv extends Environment[e, multiDimentionalState, Action] {
-
-
+  val X = 11 *2
+  val Y = 11 *2
+  class blackJackState(val id:(Int, Int), var value:Double) extends State[(Int, Int)] {
+    def isHandSoft = id._1 < 11
+    def isDealerSoft = id._1 < 11
+    def dealerSum = id._2
+    def sum = id._1
   }
+  implicit def grid2BlackJackState(s:gridWorldState):blackJackState = new blackJackState(s.id, s.value)
+
+//  object blackJackEnv extends Environment[DenseMatrix, blackJackState, gridWorldAction] {
+//    //X: sum of cards, 2 <= sum <= 21. keep drawing until sum is at least 11, so 11 <= sum <= 21.
+//    //Thus, i=0 is burst; i shows sum i  or i+10 (soft when i<=10)
+//    // Y: sum of dealer's showing card. j=0: burst, j shows sum j  and j+10 (soft when j<=10)
+//    def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X+1, Y+1) { (i, j) => new gridWorldState((i, j), 0) }
+//  }
 }
