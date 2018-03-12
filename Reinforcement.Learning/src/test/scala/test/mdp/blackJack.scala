@@ -34,6 +34,8 @@ object blackJack extends App {
   val X = 11 *2
   val Y = 11 *2
   class blackJackState(val id:(Int, Int), var value:Double) extends State[(Int, Int)] {
+    var playerTrajectory:Seq[blackJackAction] = Seq()
+    var dealerTrajectory:Seq[blackJackAction] = Seq()
     def isHandSoft = id._1 < 11
     def isDealerSoft = id._1 < 11
     def dealerSum = id._2
@@ -56,10 +58,17 @@ object blackJack extends App {
 //    override def reward(state: blackJackState, action: blackJackAction): (blackJackState, Double) = {//reward through MCMC
     }
     object blackJackPolicy extends Policy[blackJackState, blackJackAction] {
-      var policy = DenseMatrix.tabulate[blackJackAction] (X+1, Y+1){ (i, j) => blackJackAction.hit }
+      var policy = DenseMatrix.tabulate[blackJackAction] (X+1, Y+1) { (i, j) => {
+        val state: blackJackState = new blackJackState((i, j), 0)
+        state.sum match {
+          case 10 | 11 | 20 | 21 => blackJackAction.stay
+          case _ => blackJackAction.hit
+        }
+       }
+      }
       override  def optimalPolicy(state:blackJackState):blackJackAction = policy(state.id)
       override  def applicableActions(state: blackJackState): Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
-      override   def actionProb(state:blackJackState, action:blackJackAction):Double = 1.0
+      override  def actionProb(state:blackJackState, action:blackJackAction):Double = 1.0
     }
     val result = gridWorldAgent.setEpoch(50)
       .setExitDelta(0.1)
