@@ -25,6 +25,8 @@ import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
 import rl.core.mdp.{State, _}
 import rl.core.mdp.MultiDimentionalWorld._
 
+import scala.util.Random
+
 /**
   * Created by wangmich on 01/24/2018.
   */
@@ -37,12 +39,20 @@ object blackJack extends App {
     def dealerSum = id._2
     def sum = id._1
   }
+  class blackJackAction
+  object blackJackAction {
+    sealed
+    case object hit extends blackJackAction
+    case object stay extends blackJackAction
+  }
   implicit def grid2BlackJackState(s:gridWorldState):blackJackState = new blackJackState(s.id, s.value)
+  implicit def grid2BlackJackAction(a:gridWorldAction):blackJackAction = new blackJackAction
+  object blackJackEnv extends Environment[DenseMatrix, blackJackState, blackJackAction] {
+    //X: sum of cards, 2 <= sum <= 21. keep drawing until sum is at least 11, so 11 <= sum <= 21.
+    //Thus, i=0 is burst; i shows sum i  or i+10 (soft when i<=10)
+    // Y: sum of dealer's showing card. j=0: burst, j shows sum j  and j+10 (soft when j<=10)
+    def stateSpace: DenseMatrix[blackJackState] = DenseMatrix.tabulate[blackJackState](X + 1, Y + 1) { (i, j) => new blackJackState((i, j), 0) }
 
-//  object blackJackEnv extends Environment[DenseMatrix, blackJackState, gridWorldAction] {
-//    //X: sum of cards, 2 <= sum <= 21. keep drawing until sum is at least 11, so 11 <= sum <= 21.
-//    //Thus, i=0 is burst; i shows sum i  or i+10 (soft when i<=10)
-//    // Y: sum of dealer's showing card. j=0: burst, j shows sum j  and j+10 (soft when j<=10)
-//    def stateSpace:DenseMatrix[gridWorldState] = DenseMatrix.tabulate[gridWorldState](X+1, Y+1) { (i, j) => new gridWorldState((i, j), 0) }
-//  }
+    val actionSpace: Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
+  }
 }
