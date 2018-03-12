@@ -21,7 +21,7 @@
 package test.mdp
 
 import breeze.linalg.DenseMatrix
-import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldState}
+import rl.core.mdp.GridWorld.{gridWorldAction, gridWorldAgent, gridWorldState}
 import rl.core.mdp.{State, _}
 import rl.core.mdp.MultiDimentionalWorld._
 
@@ -51,8 +51,20 @@ object blackJack extends App {
     //X: sum of cards, 2 <= sum <= 21. keep drawing until sum is at least 11, so 11 <= sum <= 21.
     //Thus, i=0 is burst; i shows sum i  or i+10 (soft when i<=10)
     // Y: sum of dealer's showing card. j=0: burst, j shows sum j  and j+10 (soft when j<=10)
-    def stateSpace: DenseMatrix[blackJackState] = DenseMatrix.tabulate[blackJackState](X + 1, Y + 1) { (i, j) => new blackJackState((i, j), 0) }
-
-    val actionSpace: Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
+    override def stateSpace: DenseMatrix[blackJackState] = DenseMatrix.tabulate[blackJackState](X + 1, Y + 1) { (i, j) => new blackJackState((i, j), 0) }
+    override val actionSpace: Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
+//    override def reward(state: blackJackState, action: blackJackAction): (blackJackState, Double) = {//reward through MCMC
+    }
+    object blackJackPolicy extends Policy[blackJackState, blackJackAction] {
+      var policy = DenseMatrix.tabulate[blackJackAction] (X+1, Y+1){ (i, j) => blackJackAction.hit }
+      override  def optimalPolicy(state:blackJackState):blackJackAction = policy(state.id)
+      override  def applicableActions(state: blackJackState): Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
+      override   def actionProb(state:blackJackState, action:blackJackAction):Double = 1.0
+    }
+    val result = gridWorldAgent.setEpoch(50)
+      .setExitDelta(0.1)
+      .setPolicyIteration(true)
+      .setValueIteration(true)
+      .observe(blackJackEnv, blackJackPolicy)
   }
 }
