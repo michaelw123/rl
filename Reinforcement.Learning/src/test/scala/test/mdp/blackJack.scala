@@ -66,5 +66,4 @@ object blackJack extends App {
       .setPolicyIteration(true)
       .setValueIteration(true)
       .observe(blackJackEnv, blackJackPolicy)
-  }
 }
