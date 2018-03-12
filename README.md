@@ -12,7 +12,7 @@ Some of the planned topics are:
 
   [* Markov Decision Processes and Dynamic Programming](MDP.md)
   
-* Monte Carlo Methods
+  [* Monte Carlo Methods](MCMC.md)
 * Temporal-Difference Learning
 
 
