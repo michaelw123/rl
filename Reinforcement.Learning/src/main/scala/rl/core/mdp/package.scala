@@ -75,6 +75,10 @@ package object mdp {
     def cost(state:S, action:A):Double = 0  //if the destination state is deterministic by an action
     def cost(state:S, action:A, nextState:S):Double = 0 //an action may take S to multiple S', propability is given by transactionProb, this cost function calculates the transaction Cost(S, A, S')
     def applicableTransitions(state:S):Seq[(A, S)] = ???
+    def reward(state:S):Double = { // state value function
+      val stateAction= applicableTransitions(state:S):Seq[(A, S)]
+      stateAction.foldLeft(0.0)((a,b) => a + transitionRewardProb(state, b._1, b._2)._2)
+    }
     def getCurrentStates:CS[S] = {
       if (!currentStates.isDefined) currentStates=Option(stateSpace)
       currentStates.get
