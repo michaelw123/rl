@@ -33,22 +33,24 @@ import scala.util.Random
 object blackJack extends App {
   val X = 11 *2
   val Y = 11 *2
+  var playerTrajectory:Seq[blackJackAction] = Seq()
+  var dealerTrajectory:Seq[blackJackAction] = Seq()
+
+
+//  class blackJackState extends gridWorldState
   class blackJackState(val id:(Int, Int), var value:Double) extends State[(Int, Int)] {
-    var playerTrajectory:Seq[blackJackAction] = Seq()
-    var dealerTrajectory:Seq[blackJackAction] = Seq()
     def isHandSoft = id._1 < 11
     def isDealerSoft = id._1 < 11
     def dealerSum = id._2
     def sum = id._1
   }
-  class blackJackAction
+  class blackJackAction extends Action
   object blackJackAction {
-    sealed
     case object hit extends blackJackAction
     case object stay extends blackJackAction
   }
-  implicit def grid2BlackJackState(s:gridWorldState):blackJackState = new blackJackState(s.id, s.value)
-  implicit def grid2BlackJackAction(a:gridWorldAction):blackJackAction = new blackJackAction
+//  implicit def grid2BlackJackState(s:gridWorldState):blackJackState = new blackJackState(s.id, s.value)
+//  implicit def grid2BlackJackAction(a:gridWorldAction):blackJackAction = new blackJackAction
   object blackJackEnv extends Environment[DenseMatrix, blackJackState, blackJackAction] {
     //X: sum of cards, 2 <= sum <= 21. keep drawing until sum is at least 11, so 11 <= sum <= 21.
     //Thus, i=0 is burst; i shows sum i  or i+10 (soft when i<=10)
@@ -56,8 +58,8 @@ object blackJack extends App {
     override def stateSpace: DenseMatrix[blackJackState] = DenseMatrix.tabulate[blackJackState](X + 1, Y + 1) { (i, j) => new blackJackState((i, j), 0) }
     override val actionSpace: Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
 //    override def reward(state: blackJackState, action: blackJackAction): (blackJackState, Double) = {//reward through MCMC
-    }
-    object blackJackPolicy extends Policy[blackJackState, blackJackAction] {
+  }
+  object blackJackPolicy extends Policy[blackJackState, blackJackAction] {
       var policy = DenseMatrix.tabulate[blackJackAction] (X+1, Y+1) { (i, j) => {
         val state: blackJackState = new blackJackState((i, j), 0)
         state.sum match {
@@ -70,7 +72,10 @@ object blackJack extends App {
       override  def applicableActions(state: blackJackState): Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
       override  def actionProb(state:blackJackState, action:blackJackAction):Double = 1.0
     }
-    val result = gridWorldAgent.setEpoch(50)
+
+  import rl.core.mdp.ValueFunctions.Bellman
+  Bellman.setDiscount(0.9)
+  val result = gridWorldAgent.setEpoch(50)
       .setExitDelta(0.1)
       .setPolicyIteration(true)
       .setValueIteration(true)
