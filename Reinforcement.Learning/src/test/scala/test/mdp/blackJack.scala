@@ -72,7 +72,11 @@ object blackJack extends App {
       override  def applicableActions(state: blackJackState): Seq[blackJackAction] = Seq(blackJackAction.hit, blackJackAction.stay)
       override  def actionProb(state:blackJackState, action:blackJackAction):Double = 1.0
     }
-
+  object blackJackAgent extends Agent[blackJackAction, DenseMatrix, blackJackState]{
+    def observe[VF <: ValueFunction, P <: Policy[blackJackState, blackJackAction], E <: Environment[DenseMatrix,blackJackState, blackJackAction]](env:E, policy:P)(implicit vf:VF): DenseMatrix[blackJackState] = {
+      env.getCurrentStates
+    }
+  }
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
   val result = gridWorldAgent.setEpoch(50)
