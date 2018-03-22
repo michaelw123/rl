@@ -79,7 +79,7 @@ object blackJack extends App {
   }
   import rl.core.mdp.ValueFunctions.Bellman
   Bellman.setDiscount(0.9)
-  val result = gridWorldAgent.setEpoch(50)
+  val result = blackJackAgent.setEpoch(50)
       .setExitDelta(0.1)
       .setPolicyIteration(true)
       .setValueIteration(true)
