@@ -29,7 +29,7 @@ import breeze.plot._
 import rl.utils.rounded
 
 /**
-  * Created by wangmich on 01/11/2018.
+  * Created by Michael Wang on 01/11/2018.
   */
 object gamblersProblem extends App{
   val GOAL=100

@@ -21,7 +21,7 @@
 package rl
 
 /**
-  * Created by wangmich on 12/08/2017.
+  * Created by Michael Wang on 12/08/2017.
   */
 package object utils {
   def rounded(x: Int, n:Double):Double = {

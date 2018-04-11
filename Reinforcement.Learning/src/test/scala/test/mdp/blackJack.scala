@@ -28,7 +28,7 @@ import rl.core.mdp.MultiDimentionalWorld._
 import scala.util.Random
 
 /**
-  * Created by wangmich on 01/24/2018.
+  * Created by Michael Wang on 01/24/2018.
   */
 object blackJack extends App {
   val X = 11 *2

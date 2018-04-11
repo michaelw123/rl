@@ -4,7 +4,7 @@ import breeze.linalg.DenseMatrix
 import rl.utils.rounded
 
 /**
-  * Created by wangmich on 01/24/2018.
+  * Created by Michael Wang on 01/24/2018.
   */
 
 object MultiDimentionalWorld {

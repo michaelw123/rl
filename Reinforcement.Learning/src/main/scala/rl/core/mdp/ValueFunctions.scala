@@ -21,7 +21,7 @@
 package rl.core.mdp
 
 /**
-  * Created by MichaelXiaoqun on 2017-12-09.
+  * Created by Michael Wang on 2017-12-09.
   */
 
 object ValueFunctions {
