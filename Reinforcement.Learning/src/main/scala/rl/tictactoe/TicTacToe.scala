@@ -237,7 +237,7 @@ object game {
     println(player.estimations)
     player savePolicy "c://work/tmp/player1-policy"
     println(otherPlayer.estimations)
-    otherPlayer savePolicy "c://work/tmp/player2-policy"
+      otherPlayer savePolicy "c://work/tmp/player2-policy"
   }
   def play(implicit data: DenseMatrix[Int] = DenseMatrix.zeros[Int](ROWCOL, ROWCOL)) = {
     val player = Player.ai3

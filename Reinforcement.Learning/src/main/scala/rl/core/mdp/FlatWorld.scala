@@ -58,6 +58,12 @@ object FlatWorld {
         newStates.map(state => {
           var values = Map[flatWorldAction, Double]()
           val actions = policy.applicableActions(state)
+//
+//          actions.flatMap( action => {
+//              Seq(vf.value(state, env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))) - env.cost(state, action))
+//          })
+
+
           if (!actions.isEmpty) {
             for (action <- actions) {
               val vrp = env.stochasticRewards(state, action).map(x => (x._1, x._2, x._3 * policy.actionProb(state, action)))
